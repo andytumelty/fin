@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
   validates :username, uniqueness: true
 
   has_many :accounts, dependent: :destroy
+  has_many :categories, dependent: :destroy
 end

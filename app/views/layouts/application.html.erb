@@ -13,6 +13,7 @@
       <%= link_to "Edit Profile", edit_user_path(current_user.id) %>
       <%= link_to "Logout", :logout, method: :post %>
       <%= link_to "Accounts", accounts_path %>
+      <%= link_to "Categories", categories_path %>
     <% else %>
       <%= link_to "Register", new_user_path %> |
       <%= link_to "Login", :login %>
