@@ -12,6 +12,7 @@
     <% if current_user %>
       <%= link_to "Edit Profile", edit_user_path(current_user.id) %>
       <%= link_to "Logout", :logout, method: :post %>
+      <%= link_to "Transactions", transactions_path %>
       <%= link_to "Accounts", accounts_path %>
       <%= link_to "Categories", categories_path %>
     <% else %>
