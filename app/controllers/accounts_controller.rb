@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: [:show, :edit, :update, :destroy]
+  before_action :set_account, only: [:edit, :update, :destroy]
 
   # GET /accounts
   def index
@@ -21,7 +21,7 @@ class AccountsController < ApplicationController
     @account.user = current_user
 
     if @account.save
-      redirect_to accounts_url, notice: 'Account was successfully created.'
+      redirect_to accounts_path, notice: 'Account was successfully created.'
     else
       render action: 'new'
     end
@@ -30,7 +30,7 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1
   def update
     if @account.update(account_params)
-      redirect_to accounts_url, notice: 'Account was successfully updated.'
+      redirect_to accounts_path, notice: 'Account was successfully updated.'
     else
       render action: 'edit'
     end
@@ -40,7 +40,7 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1.json
   def destroy
     @account.destroy
-    redirect_to accounts_url
+    redirect_to accounts_path
   end
 
   private

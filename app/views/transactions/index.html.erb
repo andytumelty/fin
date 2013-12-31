@@ -1,28 +1,29 @@
-<h1>Listing transactions</h1>
+<h2>Listing transactions</h2>
 
 <table>
   <thead>
     <tr>
       <th>Date</th>
       <th>Description</th>
-      <th>Amount</th>
+      <th colspan="2">Amount</th>
+      <th colspan="2">Balance</th>
       <th>Account</th>
       <th>Category</th>
-      <th></th>
       <th></th>
       <th></th>
     </tr>
   </thead>
 
   <tbody>
+    <% balance = 0 %>
     <% @transactions.each do |transaction| %>
       <tr>
         <td><%= transaction.date %></td>
         <td><%= transaction.description %></td>
-        <td><%= transaction.amount %></td>
+        <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td>%n", negative_format: "-%u</td><td>%n") %></td>
+        <td align="right"><%= number_to_currency(balance += transaction.amount, format: "%u</td><td>%n", negative_format: "-%u</td><td>%n") %></td>
         <td><%= transaction.account.name %></td>
         <td><%= transaction.category.name %></td>
-        <td><%= link_to 'Show', transaction %></td>
         <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
         <td><%= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

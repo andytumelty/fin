@@ -7,11 +7,12 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+<h1><%= link_to "Fin", root_url %></h1>
   <div id="nav">
     <% if current_user %>
       <%= link_to "Edit Profile", edit_user_path(current_user.id) %>
       <%= link_to "Logout", :logout, method: :post %>
+      <br>
       <%= link_to "Transactions", transactions_path %>
       <%= link_to "Accounts", accounts_path %>
       <%= link_to "Categories", categories_path %>

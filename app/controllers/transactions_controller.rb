@@ -1,13 +1,9 @@
 class TransactionsController < ApplicationController
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+  before_action :set_transaction, only: [:edit, :update, :destroy]
 
   # GET /transactions
   def index
-    @transactions = current_user.transactions
-  end
-
-  # GET /transactions/1
-  def show
+    @transactions = current_user.transactions.order(:date)
   end
 
   # GET /transactions/new
@@ -42,7 +38,7 @@ class TransactionsController < ApplicationController
   # DELETE /transactions/1
   def destroy
     @transaction.destroy
-    redirect_to transactions_url
+    redirect_to transactions_path
   end
 
   private
