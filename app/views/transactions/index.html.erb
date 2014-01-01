@@ -15,22 +15,30 @@
   </thead>
 
   <tbody>
+    <tr>
+      <%= form_for(@new_transaction) do |f| %>
+        <td><%= f.date_select(:date, use_short_month: :true) %></td>
+        <td><%= f.text_field(:description, size: 40) %></td>
+        <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
+        <td colspan="2"></td>
+        <td><%= f.collection_select :account_id, current_user.accounts, :id, :name %></td>
+        <td><%= f.collection_select :category_id, current_user.categories, :id, :name %></td>
+        <td colspan="2"><%= f.submit %></td>
+        <td></td>
+      <% end %>
+    </tr>
     <% balance = 0 %>
     <% @transactions.each do |transaction| %>
       <tr>
         <td><%= transaction.date %></td>
         <td><%= transaction.description %></td>
-        <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td>%n", negative_format: "-%u</td><td>%n") %></td>
-        <td align="right"><%= number_to_currency(balance += transaction.amount, format: "%u</td><td>%n", negative_format: "-%u</td><td>%n") %></td>
-        <td><%= transaction.account.name %></td>
-        <td><%= transaction.category.name %></td>
+        <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+        <td align="right"><%= number_to_currency(balance += transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+        <td align="center"><%= transaction.account.name %></td>
+        <td align="center"><%= transaction.category.name %></td>
         <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
         <td><%= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Transaction', new_transaction_path %>

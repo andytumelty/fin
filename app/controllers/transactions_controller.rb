@@ -4,11 +4,7 @@ class TransactionsController < ApplicationController
   # GET /transactions
   def index
     @transactions = current_user.transactions.order(:date)
-  end
-
-  # GET /transactions/new
-  def new
-    @transaction = Transaction.new
+    @new_transaction = Transaction.new
   end
 
   # GET /transactions/1/edit
