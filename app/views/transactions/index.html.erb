@@ -16,6 +16,18 @@
 
   <tbody>
     <tr>
+      <%= form_tag({controller: "transactions", action: "index"}, method: "get") do %>
+        <td></td>
+        <td><%= text_field_tag('transaction_filter[description]', @transaction_filter[:description], size: 40) %></td>
+        <td colspan="2"></td>
+        <td colspan="2"></td>
+        <td></td>
+        <td></td>
+        <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
+        <td></td>
+      <% end %>
+    </tr>
+    <tr>
       <%= form_for(@new_transaction) do |f| %>
         <td><%= f.date_select(:date, use_short_month: :true) %></td>
         <td><%= f.text_field(:description, size: 40) %></td>

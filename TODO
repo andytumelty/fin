@@ -1,5 +1,8 @@
 TODO
 
+- transactions returned in batches
+- filter on start date, end date
+- category breakdown
 - "No transactions found"
 - Unassigned category by default
 - must create account to create transaction

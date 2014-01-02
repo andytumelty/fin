@@ -3,6 +3,7 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
+    @transaction_filter = transaction_filter_params
     @transactions = current_user.transactions.order(:date)
     @new_transaction = Transaction.new
   end
@@ -38,13 +39,20 @@ class TransactionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_transaction
       @transaction = Transaction.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_params
       params.require(:transaction).permit(:date, :description, :amount, :account_id, :category_id)
     end
+
+    def transaction_filter_params
+      if params[:transaction_filter]
+        params.require(:transaction_filter).permit(:description, :account_id, :category_id)
+      else
+        {description: nil, account_id: nil, category_id: nil}
+      end
+    end
+
 end
