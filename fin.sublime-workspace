@@ -3,10 +3,70 @@
 	{
 		"selected_items":
 		[
+			[
+				"tras",
+				"transaction_filter"
+			],
+			[
+				"tra",
+				"transaction_filter"
+			],
+			[
+				"trans",
+				"transaction_filter"
+			],
+			[
+				"trnas",
+				"transaction_filter"
+			],
+			[
+				"ca",
+				"category_id"
+			],
+			[
+				"des",
+				"description"
+			],
+			[
+				"tr",
+				"transaction_filter"
+			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "TODO",
+			"settings":
+			{
+				"buffer_size": 270,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "config/routes.rb",
+			"settings":
+			{
+				"buffer_size": 450,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/controllers/transactions_controller.rb",
+			"settings":
+			{
+				"buffer_size": 1780,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/transactions/index.html.erb",
+			"settings":
+			{
+				"buffer_size": 2144,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -81,8 +141,126 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "TODO",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 270,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								270,
+								270
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "config/routes.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 450,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								449,
+								449
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/controllers/transactions_controller.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1780,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								652,
+								652
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 561.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/views/transactions/index.html.erb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								262,
+								262
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
 			]
 		}
 	],

@@ -16,9 +16,9 @@
 
   <tbody>
     <tr>
-      <%= form_tag({controller: "transactions", action: "index"}, method: "get") do %>
+      <%= form_tag(transactions_filter_path, method: "get") do %>
         <td></td>
-        <td><%= text_field_tag('transaction_filter[description]', @transaction_filter[:description], size: 40) %></td>
+        <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
         <td colspan="2"></td>
         <td colspan="2"></td>
         <td></td>

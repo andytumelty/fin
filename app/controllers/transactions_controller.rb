@@ -3,9 +3,22 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transaction_filter = transaction_filter_params
+    @transaction_filter = {description: nil}
     @transactions = current_user.transactions.order(:date)
+    #puts @transaction_filter[:description]
+    #puts @transaction_filter[:description].empty?
     @new_transaction = Transaction.new
+  end
+
+  def filter
+    @transaction_filter = transaction_filter_params
+    puts @transaction_filter.inspect
+    @transactions = current_user.transactions.order(:date)
+    if !@transaction_filter[:description].nil?
+      @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
+    end
+    @new_transaction = Transaction.new
+    render 'index'
   end
 
   # GET /transactions/1/edit
@@ -48,11 +61,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_filter_params
-      if params[:transaction_filter]
-        params.require(:transaction_filter).permit(:description, :account_id, :category_id)
-      else
-        {description: nil, account_id: nil, category_id: nil}
-      end
+      params.permit(:description, :account_id, :category_id)
     end
 
 end

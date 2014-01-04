@@ -7,7 +7,7 @@ Fin::Application.routes.draw do
   resources :categories, except: :show
   resources :transactions, except: [:show, :new]
 
-  get 'filter' => 'transactions#filter', :as => :transactions_filter
+  get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout

@@ -1,5 +1,7 @@
 TODO
 
+- transaction /filter
+- params not t_fil[]
 - transactions returned in batches
 - filter on start date, end date
 - category breakdown
