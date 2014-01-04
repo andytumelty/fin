@@ -27,12 +27,14 @@ class TransactionsController < ApplicationController
 
   # POST /transactions
   def create
-    @transaction = Transaction.new(transaction_params)
+    @new_transaction = Transaction.new(transaction_params)
 
-    if @transaction.save
+    if @new_transaction.save
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
-      render action: 'new'
+      @transaction_filter = {description: nil}
+      @transactions = current_user.transactions.order(:date)
+      render action: 'index'
     end
   end
 

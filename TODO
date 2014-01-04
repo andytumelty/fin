@@ -1,5 +1,6 @@
 TODO
 
+- auto login on user create
 - transaction /filter
 - params not t_fil[]
 - transactions returned in batches

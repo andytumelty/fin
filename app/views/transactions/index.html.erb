@@ -13,7 +13,17 @@
       <th></th>
     </tr>
   </thead>
+  <% if @new_transaction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@new_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
 
+      <ul>
+      <% @new_transaction.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
   <tbody>
     <tr>
       <%= form_tag(transactions_filter_path, method: "get") do %>
