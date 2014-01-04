@@ -16,6 +16,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
+      Category.create(name: "unassigned", user: @user)
+      auto_login(@user)
       redirect_to root_url, notice: 'User was successfully created.'
     else
       render action: 'new'
@@ -34,7 +36,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   def destroy
     @user.destroy
-    redirect_to root_url
+    redirect_to root_url, notice: 'Your account was successfully deleted.'
   end
 
   private

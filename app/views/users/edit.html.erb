@@ -2,4 +2,9 @@
 
 <%= render 'form' %>
 
+<%= link_to 'Delete profile', current_user, method: :delete, data: { confirm: 'This will delete your profile, all transactions, accounts and categories.
+
+  This is not reversible.
+
+  Are you sure?' } %>
 <%= link_to 'Back', users_path %>

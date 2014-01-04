@@ -1,12 +1,9 @@
 TODO
 
-- auto login on user create
-- transaction /filter
-- params not t_fil[]
 - transactions returned in batches
 - filter on start date, end date
 - category breakdown
 - "No transactions found"
-- Unassigned category by default
 - must create account to create transaction
 - import transactions by csv
+- category reassignment on deletion

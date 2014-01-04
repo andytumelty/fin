@@ -4,4 +4,6 @@ class Transaction < ActiveRecord::Base
   has_one :user, :through => :account
   validates :description, presence: true
   validates :amount, presence: true, numericality: true
+  validates :account, presence: true
+  validates :category, presence: true
 end
