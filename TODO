@@ -1,7 +1,7 @@
 TODO
 
-- export transaction import errors
-- import view "a imported, b failed with errors, c new accounts created, d new categories created"
+- import: what happens if no amount/desc/etc... column is found?
+- account (and possibly category) being blank seem to be flagged as imported successfully
 
 - "No transactions found"
 - transactions returned in batches
@@ -19,3 +19,5 @@ TODO
 
 - mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 - ajax population, new transaction, move page
+
+- refactor transaction (to transaction_import?) and move logic to methods in models

@@ -17,7 +17,7 @@ class TransactionsController < ApplicationController
 
   def filter
     @transaction_filter = transaction_filter_params
-    puts @transaction_filter.inspect
+    #puts @transaction_filter.inspect
     @transactions = current_user.transactions.order(date: :asc, created_at: :asc)
     if !@transaction_filter[:description].nil?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
@@ -62,21 +62,57 @@ class TransactionsController < ApplicationController
   end
 
   def load_import
-    @@load_errors = []
-    CSV.foreach(params[:file].path,headers: true) do |row|
-      user_txs = current_user.transactions
-      t = user_txs.find_by_id(row["id"]) || new
-      t.attributes = row.to_hash.slice("date", "description", "amount")
-      t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
-      t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
-      if t.save
-      else
-        @@load_errors << t.errors
+    @@import_errors = []
+    successful = 0
+    errors = 0
+    if params[:file].nil?
+      flash[:alert] = "No file selected!"
+      redirect_to transactions_import_path
+    else
+      CSV.foreach(params[:file].path,headers: true) do |row|
+        user_txs = current_user.transactions
+        t = user_txs.find_by_id(row["id"]) || Transaction.new
+        t.attributes = row.to_hash.slice("date", "description", "amount")
+        t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
+        t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
+        if t.save
+          successful += 1
+        else
+          @@import_errors << [row.to_hash, t.errors.full_messages]
+          errors += 1
+        end
       end
+      #puts @@import_errors.inspect
+      notice = "Import complete: #{successful.to_s} successfully imported"
+      if errors > 0
+        notice += ", #{errors.to_s} skipped through errors (#{view_context.link_to("Download errors as CSV", transactions_import_errors_path(format: "csv"))})"
+      end
+      flash[:notice] = notice.html_safe
+      redirect_to transactions_path
     end
-    puts @@load_errors.inspect
-    flash[:notice] = 'Import complete'
-    render 'import'
+  end
+
+  def import_errors
+    respond_to do |format|
+      format.csv {
+        file = CSV.generate do |csv|
+          keys = @@import_errors[0][0].keys
+          keys << "error"
+          csv << keys
+          #puts @@import_errors.inspect
+          #puts @@import_errors[0][0].keys.inspect
+          @@import_errors.each do |e|
+            row = []
+            e[0].values.each do |val|
+              row << val
+            end
+            row << e[1][0]
+            csv << row
+          end
+        end
+        send_data file
+      }
+    end
   end
 
   private

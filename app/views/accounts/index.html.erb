@@ -14,7 +14,7 @@
       <tr>
         <td><%= account.name %></td>
         <td><%= link_to 'Edit', edit_account_path(account) %></td>
-        <td><%= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Delete', account, method: :delete, data: { confirm: "This will also delete any transactions currently tied to this account (#{account.transactions.count} transactions). Are you sure?" } %></td>
       </tr>
     <% end %>
   </tbody>

@@ -10,6 +10,7 @@ Fin::Application.routes.draw do
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
   get '/transactions/import' => 'transactions#import', :as => :transactions_import
   post '/transactions/import' => 'transactions#load_import', :as => :transactions_load_import
+  get '/transactions/import/errors' => 'transactions#import_errors', :as => :transactions_import_errors
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
