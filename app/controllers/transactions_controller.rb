@@ -3,17 +3,22 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transaction_filter = {description: nil}
-    @transactions = current_user.transactions.order(:date)
-    #puts @transaction_filter[:description]
-    #puts @transaction_filter[:description].empty?
-    @new_transaction = Transaction.new
+    @transactions = current_user.transactions.order(date: :asc, created_at: :asc)
+    respond_to do |format|
+      format.html {
+        @transaction_filter = {description: nil}
+        @new_transaction = Transaction.new    
+      }
+      format.csv {
+        send_data @transactions.to_csv
+      }
+    end
   end
 
   def filter
     @transaction_filter = transaction_filter_params
     puts @transaction_filter.inspect
-    @transactions = current_user.transactions.order(:date)
+    @transactions = current_user.transactions.order(date: :asc, created_at: :asc)
     if !@transaction_filter[:description].nil?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
     end
