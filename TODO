@@ -1,9 +1,21 @@
 TODO
 
+- export transaction import errors
+- import view "a imported, b failed with errors, c new accounts created, d new categories created"
+
+- "No transactions found"
 - transactions returned in batches
 - filter on start date, end date
-- category breakdown
-- "No transactions found"
+- category breakdown/spend in transactions#index
+
 - must create account to create transaction
-- import transactions by csv
+
 - category reassignment on deletion
+
+- budgets
+
+- bootstrap (or foundation?)
+- jquery datepicker on new transaction
+
+- mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
+- ajax population, new transaction, move page

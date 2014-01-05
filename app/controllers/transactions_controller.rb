@@ -58,6 +58,27 @@ class TransactionsController < ApplicationController
     redirect_to transactions_path
   end
 
+  def import
+  end
+
+  def load_import
+    @@load_errors = []
+    CSV.foreach(params[:file].path,headers: true) do |row|
+      user_txs = current_user.transactions
+      t = user_txs.find_by_id(row["id"]) || new
+      t.attributes = row.to_hash.slice("date", "description", "amount")
+      t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
+      t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
+      if t.save
+      else
+        @@load_errors << t.errors
+      end
+    end
+    puts @@load_errors.inspect
+    flash[:notice] = 'Import complete'
+    render 'import'
+  end
+
   private
     def set_transaction
       @transaction = Transaction.find(params[:id])

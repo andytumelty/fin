@@ -8,6 +8,8 @@ Fin::Application.routes.draw do
   resources :transactions, except: [:show, :new]
 
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
+  get '/transactions/import' => 'transactions#import', :as => :transactions_import
+  post '/transactions/import' => 'transactions#load_import', :as => :transactions_load_import
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
