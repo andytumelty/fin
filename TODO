@@ -2,11 +2,21 @@ TODO
 
 - import: what happens if no amount/desc/etc... column is found?
 - account (and possibly category) being blank seem to be flagged as imported successfully
+- case sensitivity when looking for column headers on import
+- concatenate all errors in error export, shows just first
+- validate prescence of date, category, account to generate errors
+
+- balance recalcs on update and destroy
+- budget date, account_balance and balance on csv export
+- budget date, account_balance and balance on csv import
 
 - "No transactions found"
 - transactions returned in batches
 - filter on start date, end date
 - category breakdown/spend in transactions#index
+
+- sort by date :desc
+- category order on dropdown: unassigned always first then alpha
 
 - must create account to create transaction
 

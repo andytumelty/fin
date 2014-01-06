@@ -8,9 +8,12 @@
 <table>
   <thead>
     <tr>
+      <th>Order</th>
       <th>Date</th>
+      <th>Budget Date</th>
       <th>Description</th>
       <th colspan="2">Amount</th>
+      <th colspan="2">Account<br>Balance</th>
       <th colspan="2">Balance</th>
       <th>Account</th>
       <th>Category</th>
@@ -33,34 +36,41 @@
     <tr>
       <%= form_tag(transactions_filter_path, method: "get") do %>
         <td></td>
+        <td></td>
+        <td></td>
         <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
+        <td colspan="2"></td>
         <td colspan="2"></td>
         <td colspan="2"></td>
         <td></td>
         <td></td>
         <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
-        <td></td>
       <% end %>
     </tr>
     <tr>
       <%= form_for(@new_transaction) do |f| %>
+        <td></td>
         <td><%= f.date_select(:date, use_short_month: :true) %></td>
+        <td><%= f.date_select(:budget_date, use_short_month: :true) %></td>
         <td><%= f.text_field(:description, size: 40) %></td>
         <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
+        <td colspan="2"></td>
         <td colspan="2"></td>
         <td><%= f.collection_select :account_id, current_user.accounts, :id, :name %></td>
         <td><%= f.collection_select :category_id, current_user.categories, :id, :name %></td>
         <td colspan="2"><%= f.submit %></td>
-        <td></td>
       <% end %>
     </tr>
     <% balance = 0 %>
     <% @transactions.each do |transaction| %>
       <tr>
+        <td><%= transaction.order %></td>
         <td><%= transaction.date %></td>
+        <td><%= transaction.budget_date %></td>
         <td><%= transaction.description %></td>
         <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-        <td align="right"><%= number_to_currency(balance += transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+        <td align="right"><%= number_to_currency(transaction.account_balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+        <td align="right"><%= number_to_currency(transaction.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
         <td align="center"><%= transaction.account.name %></td>
         <td align="center"><%= transaction.category.name %></td>
         <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
