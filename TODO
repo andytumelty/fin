@@ -11,9 +11,18 @@ TODO
 - budget date, account_balance and balance on csv import
 
 - "No transactions found"
-- transactions returned in batches
-- filter on start date, end date
-- category breakdown/spend in transactions#index
+- filter by account and category
+
+- Metrics on transaction#index and transaction#filter (collapsable div):
+  - opening balance
+  - closing balance
+  - income
+  - spent
+  - category breakdown
+
+- padding around fitler/new transaction form
+- errors are highlighted under form for new transaction (see http://foundation.zurb.com/docs/components/forms.html error states)
+- prefix for amount?
 
 - sort by date :desc
 - category order on dropdown: unassigned always first then alpha
@@ -24,10 +33,9 @@ TODO
 
 - budgets
 
-- bootstrap (or foundation?)
-- jquery datepicker on new transaction
-
 - mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 - ajax population, new transaction, move page
 
 - refactor transaction (to transaction_import?) and move logic to methods in models
+
+- theme datepicker

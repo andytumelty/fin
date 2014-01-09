@@ -22,8 +22,7 @@
           <th width="120" colspan="2">Balance</th>
           <th width="100">Account</th>
           <th width="100">Category</th>
-          <th width="60"></th>
-          <th width="60"></th>
+          <th width="100" colspan="2">Actions</th>
         </tr>
       </thead>
       <% if @new_transaction.errors.any? %>
@@ -55,8 +54,8 @@
         <tr>
           <%= form_for(@new_transaction) do |f| %>
             <td></td>
-            <td><%= f.date_select(:date, use_short_month: :true) %></td>
-            <td><%= f.date_select(:budget_date, use_short_month: :true) %></td>
+            <td><%= f.text_field(:date, class: "datepicker") %></td>
+            <td><%= f.text_field(:budget_date, class: "datepicker") %></td>
             <td><%= f.text_field(:description, size: 40) %></td>
             <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
             <td colspan="2"></td>
@@ -79,7 +78,7 @@
             <td align="center"><%= transaction.account.name %></td>
             <td align="center"><%= transaction.category.name %></td>
             <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
-            <td><%= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'X', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
         <% end %>
       </tbody>
