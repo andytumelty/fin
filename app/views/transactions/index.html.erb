@@ -1,81 +1,88 @@
-<h2>Transactions</h2>
+<div class="row">
+  <div class="large-4 columns">
+    <h2>Transactions</h2>
+  </div>
+  <div style="text-align:right;padding-top:15px;" class="large-8 large columns">
+    <%= link_to "Download all", transactions_path(format: "csv"), class: "small button"%>
+    <%= link_to "Import", transactions_import_path, class: "small button"%>
+  </div>
+</div>
 
-<p>
-<%= link_to "Download all", transactions_path(format: "csv")%>
-<%= link_to "Import", transactions_import_path %>
-</p>
+<div class="row">
+  <div class="large-12 columns">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th width="100">Date</th>
+          <th width="100">Budget Date</th>
+          <th width="300">Description</th>
+          <th width="120" colspan="2">Amount</th>
+          <th width="120" colspan="2">Account<br>Balance</th>
+          <th width="120" colspan="2">Balance</th>
+          <th width="100">Account</th>
+          <th width="100">Category</th>
+          <th width="60"></th>
+          <th width="60"></th>
+        </tr>
+      </thead>
+      <% if @new_transaction.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@new_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Order</th>
-      <th>Date</th>
-      <th>Budget Date</th>
-      <th>Description</th>
-      <th colspan="2">Amount</th>
-      <th colspan="2">Account<br>Balance</th>
-      <th colspan="2">Balance</th>
-      <th>Account</th>
-      <th>Category</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <% if @new_transaction.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@new_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
-
-      <ul>
-      <% @new_transaction.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+          <ul>
+          <% @new_transaction.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <tbody>
-    <tr>
-      <%= form_tag(transactions_filter_path, method: "get") do %>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
-        <td colspan="2"></td>
-        <td colspan="2"></td>
-        <td colspan="2"></td>
-        <td></td>
-        <td></td>
-        <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
-      <% end %>
-    </tr>
-    <tr>
-      <%= form_for(@new_transaction) do |f| %>
-        <td></td>
-        <td><%= f.date_select(:date, use_short_month: :true) %></td>
-        <td><%= f.date_select(:budget_date, use_short_month: :true) %></td>
-        <td><%= f.text_field(:description, size: 40) %></td>
-        <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
-        <td colspan="2"></td>
-        <td colspan="2"></td>
-        <td><%= f.collection_select :account_id, current_user.accounts, :id, :name %></td>
-        <td><%= f.collection_select :category_id, current_user.categories, :id, :name %></td>
-        <td colspan="2"><%= f.submit %></td>
-      <% end %>
-    </tr>
-    <% balance = 0 %>
-    <% @transactions.each do |transaction| %>
-      <tr>
-        <td><%= transaction.order %></td>
-        <td><%= transaction.date %></td>
-        <td><%= transaction.budget_date %></td>
-        <td><%= transaction.description %></td>
-        <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-        <td align="right"><%= number_to_currency(transaction.account_balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-        <td align="right"><%= number_to_currency(transaction.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-        <td align="center"><%= transaction.account.name %></td>
-        <td align="center"><%= transaction.category.name %></td>
-        <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
-        <td><%= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <tr>
+          <%= form_tag(transactions_filter_path, method: "get") do %>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td></td>
+            <td></td>
+            <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <%= form_for(@new_transaction) do |f| %>
+            <td></td>
+            <td><%= f.date_select(:date, use_short_month: :true) %></td>
+            <td><%= f.date_select(:budget_date, use_short_month: :true) %></td>
+            <td><%= f.text_field(:description, size: 40) %></td>
+            <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
+            <td colspan="2"></td>
+            <td colspan="2"></td>
+            <td><%= f.collection_select :account_id, current_user.accounts, :id, :name %></td>
+            <td><%= f.collection_select :category_id, current_user.categories, :id, :name %></td>
+            <td colspan="2"><%= f.submit "Add!" %></td>
+          <% end %>
+        </tr>
+        <% balance = 0 %>
+        <% @transactions.each do |transaction| %>
+          <tr>
+            <td><%= transaction.order %></td>
+            <td><%= transaction.date %></td>
+            <td><%= transaction.budget_date %></td>
+            <td><%= transaction.description %></td>
+            <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td align="right"><%= number_to_currency(transaction.account_balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td align="right"><%= number_to_currency(transaction.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td align="center"><%= transaction.account.name %></td>
+            <td align="center"><%= transaction.category.name %></td>
+            <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
+            <td><%= link_to 'Destroy', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

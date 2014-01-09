@@ -45,5 +45,4 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'sorcery'
-
-gem 'hirb'
+gem 'foundation-rails'

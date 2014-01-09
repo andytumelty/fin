@@ -1,32 +1,63 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Fin</title>
-  <%= stylesheet_link_tag    "application", media: "all"%>
-  <%= javascript_include_tag "application"%>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-<h1><%= link_to "Fin", root_url %></h1>
-  <div id="nav">
-    <% if current_user %>
-      <%= link_to "Edit Profile", edit_user_path(current_user.id) %>
-      <%= link_to "Logout", :logout, method: :post %>
-      <br>
-      <%= link_to "Transactions", transactions_path %>
-      <%= link_to "Accounts", accounts_path %>
-      <%= link_to "Categories", categories_path %>
-    <% else %>
-      <%= link_to "Register", new_user_path %> |
-      <%= link_to "Login", :login %>
-    <% end %>
-  </div>
-  <div>
-    <p id="notice"><%= flash[:notice] %></p>
-    <p id="alert"><%= flash[:alert] %></p>
-  </div>
-  
-<%= yield %>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-</body>
+    <title><%= "fin" %></title>
+
+    <%= stylesheet_link_tag    "application" %>
+    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+    <div class="fixed"> 
+      <nav class="top-bar" data-topbar>
+        <ul class="title-area">
+          <li class="name">
+            <h1><%= link_to "Fin", root_url %></h1>
+          </li>
+          <li class="divider"></li>
+        </ul>
+
+        <section class="top-bar-section">
+          <!-- Left Nav Section -->
+          <% if current_user %>
+            <ul class="left">
+              <li class="divider"></li>
+              <li><%= link_to "Transactions", transactions_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Accounts", accounts_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Categories", categories_path %></li>
+              <li class="divider"></li>
+            </ul>
+          <% end %>
+          <!-- Right Nav Section -->
+          <ul class="right">
+            <% if current_user %>
+              <li class="divider"></li>
+              <li><%= link_to "Edit Profile", edit_user_path(current_user.id) %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Logout", :logout, method: :post %></li>
+            <% else %>
+              <li class="divider"></li>
+              <li><%= link_to "Register", new_user_path %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Login", :login %></li>
+            <% end %>
+          </ul>
+        </section>
+      </nav>
+    </div>
+    <div class="row">
+      <div class="large-12 large-centered columns">
+        <p id="notice"><%= flash[:notice] %></p>
+        <p id="alert"><%= flash[:alert] %></p>
+      </div>
+    </div>
+    <%= yield %>
+    <%= javascript_include_tag "application" %>
+  </body>
 </html>
