@@ -1,4 +1,8 @@
 Fin::Application.routes.draw do
+  resources :reservations
+
+  resources :budgets
+
   root :to => 'transactions#index'
 
   resources :users, except: [:index, :show]

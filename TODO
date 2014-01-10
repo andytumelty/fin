@@ -39,3 +39,7 @@ TODO
 - refactor transaction (to transaction_import?) and move logic to methods in models
 
 - theme datepicker
+
+- datepicker for transaction edit
+
+- AJAX THE LOT!
