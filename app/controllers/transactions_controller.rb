@@ -63,10 +63,9 @@ class TransactionsController < ApplicationController
   end
 
   def load_import
-    # import order
-    # change to a transaction method
+    # change to a method in an import controller?
     # change update_balance to after_commit and wrap the import into a transaction
-    @@import_errors = []
+    @@import_errors = [] # very bad!
     successful = 0
     errors = 0
     if params[:file].nil?
@@ -76,7 +75,7 @@ class TransactionsController < ApplicationController
       CSV.foreach(params[:file].path,headers: true) do |row|
         user_txs = current_user.transactions
         t = user_txs.find_by_id(row["id"]) || Transaction.new
-        t.attributes = row.to_hash.slice("date", "description", "amount")
+        t.attributes = row.to_hash.slice("order", "date", "budget_date", "description", "amount")
         t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
         t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
         if t.save

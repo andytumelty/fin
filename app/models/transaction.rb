@@ -10,13 +10,13 @@ class Transaction < ActiveRecord::Base
   validates :category, presence: true
 
   before_create :generate_order
-  after_save :update_transaction_balances
+  after_commit :update_transaction_balances
   
   def self.to_csv
     CSV.generate do |csv|
-      csv << ["id", "order", "date", "description", "amount", "account_balance", "balance", "account", "category"]
+      csv << ["id", "order", "date", "budget_date","description", "amount", "account_balance", "balance", "account", "category"]
       all.each do |t|
-        csv << [t.id, t.order, t.date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
+        csv << [t.id, t.order, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
       end
     end
   end
@@ -30,14 +30,15 @@ class Transaction < ActiveRecord::Base
   end
 
   def update_transaction_balances
+    puts "%%%%%%%%%% RUNNING update_transaction_balances %%%%%%%%%%"
     if self.date_was.nil?
       date = self.date
     else
       date = [self.date, self.date_was].min
     end
-    puts "Looking for txs after #{date}"
+    #puts "Looking for txs after #{date}"
     transactions = self.user.transactions.where("date >= :date", date: date).order(date: :asc, order: :asc)
-    puts "I'll have to update #{transactions.count} transactions"
+    #puts "I'll have to update #{transactions.count} transactions"
     last_transaction = self.user.transactions.where("date < :date", date: date).order(date: :asc, order: :asc).last
     if !last_transaction.nil?
       balance = last_transaction.balance
@@ -55,7 +56,7 @@ class Transaction < ActiveRecord::Base
       account_balances[account.name] = account_balance
     end
     transactions.each do |transaction|
-      puts "%%%%%%%%%% update tx #{transaction.id} (date: #{transaction.date}, desc: #{transaction.description}, amount: #{transaction.amount}) %%%%%%%%"
+      #puts "%%%%%%%%%% update tx #{transaction.id} (date: #{transaction.date}, desc: #{transaction.description}, amount: #{transaction.amount}) %%%%%%%%"
       balance += transaction.amount
       transaction.update_column('balance', balance)
       account_balances[transaction.account.name] += transaction.amount

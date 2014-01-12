@@ -34,7 +34,6 @@ TODO
 - budgets
 
 - mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
-- ajax population, new transaction, move page
 
 - refactor transaction (to transaction_import?) and move logic to methods in models
 
