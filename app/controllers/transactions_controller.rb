@@ -33,22 +33,6 @@ class TransactionsController < ApplicationController
   # POST /transactions
   def create
     @new_transaction = Transaction.new(transaction_params)
-    
-    last_tx = current_user.transactions.order(date: :asc, order: :asc).last
-    prev_balance = 0
-    prev_balance = last_tx.balance if !last_tx.nil?
-    @new_transaction.balance = @new_transaction.amount + prev_balance
-    
-    last_tx_on_date = current_user.transactions.where(date: @new_transaction.date).order(order: :asc).last
-    order = 1
-    order = order + last_tx_on_date.order if !last_tx_on_date.nil?
-    @new_transaction.order = order
-    
-    last_account_tx = current_user.transactions.where(account: @new_transaction.account).order(date: :asc, order: :asc).last
-    prev_account_balance = 0
-    prev_account_balance = last_account_tx.account_balance if !last_account_tx.nil?
-    @new_transaction.account_balance = @new_transaction.amount + prev_account_balance
-
     if @new_transaction.save
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
@@ -79,6 +63,9 @@ class TransactionsController < ApplicationController
   end
 
   def load_import
+    # import order
+    # change to a transaction method
+    # change update_balance to after_commit and wrap the import into a transaction
     @@import_errors = []
     successful = 0
     errors = 0

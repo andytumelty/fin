@@ -47,3 +47,4 @@ end
 
 gem 'sorcery'
 gem 'foundation-rails'
+gem 'hirb'
