@@ -29,7 +29,7 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def update_transaction_balances
+  def update_transaction_balances # TODO update balances only if date, amount or account changes
     if self.date_was.nil?
       date = self.date
       old_date = date

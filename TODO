@@ -31,14 +31,7 @@ TODO
 
 - must create account to create transaction
 
-- category reassignment on deletion
-
-- budgets
-- budget update callbacks s=only if date changes
-
 - mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
-
-- refactor transaction (to transaction_import?) and move logic to methods in models
 
 - theme datepicker
 
@@ -48,8 +41,6 @@ TODO
 
 - budgets show new reservation
 - none for ignored categroies
-- update reservations, budgets when transactions update
-- if no budget date = date
 
 % commands
 
