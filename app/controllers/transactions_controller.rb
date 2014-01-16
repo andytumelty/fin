@@ -1,10 +1,9 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:edit, :update, :destroy]
+  before_action :set_transactions, only: [:index, :filter]
+  before_action :set_accounts_and_categories, only: [:index, :filter]
 
   def index
-    @accounts = current_user.accounts.order(name: :asc)
-    @categories = current_user.categories.order(name: :asc)
-    @transactions = current_user.transactions.includes(:account, :category).order(date: :asc, order: :asc)
     respond_to do |format|
       format.html {
         @transaction_filter = {description: nil}
@@ -16,11 +15,18 @@ class TransactionsController < ApplicationController
     end
   end
 
-  def filter
+  def filter # FIXME category and account selected don't persist
     @transaction_filter = transaction_filter_params
-    @transactions = current_user.transactions.order(date: :asc, order: :asc)
-    if !@transaction_filter[:description].blank?
+    if @transaction_filter[:description].present?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
+    end
+    if @transaction_filter[:category].present?
+      category = current_user.categories.where(name: @transaction_filter[:category]).first
+      @transactions = @transactions.where(category: category)
+    end
+    if @transaction_filter[:account].present?
+      account = current_user.accounts.where(name: @transaction_filter[:account]).first
+      @transactions = @transactions.where(account: account)
     end
     @new_transaction = Transaction.new
     render 'index'
@@ -117,12 +123,21 @@ class TransactionsController < ApplicationController
       @transaction = current_user.transactions.find(params[:id])
     end
 
+    def set_transactions
+      @transactions = current_user.transactions.includes(:account, :category).order(date: :asc, order: :asc)
+    end
+
+    def set_accounts_and_categories
+      @accounts = current_user.accounts.order(name: :asc)
+      @categories = current_user.categories.order(name: :asc)
+    end
+
     def transaction_params
       params.require(:transaction).permit(:order, :date, :budget_date, :description, :amount, :account_id, :category_id)
     end
 
     def transaction_filter_params
-      params.permit(:description, :account_id, :category_id)
+      params.permit(:description, :account, :category)
     end
 
 end

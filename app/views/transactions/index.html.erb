@@ -38,7 +38,7 @@
       <% end %>
       <tbody>
         <tr>
-          <%= form_tag(transactions_filter_path, method: "get") do %>
+          <%= form_tag(transactions_filter_path, method: "get") do |f| %>
             <td></td>
             <td></td>
             <td></td>
@@ -46,8 +46,8 @@
             <td colspan="2"></td>
             <td colspan="2"></td>
             <td colspan="2"></td>
-            <td></td>
-            <td></td>
+            <td><%= collection_select(nil, :account, @accounts, :name, :name, include_blank: true) %></td>
+            <td><%= collection_select(nil, :category, @categories, :name, :name, include_blank: true) %></td>
             <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
           <% end %>
         </tr>
