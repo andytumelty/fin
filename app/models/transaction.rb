@@ -59,6 +59,7 @@ class Transaction < ActiveRecord::Base
       account_balances[transaction.account.name] += transaction.amount
       transaction.update_column('account_balance', account_balances[transaction.account.name])
     end
+    #TODO any way of tracking what budgets need updating and updating them all together rather than after every transaction update?
     budgets = self.user.budgets.where("(start_date <= :budget_date AND end_date >= :budget_date) OR (start_date <= :old_budget_date AND end_date >= :old_budget_date)", budget_date: date, old_budget_date: old_date)
     budgets.each do |budget|
       budget.update_reservation_balances

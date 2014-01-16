@@ -13,6 +13,8 @@ class BudgetsController < ApplicationController
     @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
     @budgeted_reservations = @budget.reservations.where(ignored: false)
     @ignored_reservations = @budget.reservations.where(ignored: true)
+    @new_reservation = Reservation.new
+    @categories = current_user.categories # TODO change to be only categories that don't already have a reservation in this budget
   end
 
   # GET /budgets/new

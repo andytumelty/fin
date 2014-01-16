@@ -19,7 +19,7 @@ class TransactionsController < ApplicationController
   def filter
     @transaction_filter = transaction_filter_params
     @transactions = current_user.transactions.order(date: :asc, order: :asc)
-    if !@transaction_filter[:description].nil?
+    if !@transaction_filter[:description].blank?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
     end
     @new_transaction = Transaction.new
@@ -31,6 +31,9 @@ class TransactionsController < ApplicationController
 
   def create # TODO if no budget date is set, use date
     @new_transaction = Transaction.new(transaction_params)
+    if @new_transaction.budget_date.blank?
+      @new_transaction.budget_date = @new_transaction.date
+    end
     if @new_transaction.save
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
@@ -61,7 +64,7 @@ class TransactionsController < ApplicationController
     @@import_errors = [] # FIXME move import errors from class var to session
     successful = 0
     errors = 0
-    if params[:file].nil?
+    if params[:file].blank?
       flash[:alert] = "No file selected!"
       redirect_to transactions_import_path
     else
