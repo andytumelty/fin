@@ -2,14 +2,17 @@ class BudgetsController < ApplicationController
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
 
   # GET /budgets
-  # GET /budgets.json
   def index
-    @budgets = Budget.all
+    @budgets = current_user.budgets
   end
 
   # GET /budgets/1
-  # GET /budgets/1.json
   def show
+    @budgets = current_user.budgets.order(start_date: :asc)
+    @previous_budget = @budgets.where("start_date < :start_date", start_date: @budget.start_date).last
+    @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
+    @budgeted_reservations = @budget.reservations.where(ignored: false)
+    @ignored_reservations = @budget.reservations.where(ignored: true)
   end
 
   # GET /budgets/new
@@ -22,49 +25,42 @@ class BudgetsController < ApplicationController
   end
 
   # POST /budgets
-  # POST /budgets.json
   def create
     @budget = Budget.new(budget_params)
-
-    respond_to do |format|
-      if @budget.save
-        format.html { redirect_to @budget, notice: 'Budget was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @budget }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @budget.errors, status: :unprocessable_entity }
-      end
+    @budget.user = current_user
+    if @budget.name.nil?
+      @budget.name = @budget.start_date.to_s + " to " + @budget.end_date.to_s
+    end
+    if @budget.save
+      redirect_to @budget, notice: 'Budget was successfully created.'
+    else
+      render action: 'new'
     end
   end
 
   # PATCH/PUT /budgets/1
-  # PATCH/PUT /budgets/1.json
   def update
-    respond_to do |format|
-      if @budget.update(budget_params)
-        format.html { redirect_to @budget, notice: 'Budget was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @budget.errors, status: :unprocessable_entity }
-      end
+    if @budget.update(budget_params)
+      redirect_to @budget, notice: 'Budget was successfully updated.'
+    else
+      render action: 'edit'
     end
   end
 
   # DELETE /budgets/1
-  # DELETE /budgets/1.json
   def destroy
     @budget.destroy
-    respond_to do |format|
-      format.html { redirect_to budgets_url }
-      format.json { head :no_content }
-    end
+    redirect_to budgets_url
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_budget
-      @budget = Budget.find(params[:id])
+      if params[:id] == "latest"
+        @budget = current_user.budgets.order(start_date: :asc).last
+      else
+        @budget = current_user.budgets.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

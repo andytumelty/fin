@@ -7,7 +7,6 @@
       <th>Start date</th>
       <th>End date</th>
       <th>Balance</th>
-      <th>User</th>
       <th></th>
       <th></th>
       <th></th>
@@ -21,7 +20,6 @@
         <td><%= budget.start_date %></td>
         <td><%= budget.end_date %></td>
         <td><%= budget.balance %></td>
-        <td><%= budget.user %></td>
         <td><%= link_to 'Show', budget %></td>
         <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
         <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>

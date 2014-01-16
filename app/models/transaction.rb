@@ -24,23 +24,21 @@ class Transaction < ActiveRecord::Base
   def generate_order
     last_transaction_on_date = self.user.transactions.where(date: self.date).order(order: :asc).last
     self.order = 1
-    if !last_transaction_on_date.nil?
+    if last_transaction_on_date.present?
       self.order += last_transaction_on_date.order
     end
   end
 
   def update_transaction_balances
-    puts "%%%%%%%%%% RUNNING update_transaction_balances %%%%%%%%%%"
     if self.date_was.nil?
       date = self.date
+      old_date = date
     else
       date = [self.date, self.date_was].min
     end
-    #puts "Looking for txs after #{date}"
     transactions = self.user.transactions.where("date >= :date", date: date).order(date: :asc, order: :asc)
-    #puts "I'll have to update #{transactions.count} transactions"
     last_transaction = self.user.transactions.where("date < :date", date: date).order(date: :asc, order: :asc).last
-    if !last_transaction.nil?
+    if last_transaction.present?
       balance = last_transaction.balance
     else
       balance = 0
@@ -48,7 +46,7 @@ class Transaction < ActiveRecord::Base
     account_balances = Hash.new
     self.user.accounts.each do |account|
       last_account_transaction = account.transactions.where("date < :date", date: date).order(date: :asc, order: :asc).last
-      if !last_account_transaction.nil?
+      if last_account_transaction.present?
         account_balance = last_account_transaction.account_balance
       else
         account_balance = 0
@@ -56,11 +54,15 @@ class Transaction < ActiveRecord::Base
       account_balances[account.name] = account_balance
     end
     transactions.each do |transaction|
-      #puts "%%%%%%%%%% update tx #{transaction.id} (date: #{transaction.date}, desc: #{transaction.description}, amount: #{transaction.amount}) %%%%%%%%"
       balance += transaction.amount
       transaction.update_column('balance', balance)
       account_balances[transaction.account.name] += transaction.amount
       transaction.update_column('account_balance', account_balances[transaction.account.name])
+    end
+    budgets = self.user.budgets.where("(start_date <= :budget_date AND end_date >= :budget_date) OR (start_date <= :old_budget_date AND end_date >= :old_budget_date)", budget_date: date, old_budget_date: old_date)
+    budgets.each do |budget|
+      budget.update_reservation_balances
+      budget.update_budget_balance
     end
   end
 

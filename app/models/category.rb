@@ -4,4 +4,6 @@ class Category < ActiveRecord::Base
   has_many :reservations
 
   validates :name, presence: true, uniqueness: { scope: :user, case_sensitive: false }
+
+  # TODO after delete, reassign transactions to unassigned, delete reservations with this category (triggering budget updates)
 end

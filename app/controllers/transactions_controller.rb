@@ -3,7 +3,9 @@ class TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transactions = current_user.transactions.order(date: :asc, order: :asc)
+    @accounts = current_user.accounts
+    @categories = current_user.categories
+    @transactions = current_user.transactions.includes(:account, :category).order(date: :asc, order: :asc)
     respond_to do |format|
       format.html {
         @transaction_filter = {description: nil}
@@ -17,7 +19,6 @@ class TransactionsController < ApplicationController
 
   def filter
     @transaction_filter = transaction_filter_params
-    #puts @transaction_filter.inspect
     @transactions = current_user.transactions.order(date: :asc, order: :asc)
     if !@transaction_filter[:description].nil?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
@@ -31,7 +32,7 @@ class TransactionsController < ApplicationController
   end
 
   # POST /transactions
-  def create
+  def create # TODO if no budget date is set, use date
     @new_transaction = Transaction.new(transaction_params)
     if @new_transaction.save
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
@@ -64,8 +65,7 @@ class TransactionsController < ApplicationController
 
   def load_import
     # change to a method in an import controller?
-    # change update_balance to after_commit and wrap the import into a transaction
-    @@import_errors = [] # very bad!
+    @@import_errors = [] # FIXME move import errors from class var to session
     successful = 0
     errors = 0
     if params[:file].nil?

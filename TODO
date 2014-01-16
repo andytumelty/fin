@@ -5,6 +5,8 @@ TODO
 - case sensitivity when looking for column headers on import
 - concatenate all errors in error export, shows just first
 - validate prescence of date, category, account to generate errors
+- add text on transaction import describing necessary format
+- allow column mapping for transaction import
 
 - balance recalcs on update and destroy
 - budget date, account_balance and balance on csv export
@@ -32,6 +34,7 @@ TODO
 - category reassignment on deletion
 
 - budgets
+- budget update callbacks s=only if date changes
 
 - mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 
@@ -42,3 +45,128 @@ TODO
 - datepicker for transaction edit
 
 - AJAX THE LOT!
+
+- budgets show new reservation
+- none for ignored categroies
+- update reservations, budgets when transactions update
+- if no budget date = date
+
+% commands
+
+heroku config:add TZ=Europe/London
+
+% controllers/reservations_controller.rb
+create
+reservation.user = current_user
+reservation.save
+reservation.budget.update_reservation_balances
+
+destroy
+budget = reservation.budget
+budget.update_reservation_balances
+
+update
+# if reservation category is changing...
+reservation.budget.update_reservation_balances
+
+
+% controllers/transactions_controller.rb
+create
+budget = Budget.where(user: current_user, date: (self.start_date..self.end_date))
+if budget
+  budget.update_reservation_balances
+  budget.update_budget_balance
+end
+
+update
+# if budget_date, category or amount has changed
+# also need to run on old budget_date and find if the budget is a different one
+attrs = ["budget_date", "amount", "category"]
+if (transaction.changed & attrs).any?
+  budget = Budget.where(user: current_user, date: (self.start_date..self.end_date))
+  if budget
+    budget.update_reservation_balances
+    budget.update_budget_balance
+  end
+  if transaction.budget_date_changed?
+    old_budget = current_user.budgets.where("start_date <= :date AND end_date >= :date", date: transaction.budget_date_was)
+    if old_budget != budget
+      budget.update_reservation_balances
+      budget.update_budget_balance
+    end
+  end
+end
+
+# on delete category, delete the relevant budgets and recalculate the reservation balances and budget balance of all budgets with a reservation of that category
+# on delete account, delete the relevant transactions and recalculate transaction balances
+
+# don't use, in it's current state you can have a budget that starts in one gap, envelops a budget and ends in another gap. Besides, it might be advantageous to track different budgets, i.e. one for 2014 Q1 and one for January 2014
+class OverlapValidator < ActiveModel::Validator
+  def validate(record)
+    start_date_overlaps = Budget.where("user = :user AND (start_date <= :start_date AND end_date >= :end_date)
+                  (start_date <= :end_date AND end_date >= :end_date))",
+                user: record.user, start_date: record.start_date, end_date: record.end_date).count == 0
+Budget.where("user = :user AND (start_date <= :start_date AND end_date >= :end_date)
+                  (start_date <= :end_date AND end_date >= :end_date))",
+                user: record.user, start_date: record.start_date, end_date: record.end_date).count
+end
+
+budget name not copying over
+
+/config/routes.rb
+
+resources :budgets, except: :index
+get '/budgets', to 'budgets#show', as: :budgets
+
+
+/controllers/budgets_controller.rb
+edit getter, if no id then choose most recent budget
+
+def index
+
+
+/views/budgets/show.html.erb
+
+FIXME OPTIMIZE and TODO, use with rake notes
+
+dashboard
+- current overall balance
+- balance per account
+- categorical spend (default: in the last 30 days, ability to alter time)
+
+move number_to_currency format gunk to a new helper number_to_currency_with_tds
+amounts should be £ - if 0
+
+optimizing: using inverse of on models with associations
+
+find_or_create_by for category or account on transaction import, new, and update
+auto-complete when typing in categories, accounts and transaction, ordered by popularity
+[am|ex cashback |v]
+|amex corporate | |  with the idea that you can arrow down and hit enter or tab to populate
+
+styling for accounts and categories as buttons (bootstrap-esque), possible colour varience
+
+search for nil? and replace with blank? or present?
+
+use bullet to help detect n+1 problems
+
+scss custom classes and mixins
+bourbon sass
+
+specify desired columns on queries to reduce query load on mem
+
+The data structure on splits will vary, depending on how strict they need to be:
+- Should you be able to group transactions with different accounts, i.e. transfers?
+  And if so, what then happens if you filter on a particular account?
+  This also affects looking up the last account balance, and quickly getting categorical spend
+  Could add two columns, is split and parent_transaction
+
+  has_many :children, class_name: "Transaction", foreign_key: "parent_id"
+  belongs_to :parent, class_name: "Transaction"
+
+  for indexing transactions:
+  if @transaction.children.empty?
+    show splits...
+  end
+
+  @transaction.parent = params :id

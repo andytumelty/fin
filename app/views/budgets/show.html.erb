@@ -1,29 +1,93 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @budget.name %>
-</p>
+<div class="row">
+  <div class="small-6 small-centered columns text-center">
+    <h3>
+      <%= @budget.name %><br>
+      <small>
+        From <%= @budget.start_date %> to <%= @budget.end_date %>
+      </small>
+    </h3>
+    <%= link_to 'Delete budget', budget_path(@budget), method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
+</div>
 
-<p>
-  <strong>Start date:</strong>
-  <%= @budget.start_date %>
-</p>
+<div class="row">
+  <div class="small-6 small-centered columns text-center">
+  <div class="small-1 columns text-center">
+    <% if @previous_budget.nil? %>
+      <h1><</h1>
+    <% else %>
+      <%= link_to 'Previous Budget', budget_path(@previous_budget) %>
+    <% end %>
+  </div>
+  <div class="small-4 columns text-center">
+    budgets <br>
+    <%= link_to 'New Budget', new_budget_path %>
+  </div>
+  <div class="small-1 columns text-center">
+    <% if @next_budget.nil? %>
+      <h1>></h1>
+    <% else %>
+      <%= link_to 'Next Budget', budget_path(@next_budget) %>
+    <% end %>
+  </div>
+  </div>
+</div>
 
-<p>
-  <strong>End date:</strong>
-  <%= @budget.end_date %>
-</p>
+<div class="row">
+  <div class="small-6 small-centered columns text-center">
+    <h2>
+      <small>You've got</small>
+      <%= number_to_currency(@budget.balance) %>
+      <small>left to spend</small>
+    </h2>
+  </div>
+</div>
 
-<p>
-  <strong>Balance:</strong>
-  <%= @budget.balance %>
-</p>
+<div class="row">
+  <div class="small-4 small-centered columns">
+    <table>
+      <thead>
+        <th width="200">Category</th>
+        <th width="50" colspan="2">Budgeted</th>
+        <th width="50" colspan="2">Balance</th>
+        <th width="40"></th>
+      </thead>
+      <% @budgeted_reservations.each do |reservation| %>
+        <% if !reservation.category_id.nil? %>
+          <tr>
+            <td><%= Category.find(reservation.category.id).name %></td>
+            <td><%= number_to_currency(reservation.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td><%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %></td>
+          </tr>
+        <% else %>
+          <tr>
+            <td>Everything else</td>
+            <td><%= number_to_currency(reservation.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <td></td>
+          </tr>
+        <% end %>
+      <% end %>
+      </table>
 
-<p>
-  <strong>User:</strong>
-  <%= @budget.user %>
-</p>
-
-<%= link_to 'Edit', edit_budget_path(@budget) %> |
-<%= link_to 'Back', budgets_path %>
+      <table>
+      <thead>
+        <th>Ignored categories</th>
+        <th colspan="2"> </th>
+        <th colspan="2"> </th>
+        <th></th>
+      </thead>
+      <% @ignored_reservations.each do |reservation| %>
+        <tr>
+          <td><%= Category.find(reservation.category.id).name %></td>
+          <td><%= number_to_currency(reservation.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+          <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+          <td><%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
