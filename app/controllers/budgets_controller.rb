@@ -8,13 +8,17 @@ class BudgetsController < ApplicationController
 
   # GET /budgets/1
   def show
-    @budgets = current_user.budgets.order(start_date: :asc)
-    @previous_budget = @budgets.where("start_date < :start_date", start_date: @budget.start_date).last
-    @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
-    @budgeted_reservations = @budget.reservations.where(ignored: false)
-    @ignored_reservations = @budget.reservations.where(ignored: true)
-    @new_reservation = Reservation.new
-    @categories = current_user.categories.order(name: :asc) # TODO change to be only categories that don't already have a reservation in this budget
+    if @budget.blank?
+      redirect_to new_budget_url, notice: 'No budgets found'
+    else
+      @budgets = current_user.budgets.order(start_date: :asc)
+      @previous_budget = @budgets.where("start_date < :start_date", start_date: @budget.start_date).last
+      @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
+      @budgeted_reservations = @budget.reservations.where(ignored: false)
+      @ignored_reservations = @budget.reservations.where(ignored: true)
+      @new_reservation = Reservation.new
+      @categories = current_user.categories.order(name: :asc) # TODO change to be only categories that don't already have a reservation in this budget
+    end
   end
 
   # GET /budgets/new
@@ -30,9 +34,11 @@ class BudgetsController < ApplicationController
   def create
     @budget = Budget.new(budget_params)
     @budget.user = current_user
-    if @budget.name.nil?
+    @budget.balance = 0
+    if @budget.name.blank?
       @budget.name = @budget.start_date.to_s + " to " + @budget.end_date.to_s
     end
+    p(@budget)
     if @budget.save
       redirect_to @budget, notice: 'Budget was successfully created.'
     else

@@ -40,8 +40,6 @@ TODO
 
 heroku config:add TZ=Europe/London
 
-budget name not copying over
-
 dashboard
 - current overall balance
 - balance per account

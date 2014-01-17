@@ -17,6 +17,7 @@ class Budget < ActiveRecord::Base
       end
       reservation.update_column('balance', reservation.balance + transaction.amount)
     end
+    self.reservations.reload
   end
 
   def update_budget_balance
@@ -38,12 +39,18 @@ class Budget < ActiveRecord::Base
 
   def copy_previous_reservations
     puts "%%%%% budget.rb : copy_previous_reservations"
-    if Budget.where(user: self.user).count > 1
-      Budget.where(user: self.user).order(start_date: :desc).first.reservations.each do |prev_reservation|
+    if self.user.budgets.count > 1
+      puts "&&&&& self.user.budgets.count > 1"
+      prev_budget = self.user.budgets.where.not(id: self.id).order(start_date: :asc).last
+      p(prev_budget)
+      prev_budget.reservations.each do |prev_reservation|
+        p(prev_reservation)
         Reservation.create(budget: self, category_id: prev_reservation.category_id, amount: prev_reservation.amount, ignored: prev_reservation.ignored)
       end
     else
       Reservation.create(budget: self, amount: 0)
     end
+    p(self)
+    p(self.reservations)
   end
 end
