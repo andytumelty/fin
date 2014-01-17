@@ -32,7 +32,7 @@ $rem-base: 14px;
 
 // $include-html-grid-classes: $include-html-classes;
 
-$row-width: rem-calc(1200);
+$row-width: rem-calc(1300);
 // $column-gutter: rem-calc(30);
 // $total-columns: 12;
 
@@ -857,14 +857,14 @@ $table-head-font-size: rem-calc(13);
 $table-head-padding: rem-calc(6 8);
 
 // These control the row padding and font styles
-$table-row-padding: rem-calc(6 8);
-$table-row-font-size: rem-calc(13);
+$table-row-padding: rem-calc(4 4);
+$table-row-font-size: rem-calc(12.5);
 // $table-row-font-color: #222;
-$table-line-height: rem-calc(15);
+$table-line-height: rem-calc(13);
 
 // These are for controlling the display and margin of tables
 // $table-display: table-cell;
-// $table-margin-bottom: rem-calc(20);
+// $table-margin-bottom: rem-calc(10);
 
 //
 // TABS
