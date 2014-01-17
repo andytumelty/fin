@@ -1,25 +1,19 @@
 TODO
 
-- import: what happens if no amount/desc/etc... column is found?
-- account (and possibly category) being blank seem to be flagged as imported successfully
-- case sensitivity when looking for column headers on import
-- concatenate all errors in error export, shows just first
-- validate prescence of date, category, account to generate errors
-- add text on transaction import describing necessary format
-- allow column mapping for transaction import
+FIXME account (and possibly category) being blank seem to be flagged as imported successfully
+FIXME case sensitivity when looking for column headers on import
+FIXME concatenate all errors in error export, shows just first
+FIXME validate prescence of transaction date, category, account to generate errors
+TODO add text on transaction import describing necessary format
+TODO allow column mapping for transaction import
 
-- "No transactions found"
+TODO "No transactions found"
 
-- Metrics on transaction#index and transaction#filter (collapsable div):
-  - opening balance
-  - closing balance
-  - income
-  - spent
-  - category breakdown
+TODO Metrics on transaction#index and transaction#filter (collapsable div): opening balance, closing balance, income, spent, category breakdown
 
-- padding around fitler/new transaction form
-- errors are highlighted under form for new transaction (see http://foundation.zurb.com/docs/components/forms.html error states)
-- prefix for amount?
+TODO lessen padding around fitler/new transaction form
+TODO errors are highlighted under form for new transaction (see http://foundation.zurb.com/docs/components/forms.html error states)
+TODO prefix for amount
 
 - sort by date :desc
 - category order on dropdown: unassigned always first then alpha

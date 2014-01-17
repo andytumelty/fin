@@ -6,7 +6,8 @@ class TransactionsController < ApplicationController
   def index
     respond_to do |format|
       format.html {
-        @transaction_filter = {description: nil}
+        @transactions = @transactions.where(date: (Date.today-1.month..Date.today))
+        @transaction_filter = {description: nil, date_from: Date.today - 1.month, date_to: Date.today}
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)    
       }
       format.csv {
@@ -27,6 +28,9 @@ class TransactionsController < ApplicationController
     if @transaction_filter[:account].present?
       account = current_user.accounts.where(name: @transaction_filter[:account]).first
       @transactions = @transactions.where(account: account)
+    end
+    if @transaction_filter[:date_from].present? && @transaction_filter[:date_to].present?
+      @transactions = @transactions.where(date: (@transaction_filter[:date_from]..@transaction_filter[:date_to]))
     end
     @new_transaction = Transaction.new
     render 'index'
@@ -137,7 +141,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_filter_params
-      params.permit(:description, :account, :category)
+      params.permit(:description, :account, :category, :date_from, :date_to)
     end
 
 end
