@@ -15,12 +15,12 @@
   <div class="large-4 columns">
     <table>
       <thead>
-        <th colspan="2">Category Breakdown</th>
+        <th colspan="3">Category Breakdown</th>
       </thead>
       <% @category_breakdown.each do |category, amount| %>
         <tr>
           <td><%= category %></td>
-          <td><%= amount %></td>
+          <%= number_to_currency_td(amount) %>
         </tr>
       <% end %>
     </table>
@@ -28,19 +28,19 @@
   <div class="large-4 columns">
     <table>
       <thead>
-        <th colspan="2">Metrics</th>
+        <th colspan="3">Metrics</th>
       </thead>
       <tr>
         <td>Total Income</td>
-        <td><%= @total_income %></td>
+        <%= number_to_currency_td(@total_income) %>
       </tr>
       <tr>
         <td>Total Expenditure</td>
-        <td><%= @total_expenditure %></td>
+        <%= number_to_currency_td(@total_expenditure) %>
       </tr>
       <tr>
         <td>Balance Diff</td>
-        <td><%= @balance_diff %></td>
+        <%= number_to_currency_td(@balance_diff) %>
       </tr>
     </table>
   </div>
@@ -109,9 +109,9 @@
             <td><%= transaction.date %></td>
             <td><%= transaction.budget_date %></td>
             <td><%= transaction.description %></td>
-            <td align="right"><%= number_to_currency(transaction.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-            <td align="right"><%= number_to_currency(transaction.account_balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-            <td align="right"><%= number_to_currency(transaction.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <%= number_to_currency_td(transaction.amount) %>
+            <%= number_to_currency_td(transaction.account_balance) %>
+            <%= number_to_currency_td(transaction.balance) %>
             <td align="center"><%= transaction.account.name %></td>
             <td align="center"><%= transaction.category.name %></td>
             <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
