@@ -16,8 +16,8 @@ end
 
 gem 'sorcery'
 gem 'foundation-rails'
-gem 'hirb'
 
+gem 'hirb'
 gem 'nokogiri'
 gem 'redcarpet', '~> 2.1.1'
 gem 'lograge'

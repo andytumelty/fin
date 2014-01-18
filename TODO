@@ -15,23 +15,17 @@ TODO lessen padding around fitler/new transaction form
 TODO errors are highlighted under form for new transaction (see http://foundation.zurb.com/docs/components/forms.html error states)
 TODO prefix for amount
 
-- sort by date :desc
-- category order on dropdown: unassigned always first then alpha
+TODO must create account to create transaction
 
-- must create account to create transaction
+TODO mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 
-- mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
+TODO theme datepicker
 
-- theme datepicker
+TODO datepicker for transaction edit
 
-- datepicker for transaction edit
+TODO AJAX THE LOT!
 
-- AJAX THE LOT!
-
-- none for ignored categroies
-
-% commands
-
+TODO host on heroku
 heroku config:add TZ=Europe/London
 
 dashboard

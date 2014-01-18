@@ -8,7 +8,9 @@ class TransactionsController < ApplicationController
       format.html {
         @transactions = @transactions.where(date: (Date.today-1.month..Date.today))
         @transaction_filter = {description: nil, date_from: Date.today - 1.month, date_to: Date.today}
-        @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)    
+        @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
+        @category_breakdown = set_category_breakdown(@transactions)
+        @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
       }
       format.csv {
         send_data @transactions.to_csv
@@ -32,6 +34,8 @@ class TransactionsController < ApplicationController
     if @transaction_filter[:date_from].present? && @transaction_filter[:date_to].present?
       @transactions = @transactions.where(date: (@transaction_filter[:date_from]..@transaction_filter[:date_to]))
     end
+    @category_breakdown = set_category_breakdown(@transactions)
+    @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
     @new_transaction = Transaction.new
     render 'index'
   end
@@ -144,4 +148,21 @@ class TransactionsController < ApplicationController
       params.permit(:description, :account, :category, :date_from, :date_to)
     end
 
+    def set_category_breakdown(transactions)
+      category_breakdown = Hash.new
+      current_user.categories.each do |category|
+        category_transactions = transactions.where(category: category)
+        if category_transactions.present?
+          category_breakdown[category.name] = category_transactions.sum('amount')
+        end
+      end
+      return category_breakdown
+    end
+
+    def set_metrics(transactions)
+      total_income = transactions.where('amount > 0').sum('amount') # TODO Is this useful? Transfers skew this
+      total_expenditure = transactions.where('amount < 0').sum('amount')
+      balance_diff = total_income + total_expenditure
+      return [total_income, total_expenditure, balance_diff]
+    end
 end
