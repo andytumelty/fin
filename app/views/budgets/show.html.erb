@@ -8,30 +8,35 @@
         From <%= @budget.start_date %> to <%= @budget.end_date %>
       </small>
     </h3>
-    <%= link_to 'Delete budget', budget_path(@budget), method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%= link_to 'Edit', edit_budget_path(@budget) %> |
+    <%= link_to 'Delete', budget_path(@budget), method: :delete, data: { confirm: 'Are you sure?' } %>
   </div>
 </div>
 
 <div class="row">
   <div class="small-6 small-centered columns text-center">
-  <div class="small-1 columns text-center">
-    <% if @previous_budget.nil? %>
-      <h1><</h1>
-    <% else %>
-      <%= link_to 'Previous Budget', budget_path(@previous_budget) %>
-    <% end %>
-  </div>
-  <div class="small-4 columns text-center">
-    budgets <br>
-    <%= link_to 'New Budget', new_budget_path %>
-  </div>
-  <div class="small-1 columns text-center">
-    <% if @next_budget.nil? %>
-      <h1>></h1>
-    <% else %>
-      <%= link_to 'Next Budget', budget_path(@next_budget) %>
-    <% end %>
-  </div>
+    <div class="small-2 columns text-center">
+      <h2>
+        <% if @previous_budget.nil? %>
+          <
+        <% else %>
+          <%= link_to '<', budget_path(@previous_budget) %>
+        <% end %>
+      </h2>
+    </div>
+    <div style="padding-top:10px;" class="small-8 columns text-center">
+      <p style="width:200px;margin:0 auto;">Jump to: <%= collection_select(nil, :budget, @budgets, :id, :name, size: 5) %></p>
+      <p><%= link_to 'New Budget', new_budget_path %></p>
+    </div>
+    <div class="small-2 columns text-center">
+      <h2>
+        <% if @next_budget.nil? %>
+          >
+        <% else %>
+          <%= link_to '>', budget_path(@next_budget) %>
+        <% end %>
+      </h2>
+    </div>
   </div>
 </div>
 
@@ -46,20 +51,20 @@
 </div>
 
 <div class="row">
-  <div class="small-4 small-centered columns">
-    <table>
+  <div class="small-5 small-centered columns">
+    <table style="margin:0 auto;">
       <thead>
-        <th width="250">Reservations</th>
-        <th width="100" colspan="2">Budgeted</th>
-        <th width="100" colspan="2">Balance</th>
-        <th width="40"></th>
+        <th width="200">Reservations</th>
+        <th width="90" colspan="2">Budgeted</th>
+        <th width="90" colspan="2">Balance</th>
+        <th width="60"></th>
       </thead>
       <% @budgeted_reservations.each do |reservation| %>
         <% if !reservation.category_id.nil? %>
           <tr>
             <td><%= Category.find(reservation.category_id).name %></td>
-            <td><%= number_to_currency(reservation.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-            <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <%= number_to_currency_td(reservation.amount) %>
+            <%= number_to_currency_td(reservation.balance) %>
             <td>
               <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
               <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
@@ -68,20 +73,20 @@
         <% else %>
           <tr>
             <td>Everything else</td>
-            <td><%= number_to_currency(reservation.amount, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
-            <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+            <%= number_to_currency_td(reservation.amount) %>
+            <%= number_to_currency_td(reservation.balance) %>
             <td></td>
           </tr>
         <% end %>
       <% end %>
       <tr>
-        <td colspan="6"><i>Ignored Reservations</i></td>
+        <td style="padding-top:20px;" colspan="6"><i>Ignored Reservations</i></td>
       </tr>
       <% @ignored_reservations.each do |reservation| %>
         <tr>
           <td><%= Category.find(reservation.category_id).name %></td>
           <td colspan="2"></td>
-          <td><%= number_to_currency(reservation.balance, format: "%u</td><td align=\"right\">%n", negative_format: "-%u</td><td align=\"right\">%n") %></td>
+          <%= number_to_currency_td(reservation.balance) %>
           <td>
             <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
             <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
@@ -89,7 +94,7 @@
         </tr>
       <% end %>
       <tr>
-        <td><i>New Reservation</i></td>
+        <td style="padding-top:20px;"><i>New Reservation</i></td>
         <td colspan="2">Amount</td>
         <td colspan="2">Ignored?</td>
         <td></td>
@@ -97,7 +102,7 @@
       <tr>
         <%= form_for [@budget, @new_reservation] do |f| %>
           <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
-          <td colspan="2"><%= f.text_field :amount %></td>
+          <td colspan="2"><%= f.text_field(:amount, size: 5) %></td>
           <td colspan="2"><%= f.check_box :ignored %></td>
           <td><%= f.submit "Add!" %></td>
         <% end %>

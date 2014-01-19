@@ -15,6 +15,10 @@ class Budget < ActiveRecord::Base
       if reservation.blank?
         reservation = reservations.where(category_id: nil).first
       end
+      #if transaction.category.id == 18
+      #  puts "%%%%% found Han, adding transaction: #{transaction.description} #{transaction.amount}"
+      #  puts "%%%%% new reservation balance will be #{reservation.balance + transaction.amount}"
+      #end
       reservation.update_column('balance', reservation.balance + transaction.amount)
     end
     self.reservations.reload

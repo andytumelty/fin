@@ -20,6 +20,12 @@ class TransactionsController < ApplicationController
 
   def filter # FIXME category and account selected don't persist
     @transaction_filter = transaction_filter_params
+    if @transaction_filter[:date_from].present? && @transaction_filter[:date_to].present?
+      @transactions = @transactions.where(date: (@transaction_filter[:date_from]..@transaction_filter[:date_to]))
+    end
+    if @transaction_filter[:budget_date_from].present? && @transaction_filter[:budget_date_to].present?
+      @transactions = @transactions.where(budget_date: (@transaction_filter[:budget_date_from]..@transaction_filter[:budget_date_to]))
+    end
     if @transaction_filter[:description].present?
       @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
     end
@@ -30,9 +36,6 @@ class TransactionsController < ApplicationController
     if @transaction_filter[:account].present?
       account = current_user.accounts.where(name: @transaction_filter[:account]).first
       @transactions = @transactions.where(account: account)
-    end
-    if @transaction_filter[:date_from].present? && @transaction_filter[:date_to].present?
-      @transactions = @transactions.where(date: (@transaction_filter[:date_from]..@transaction_filter[:date_to]))
     end
     @category_breakdown = set_category_breakdown(@transactions)
     @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
@@ -145,7 +148,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_filter_params
-      params.permit(:description, :account, :category, :date_from, :date_to)
+      params.permit(:date_from, :date_to, :budget_date_from, :budget_date_to, :description, :account, :category)
     end
 
     def set_category_breakdown(transactions)
@@ -156,6 +159,7 @@ class TransactionsController < ApplicationController
           category_breakdown[category.name] = category_transactions.sum('amount')
         end
       end
+      category_breakdown = Hash[category_breakdown.sort_by{|key, val| val}.reverse]
       return category_breakdown
     end
 

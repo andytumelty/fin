@@ -1,5 +1,11 @@
 TODO
 
+TODO categories, accounts checkbox select
+
+TODO On show budget, ability to click on a reservation and see the transactions that apply
+
+TODO ability to show/hide columns on transactions index
+
 FIXME account (and possibly category) being blank seem to be flagged as imported successfully
 FIXME case sensitivity when looking for column headers on import
 FIXME concatenate all errors in error export, shows just first
