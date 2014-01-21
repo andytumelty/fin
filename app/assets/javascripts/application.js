@@ -20,4 +20,9 @@
 $(function(){ 
   $(document).foundation();
   $('.datepicker').datepicker();
+  $('#metrics').hide();
+  $('#toggle_metrics').click(function(e) {
+    e.preventDefault();
+    $('#metrics').toggle();
+  });
 });
