@@ -22,3 +22,5 @@ gem 'nokogiri'
 gem 'redcarpet', '~> 2.1.1'
 gem 'lograge'
 gem 'meta_request'
+
+gem 'rails_12factor', group: :production
