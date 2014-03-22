@@ -239,7 +239,15 @@
 			"file": "config/database.yml",
 			"settings":
 			{
-				"buffer_size": 1727,
+				"buffer_size": 142,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Gemfile",
+			"settings":
+			{
+				"buffer_size": 447,
 				"line_ending": "Unix"
 			}
 		},
@@ -280,6 +288,7 @@
 	},
 	"file_history":
 	[
+		"/home/laycat/Desktop/pg_hba.conf",
 		"/home/laycat/fin/app/models/transaction.rb",
 		"/home/laycat/fin/app/controllers/transactions_controller.rb",
 		"/home/laycat/fin/Gemfile",
@@ -390,7 +399,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -399,15 +408,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1727,
+						"buffer_size": 142,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								576,
-								576
+								142,
+								142
 							]
 						],
 						"settings":
@@ -416,7 +425,35 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Gemfile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								30,
+								30
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -424,7 +461,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "app/models/transaction.rb",
 					"semi_transient": false,
 					"settings":
@@ -450,7 +487,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
