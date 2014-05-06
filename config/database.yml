@@ -3,4 +3,6 @@ development:
   encoding: unicode
   database: fin_development
   pool: 5
-  password: 
+  host: localhost
+  username: fin
+  password: fin

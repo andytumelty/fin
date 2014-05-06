@@ -252,6 +252,46 @@
 			}
 		},
 		{
+			"file": "config/initializers/sorcery.rb",
+			"settings":
+			{
+				"buffer_size": 12117,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/controllers/transactions_controller.rb",
+			"settings":
+			{
+				"buffer_size": 6461,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "CSV.foreach('./import.csv',headers: true) do |row|\nt = Transaction.find(row[\"id\"])\nt.category = Category.where(name: row[\"category\"], user: u).first || Category.create(name: row[\"category\"], user: u)\nt.save\nend",
+			"settings":
+			{
+				"buffer_size": 210,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/controllers/budgets_controller.rb",
+			"settings":
+			{
+				"buffer_size": 2246,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/views/budgets/show.html.erb",
+			"settings":
+			{
+				"buffer_size": 3802,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "app/models/transaction.rb",
 			"settings":
 			{
@@ -288,6 +328,8 @@
 	},
 	"file_history":
 	[
+		"/home/laycat/transactions import 2014-03-22.csv",
+		"/home/laycat/fin/app/controllers/user_sessions_controller.rb",
 		"/home/laycat/Desktop/pg_hba.conf",
 		"/home/laycat/fin/app/models/transaction.rb",
 		"/home/laycat/fin/app/controllers/transactions_controller.rb",
@@ -344,7 +386,6 @@
 		"/home/laycat/fin/config/application.rb",
 		"/home/laycat/fin/app/controllers/users_controller.rb",
 		"/home/laycat/fin/app/controllers/application_controller.rb",
-		"/home/laycat/fin/app/controllers/user_sessions_controller.rb",
 		"/home/laycat/fin/app/views/accounts/_form.html.erb",
 		"/home/laycat/fin/app/views/accounts/new.html.erb",
 		"/home/laycat/fin/config/locales/en.yml",
@@ -399,7 +440,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -429,7 +470,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -457,11 +498,158 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
+					"file": "config/initializers/sorcery.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12117,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5244,
+								5244
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6426.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "app/controllers/transactions_controller.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6461,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3340,
+								3340
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1173.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 210,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								210,
+								210
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "app/controllers/budgets_controller.rb",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2246,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								667,
+								667
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 51.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "app/views/budgets/show.html.erb",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3802,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1884,
+								1884
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 765.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "app/models/transaction.rb",
 					"semi_transient": false,
 					"settings":
@@ -473,8 +661,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								370,
+								370
 							]
 						],
 						"settings":
@@ -484,10 +672,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 255.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				}
 			]
