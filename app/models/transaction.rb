@@ -10,7 +10,7 @@ class Transaction < ActiveRecord::Base
   validates :category, presence: true
 
   before_create :generate_order
-  after_commit :update_transaction_balances
+  #after_commit :update_transaction_balances
   
   def self.to_csv
     CSV.generate do |csv|
@@ -68,11 +68,11 @@ class Transaction < ActiveRecord::Base
     end
     #TODO any way of tracking what budgets need updating and updating them all together rather than after every transaction update?
     # FIXME I don't think budgets are being corrected if you change a transaction's budget date
-    budgets = self.user.budgets.where("(start_date <= :budget_date AND end_date >= :budget_date) OR (start_date <= :old_budget_date AND end_date >= :old_budget_date)", budget_date: budget_date, old_budget_date: old_budget_date)
-    budgets.each do |budget|
-      budget.update_reservation_balances
-      budget.update_budget_balance
-    end
+    #budgets = self.user.budgets.where("(start_date <= :budget_date AND end_date >= :budget_date) OR (start_date <= :old_budget_date AND end_date >= :old_budget_date)", budget_date: budget_date, old_budget_date: old_budget_date)
+    #budgets.each do |budget|
+    #  budget.update_reservation_balances
+    #  budget.update_budget_balance
+    #end
   end
 
 end

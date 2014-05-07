@@ -2,8 +2,8 @@ class Budget < ActiveRecord::Base
   belongs_to :user
   has_many :reservations, dependent: :destroy
 
-  after_create :copy_previous_reservations, :update_reservation_balances, :update_budget_balance
-  after_update :update_reservation_balances, :update_budget_balance
+  after_create :copy_previous_reservations#, :update_reservation_balances, :update_budget_balance
+  #after_update :update_reservation_balances, :update_budget_balance
 
   def update_reservation_balances
     puts "%%%%% budget.rb : update_reservation_balances"
