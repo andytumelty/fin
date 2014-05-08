@@ -6,7 +6,7 @@ class TransactionsController < ApplicationController
   def index
     respond_to do |format|
       format.html {
-        @transactions = @transactions.where(date: (Date.today-1.month..Date.today))
+        #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
         @transaction_filter = {description: nil, date_from: Date.today - 1.month, date_to: Date.today}
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
         @category_breakdown = set_category_breakdown(@transactions)
@@ -46,12 +46,15 @@ class TransactionsController < ApplicationController
   def edit
   end
 
-  def create # TODO if no budget date is set, use date
+  def create
     @new_transaction = Transaction.new(transaction_params)
     if @new_transaction.budget_date.blank?
       @new_transaction.budget_date = @new_transaction.date
     end
     if @new_transaction.save
+      # mark transaction and any after to be updated
+      # for each, mark reservations that need to be updated
+      # trigger balance updater
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
       @transaction_filter = {description: nil}
@@ -62,6 +65,9 @@ class TransactionsController < ApplicationController
 
   def update
     if @transaction.update(transaction_params)
+      # mark transaction and any after to be updated
+      # for each, mark reservations that need to be updated
+      # trigger balance updater
       redirect_to transactions_path, notice: 'Transaction was successfully updated.'
     else
       render action: 'edit'
@@ -92,12 +98,15 @@ class TransactionsController < ApplicationController
         t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
         t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
         if t.save
+          # mark transaction and any after to be updated
+          # for each, mark reservations that need to be updated
           successful += 1
         else
           @@import_errors << [row.to_hash, t.errors.full_messages]
           errors += 1
         end
       end
+      # trigger balance updater
       notice = "Import complete: #{successful.to_s} successfully imported"
       if errors > 0
         notice += ", #{errors.to_s} skipped through errors (#{view_context.link_to("Download errors as CSV", transactions_import_errors_path(format: "csv"))})"
