@@ -11,7 +11,7 @@
   </head>
 
   <body>
-    <h1><%= link_to "Fin", root_url %></h1>
+    <h1>Fin</h1>
 
     <div>
       <% if current_user %>
@@ -32,8 +32,8 @@
       </div>
     <% end %>
 
-    <p id="notice"><%= flash[:notice] %></p>
-    <p id="alert"><%= flash[:alert] %></p>
+    <div class="notice"><%= flash[:notice] %></div>
+    <div class="alert"><%= flash[:alert] %></div>
 
     <%= yield %>
     <%= javascript_include_tag "application" %>

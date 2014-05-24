@@ -73,8 +73,8 @@
         <td><%= t.balance %></td>
         <td align="center"><%= t.account.name %>
         <td align="center"><%= t.category.name %>
-        <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
-        <td><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><button><%= link_to 'Edit', edit_transaction_path(t) %></button></td>
+        <td><button><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></button></td>
       </tr>
     <% end %>
   </tbody>
