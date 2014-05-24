@@ -15,16 +15,16 @@
   </thead>
 
   <tbody>
-    <% @reservations.each do |reservation| %>
+    <% @reservations.each do |r| %>
       <tr>
-        <td><%= reservation.category %></td>
-        <td><%= reservation.amount %></td>
-        <td><%= reservation.balance %></td>
-        <td><%= reservation.ignored %></td>
-        <td><%= reservation.budget %></td>
-        <td><%= link_to 'Show', reservation %></td>
-        <td><%= link_to 'Edit', edit_reservation_path(reservation) %></td>
-        <td><%= link_to 'Destroy', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= r.category %></td>
+        <td><%= r.amount %></td>
+        <td><%= r.balance %></td>
+        <td><%= r.ignored %></td>
+        <td><%= r.budget %></td>
+        <td><%= link_to 'Show', r %></td>
+        <td><%= link_to 'Edit', edit_reservation_path(r) %></td>
+        <td><%= link_to 'Destroy', r, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

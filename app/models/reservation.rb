@@ -4,9 +4,7 @@ class Reservation < ActiveRecord::Base
 
   validates :category_id, uniqueness: {scope: :budget, case_sensitive: false}
 
-  after_commit :trigger_budget_calcs 
-
-  # TODO prevent Everything else reservation from being edited or deleted
+  after_commit :trigger_budget_calcs
   
   def trigger_budget_calcs
     puts "%%%%% reservation.rb : trigger_budget_calcs"

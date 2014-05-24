@@ -1,6 +1,10 @@
 class BudgetsController < ApplicationController
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
 
+  # FIXME prevent viewing budgets that aren't yours
+  # FIXME prevent editing budgets that aren't yours
+  # FIXME prevent deleting budgets that aren't yours
+
   # GET /budgets
   def index
     @budgets = current_user.budgets
@@ -17,7 +21,8 @@ class BudgetsController < ApplicationController
       @budgeted_reservations = @budget.reservations.where(ignored: false).order(amount: :desc)
       @ignored_reservations = @budget.reservations.where(ignored: true)
       @new_reservation = Reservation.new
-      @categories = current_user.categories.order(name: :asc) # TODO change to be only categories that don't already have a reservation in this budget
+      # TODO change to be only categories that don't already have a reservation in this budget
+      @categories = current_user.categories.where.not(id: @budgeted_reservations.pluck(:category_id)).order(name: :asc)
     end
   end
 

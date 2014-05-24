@@ -29,7 +29,16 @@ class ReservationsController < ApplicationController
   end
 
   def destroy
-    @reservation.destroy
+    if @reservation.budget.user == current_user
+      if @reservation.category_id.nil?
+        flash[:error] = "You can't delete the everything else reservation!"
+      else
+        flash[:notice] = "Reservation destroyed"
+        @reservation.destroy
+      end
+    else
+      flash[:error] = "That's not your reservation!"
+    end
     redirect_to @budget
   end
 

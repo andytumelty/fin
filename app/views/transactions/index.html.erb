@@ -1,134 +1,81 @@
-<div class="row">
-  <div class="large-4 columns">
-    <h2>Transactions</h2>
-  </div>
-  <div style="text-align:right;padding-top:15px;" class="large-8 large columns">
-    <%= link_to "Download all", transactions_path(format: "csv"), class: "small button"%>
-    <%= link_to "Import", transactions_import_path, class: "small button"%>
-  </div>
+<h2>Transactions</h2>
+
+<div style="text-align:right;padding-top:15px;">
+  <%= link_to "Download all", transactions_path(format: "csv"), class: "small button"%>
+  <%= link_to "Import", transactions_import_path, class: "small button"%>
 </div>
 
-<div class="row">
-  <div class="large-3 columns">
-    <a href="#" id="toggle_metrics">Toggle Metrics</a>
-    <br><br>
-  </div>
-</div>
+<% if @new_transaction.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@new_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
 
-<div id="metrics" class="row">
-  <div class="large-4 columns">
-    Pie Chart
+    <ul>
+    <% @new_transaction.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
   </div>
-  <div class="large-4 columns">
-    <table>
-      <thead>
-        <th colspan="3">Category Breakdown</th>
-      </thead>
-      <% @category_breakdown.each do |category, amount| %>
-        <tr>
-          <td><%= category %></td>
-          <%= number_to_currency_td(amount) %>
-        </tr>
+<% end %>
+
+<table>
+  <thead>
+    <th width="80">Date</th>
+    <th width="80">Budget Date</th>
+    <th width="520">Description</th>
+    <th width="90">Amount</th>
+    <th width="90">Account<br>Balance</th>
+    <th width="90">Balance</th>
+    <th width="120">Account</th>
+    <th width="100">Category</th>
+    <th width="60" colspan="2">Actions</th>
+  </thead>
+  <tbody>
+    <tr>
+      <%= form_tag(transactions_filter_path, method: "get") do |f| %>
+        <td>
+          <%= text_field_tag('date_from', @transaction_filter[:date_from], class: "datepicker") %>
+          <%= text_field_tag('date_to', @transaction_filter[:date_to], class: "datepicker") %>
+        </td>
+        <td>
+          <%= text_field_tag('budget_date_from', @transaction_filter[:budget_date_from], class: "datepicker") %>
+          <%= text_field_tag('budget_date_to', @transaction_filter[:budget_date_to], class: "datepicker") %>
+        </td>
+        <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= collection_select(nil, :account, @accounts, :name, :name, include_blank: true) %></td>
+        <td><%= collection_select(nil, :category, @categories, :name, :name, include_blank: true) %></td>
+        <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
       <% end %>
-    </table>
-  </div>
-  <div class="large-4 columns">
-    <table>
-      <thead>
-        <th colspan="3">Metrics</th>
-      </thead>
-      <tr>
-        <td>Total Income</td>
-        <%= number_to_currency_td(@total_income) %>
-      </tr>
-      <tr>
-        <td>Total Expenditure</td>
-        <%= number_to_currency_td(@total_expenditure) %>
-      </tr>
-      <tr>
-        <td>Balance Diff</td>
-        <%= number_to_currency_td(@balance_diff) %>
-      </tr>
-    </table>
-  </div>
-</div>
-
-<div class="row">
-  <div class="large-12 columns">
-    <table>
-      <thead>
-        <tr>
-          <th width="80">Date</th>
-          <th width="80">Budget Date</th>
-          <th width="520">Description</th>
-          <th width="90" colspan="2">Amount</th>
-          <th width="90" colspan="2">Account<br>Balance</th>
-          <th width="90" colspan="2">Balance</th>
-          <th width="120">Account</th>
-          <th width="100">Category</th>
-          <th width="60" colspan="2">Actions</th>
-        </tr>
-      </thead>
-      <% if @new_transaction.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@new_transaction.errors.count, "error") %> prohibited this transaction from being saved:</h2>
-
-          <ul>
-          <% @new_transaction.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-          </ul>
-        </div>
+    </tr>
+    <tr>
+      <%= form_for(@new_transaction) do |f| %>
+        <td><%= f.text_field(:date, class: "datepicker") %></td>
+        <td><%= f.text_field(:budget_date, class: "datepicker") %></td>
+        <td><%= f.text_field(:description, size: 40) %></td>
+        <td align="right"><%= f.text_field(:amount, size: 5) %></td>
+        <td></td>
+        <td></td>
+        <td><%= f.collection_select :account_id, @accounts, :id, :name %></td>
+        <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
+        <td colspan="2"><%= f.submit "Add!" %></td>
       <% end %>
-      <tbody>
-        <tr>
-          <%= form_tag(transactions_filter_path, method: "get") do |f| %>
-            <td>
-              <%= text_field_tag('date_from', @transaction_filter[:date_from], class: "datepicker") %>
-              <%= text_field_tag('date_to', @transaction_filter[:date_to], class: "datepicker") %>
-            </td>
-            <td>
-              <%= text_field_tag('budget_date_from', @transaction_filter[:budget_date_from], class: "datepicker") %>
-              <%= text_field_tag('budget_date_to', @transaction_filter[:budget_date_to], class: "datepicker") %>
-            </td>
-            <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
-            <td><%= collection_select(nil, :account, @accounts, :name, :name, include_blank: true) %></td>
-            <td><%= collection_select(nil, :category, @categories, :name, :name, include_blank: true) %></td>
-            <td colspan="2"><%= submit_tag 'Filter!', name: nil %></td>
-          <% end %>
-        </tr>
-        <tr>
-          <%= form_for(@new_transaction) do |f| %>
-            <td><%= f.text_field(:date, class: "datepicker") %></td>
-            <td><%= f.text_field(:budget_date, class: "datepicker") %></td>
-            <td><%= f.text_field(:description, size: 40) %></td>
-            <td colspan="2" align="right"><%= f.text_field(:amount, size: 5) %></td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
-            <td><%= f.collection_select :account_id, @accounts, :id, :name %></td>
-            <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
-            <td colspan="2"><%= f.submit "Add!" %></td>
-          <% end %>
-        </tr>
-        <% balance = 0 %>
-        <% @transactions.each do |transaction| %>
-          <tr>
-            <td><%= transaction.date %></td>
-            <td><%= transaction.budget_date %></td>
-            <td><%= transaction.description %></td>
-            <%= number_to_currency_td(transaction.amount) %>
-            <%= number_to_currency_td(transaction.account_balance) %>
-            <%= number_to_currency_td(transaction.balance) %>
-            <td align="center"><%= transaction.account.name %></td>
-            <td align="center"><%= transaction.category.name %></td>
-            <td><%= link_to 'Edit', edit_transaction_path(transaction) %></td>
-            <td><%= link_to 'X', transaction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
+    </tr>
+    <% balance = 0 %>
+    <% @transactions.each do |t| %>
+      <tr>
+        <td><%= t.date %></td>
+        <td><%= t.budget_date %></td>
+        <td><%= t.description %></td>
+        <td><%= t.amount %></td>
+        <td><%= t.account_balance %></td>
+        <td><%= t.balance %></td>
+        <td align="center"><%= t.account.name %>
+        <td align="center"><%= t.category.name %>
+        <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
+        <td><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

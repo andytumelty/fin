@@ -11,6 +11,8 @@ class Transaction < ActiveRecord::Base
 
   before_create :generate_order
   #after_commit :update_transaction_balances
+
+  # TODO Split transactions
   
   def self.to_csv
     CSV.generate do |csv|

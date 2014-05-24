@@ -1,6 +1,10 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:edit, :update, :destroy]
 
+  # FIXME prevent viewing categories that aren't yours
+  # FIXME prevent editing categories that aren't yours
+  # FIXME prevent deleting categories that aren't yours
+
   # GET /categories
   def index
     @categories = current_user.categories.all
@@ -38,6 +42,7 @@ class CategoriesController < ApplicationController
 
   # DELETE /categories/1
   def destroy
+    # FIXME prevent deleting unassigned
     @category.destroy
     redirect_to categories_path
   end

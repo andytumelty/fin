@@ -3,6 +3,10 @@ class TransactionsController < ApplicationController
   before_action :set_transactions, only: [:index, :filter]
   before_action :set_accounts_and_categories, only: [:index, :filter]
 
+  # FIXME prevent viewing transactions that aren't yours
+  # FIXME prevent editing transactions that aren't yours
+  # FIXME prevent deleting transactions that aren't yours
+
   def index
     respond_to do |format|
       format.html {

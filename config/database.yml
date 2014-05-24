@@ -4,5 +4,3 @@ development:
   database: fin_development
   pool: 5
   host: localhost
-  username: fin
-  password: fin

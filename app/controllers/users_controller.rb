@@ -2,6 +2,10 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy]
   skip_before_filter :require_login, only: [:new, :create]
 
+  # FIXME prevent viewing users that aren't yours
+  # FIXME prevent editing users that aren't yours
+  # FIXME prevent deleting users that aren't yours
+
   # GET /users/new
   def new
     @user = User.new
