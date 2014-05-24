@@ -64,7 +64,7 @@ class TransactionsController < ApplicationController
   end
 
   def update
-    @transaction.update = true
+    @transaction.recalculate = true
     if @transaction.update(transaction_params)
       # mark transaction and any after to be updated
       # for each, mark reservations that need to be updated
