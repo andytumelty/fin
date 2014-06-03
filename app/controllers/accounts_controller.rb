@@ -1,4 +1,5 @@
 class AccountsController < ApplicationController
+  before_filter :require_login
   before_action :set_account, only: [:edit, :update, :destroy]
 
   # GET /accounts

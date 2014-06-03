@@ -1,4 +1,5 @@
 class TransactionsController < ApplicationController
+  before_filter :require_login
   before_action :set_transaction, only: [:edit, :update, :destroy]
   before_action :set_transactions, only: [:index, :filter]
   before_action :set_accounts_and_categories, only: [:index, :filter]
@@ -11,7 +12,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       format.html {
         #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
-        @transaction_filter = {description: nil, date_from: Date.today - 1.month, date_to: Date.today}
+        @transaction_filter = {description: nil, date_from: nil, date_to: Date.today}
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
         @category_breakdown = set_category_breakdown(@transactions)
         @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)

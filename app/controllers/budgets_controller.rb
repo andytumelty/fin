@@ -1,4 +1,5 @@
 class BudgetsController < ApplicationController
+  before_filter :require_login
   before_action :set_budget, only: [:show, :edit, :update, :destroy]
 
   # FIXME prevent viewing budgets that aren't yours

@@ -1,4 +1,5 @@
 class ReservationsController < ApplicationController
+  before_filter :require_login
   before_action :set_reservation, only: [:edit, :update, :destroy]
   before_action :set_budget
 

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  # FIXME before_filter :require_login?
   before_action :set_user, only: [:edit, :update, :destroy]
   skip_before_filter :require_login, only: [:new, :create]
 

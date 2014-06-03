@@ -22,3 +22,5 @@ gem 'bourbon', '~> 4.0.2'
 gem 'neat', '~> 1.6.0'
 gem 'bitters'
 gem 'refills'
+
+gem 'awesome_print', group: :development

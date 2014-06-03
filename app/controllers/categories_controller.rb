@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+  before_filter :require_login
   before_action :set_category, only: [:edit, :update, :destroy]
 
   # FIXME prevent viewing categories that aren't yours
