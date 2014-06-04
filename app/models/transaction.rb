@@ -24,57 +24,11 @@ class Transaction < ActiveRecord::Base
   end
 
   def generate_order
-    last_transaction_on_date = self.user.transactions.where(date: self.date).order(order: :asc).last
-    self.order = 1
-    if last_transaction_on_date.present?
-      self.order += last_transaction_on_date.order
-    end
+    self.order = self.user.transactions.order(order: :desc).first.order + 1
   end
 
-  def update_transaction_balances # TODO update balances only if date, amount or account changes
-    if self.date_was.nil?
-      date = self.date
-      old_date = date # FIXME why is this being set? is it used anywhere?
-    else
-      date = [self.date, self.date_was].min
-    end
-    if self.budget_date_was.nil?
-      budget_date = self.budget_date
-      old_budget_date = budget_date
-    else
-      budget_date = self.budget_date
-      old_budget_date = self.budget_date_was
-    end
-    transactions = self.user.transactions.where("date >= :date", date: date).order(date: :asc, order: :asc)
-    last_transaction = self.user.transactions.where("date < :date", date: date).order(date: :asc, order: :asc).last
-    if last_transaction.present?
-      balance = last_transaction.balance
-    else
-      balance = 0
-    end
-    account_balances = Hash.new
-    self.user.accounts.each do |account|
-      last_account_transaction = account.transactions.where("date < :date", date: date).order(date: :asc, order: :asc).last
-      if last_account_transaction.present?
-        account_balance = last_account_transaction.account_balance
-      else
-        account_balance = 0
-      end
-      account_balances[account.name] = account_balance
-    end
-    transactions.each do |transaction|
-      balance += transaction.amount
-      transaction.update_column('balance', balance)
-      account_balances[transaction.account.name] += transaction.amount
-      transaction.update_column('account_balance', account_balances[transaction.account.name])
-    end
-    #TODO any way of tracking what budgets need updating and updating them all together rather than after every transaction update?
-    # FIXME I don't think budgets are being corrected if you change a transaction's budget date
-    #budgets = self.user.budgets.where("(start_date <= :budget_date AND end_date >= :budget_date) OR (start_date <= :old_budget_date AND end_date >= :old_budget_date)", budget_date: budget_date, old_budget_date: old_budget_date)
-    #budgets.each do |budget|
-    #  budget.update_reservation_balances
-    #  budget.update_budget_balance
-    #end
+  def update_transaction_balances
+    
   end
 
 end

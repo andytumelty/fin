@@ -12,7 +12,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       format.html {
         #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
-        @transaction_filter = {description: nil, date_from: nil, date_to: Date.today}
+        @transaction_filter = {description: nil, date_from: nil, date_to: nil}
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
         @category_breakdown = set_category_breakdown(@transactions)
         @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
@@ -63,7 +63,7 @@ class TransactionsController < ApplicationController
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
       @transaction_filter = {description: nil}
-      @transactions = current_user.transactions.order(:date)
+      @transactions = current_user.transactions.order(:order) # TODO need to be set? order(:order)?
       render action: 'index'
     end
   end
