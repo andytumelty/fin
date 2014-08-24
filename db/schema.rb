@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20140824162350) do
     t.date     "budget_date"
     t.decimal  "balance",         precision: 19, scale: 4
     t.decimal  "account_balance", precision: 19, scale: 4
-    t.float    "rank"
+    t.float    "sort"
     t.boolean  "recalculate"
   end
 
