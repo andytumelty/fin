@@ -39,18 +39,19 @@ class Transaction < ActiveRecord::Base
   end
 
   def update_transaction_balances
-    # tx_logger.info "New: #{self.id_was.nil?}, #{self.inspect}"
-    # tx_logger.info "Destroyed: #{self.destroyed?}, #{self.inspect}"
-    # tx_logger.info "Changed? #{self.changed?}, #{self.changed}"
-    if self.id_was.nil?
-      tx_logger.info "New!"
+    if self.id_was.nil? || self.destroyed?
+      tx_logger.info "New? #{self.id_was.nil?}, Destroyed? #{self.destroyed?}"
+      
       to_update = self.user.transactions.where("sort >= ?", self.sort).order(sort: :asc)
       tx_logger.debug "Gonna update #{to_update.count}"
+      
       last_tx = self.user.transactions.where("sort < ?", self.sort).order(sort: :desc).first
-      balance = last_tx.nil? ? 0 : last_tx.balance
       last_account_tx = self.user.transactions.where("sort < ?", self.sort).where(account: self.account).order(sort: :desc).first
+      
+      balance = last_tx.nil? ? 0 : last_tx.balance
       account_balance = last_account_tx.nil? ? 0 : last_account_tx.account_balance
       tx_logger.debug "Balance: #{balance}, Account Balance: #{account_balance}"
+      
       ActiveRecord::Base.transaction do
         to_update.each do |tx|
           balance += tx.amount
@@ -61,8 +62,6 @@ class Transaction < ActiveRecord::Base
           end
         end
       end
-    elsif self.destroyed?
-      tx_logger.info "Destroyed! #{self.inspect}"
     else
       tx_logger.info "Changed? #{self.changes}, #{self.inspect}"
     end
