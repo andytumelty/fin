@@ -9,7 +9,7 @@ class Category < ActiveRecord::Base
 
   def reassign_transactions
     transactions = self.user.transactions.where(category: self)
-    transactions.update_all(category: self.user.categories.where(name: "unassigned").first)
+    transactions.update_all(category_id: self.user.categories.where(name: "unassigned").first.id)
   end
 
   #def delete_reservations
