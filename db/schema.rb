@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140524165215) do
+ActiveRecord::Schema.define(version: 20140824162350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 20140524165215) do
     t.date     "budget_date"
     t.decimal  "balance",         precision: 19, scale: 4
     t.decimal  "account_balance", precision: 19, scale: 4
-    t.float    "order"
+    t.float    "rank"
     t.boolean  "recalculate"
   end
 

@@ -63,7 +63,7 @@ class TransactionsController < ApplicationController
       redirect_to transactions_path, notice: 'Transaction was successfully created.'
     else
       @transaction_filter = {description: nil}
-      @transactions = current_user.transactions.order(:order) # TODO need to be set? order(:order)?
+      @transactions = current_user.transactions.order(:sort) # TODO need to be set? order(:order)?
       render action: 'index'
     end
   end
@@ -100,7 +100,7 @@ class TransactionsController < ApplicationController
       CSV.foreach(params[:file].path,headers: true) do |row|
         user_txs = current_user.transactions
         t = user_txs.find_by_id(row["id"]) || Transaction.new
-        t.attributes = row.to_hash.slice("order", "date", "budget_date", "description", "amount")
+        t.attributes = row.to_hash.slice("sort", "date", "budget_date", "description", "amount")
         t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
         t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
         if t.save
@@ -150,7 +150,7 @@ class TransactionsController < ApplicationController
     end
 
     def set_transactions
-      @transactions = current_user.transactions.includes(:account, :category).order(order: :desc)
+      @transactions = current_user.transactions.includes(:account, :category).order(sort: :desc)
     end
 
     def set_accounts_and_categories
@@ -159,7 +159,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params
-      params.require(:transaction).permit(:order, :date, :budget_date, :description, :amount, :account_id, :category_id)
+      params.require(:transaction).permit(:sort, :date, :budget_date, :description, :amount, :account_id, :category_id)
     end
 
     def transaction_filter_params

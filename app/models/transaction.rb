@@ -9,26 +9,28 @@ class Transaction < ActiveRecord::Base
   validates :account, presence: true
   validates :category, presence: true
 
-  before_create :generate_order
-  #after_commit :update_transaction_balances
+  before_create :generate_order, prepend: true
+  before_create :update_transaction_balances
+  after_update :update_transaction_balances
+  after_destroy :update_transaction_balances
 
   # TODO Split transactions
   
   def self.to_csv
     CSV.generate do |csv|
-      csv << ["id", "order", "date", "budget_date","description", "amount", "account_balance", "balance", "account", "category"]
+      csv << ["id", "sort", "date", "budget_date","description", "amount", "account_balance", "balance", "account", "category"]
       all.each do |t|
-        csv << [t.id, t.order, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
+        csv << [t.id, t.sort, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
       end
     end
   end
 
   def generate_order
-    self.order = self.user.transactions.order(order: :desc).first.order + 1
+    self.sort = self.user.transactions.order(sort: :desc).first.sort + 1
   end
 
   def update_transaction_balances
-    
+
   end
 
 end
