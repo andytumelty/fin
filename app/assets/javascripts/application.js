@@ -18,4 +18,9 @@
 
 $(function(){ 
   $('.datepicker').datepicker();
+
+  $("#transaction_filter_row").hide();
+  $("#transaction_filter_row_toggle").click(function() {
+    $("#transaction_filter_row").toggle();
+  });
 });

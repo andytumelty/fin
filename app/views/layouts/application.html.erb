@@ -10,38 +10,35 @@
     <%= csrf_meta_tags %>
   </head>
 
-  <body>
+  <body style="margin:5px 10px;">
+    <h1 style="float:left;padding-right:10px;">Fin</h1>
 
-  <header class="navigation">
-      <%= link_to image_tag("logo.png", alt: "logo"), root_url, class: "logo" %>
-      <div class="nav">
-        <ul id="navigation-menu">
-          <% if current_user %>
-            <li class="nav-link"><%= link_to "Transactions" , transactions_path   %></li>
-            <li class="nav-link"><%= link_to "Accounts"     , accounts_path       %></li>
-            <li class="nav-link"><%= link_to "Categories"   , categories_path     %></li>
-            <li class="nav-link"><%= link_to "Budgets"      , latest_budget_path  %></li>
-          <% end %>
-        </ul>
-      </div>
-      <div id="user-menu">
-        <% if current_user %>
-          <%= link_to button_tag("Edit Profile"), edit_user_path(current_user.id) %>
-          <%= link_to button_tag("Logout"), logout_path, method: :post %>
-        <% else %>
-          <%= link_to button_tag("Register"), new_user_path %>
-          <%= link_to button_tag("Login"), login_path %>
-        <% end %>
-      </div>
+    <div style="float:left;">
+      <% if current_user %>
+        <%= link_to "Transactions" , transactions_path   %> |
+        <%= link_to "Accounts"     , accounts_path       %> |
+        <%= link_to "Categories"   , categories_path     %> |
+        <%= link_to "Budgets"      , latest_budget_path  %>
+      <% end %>
     </div>
-  </header>
 
-    <h1>Fin</h1>
+    <div style="float:right;">
+      <% if current_user %>
+        <%= link_to "Edit Profile", edit_user_path(current_user.id) %> |
+        <%= link_to "Logout", logout_path, method: :post %>
+      <% else %>
+        <%= link_to "Register", new_user_path %> |
+        <%= link_to "Login", login_path %>
+      <% end %>
+    </div>
 
-    <div class="notice"><%= flash[:notice] %></div>
-    <div class="alert"><%= flash[:alert] %></div>
+    <div style="clear:both;">
+      <div class="notice"><%= flash[:notice] %></div>
+      <div class="alert"><%= flash[:alert] %></div>
 
-    <%= yield %>
-    <%= javascript_include_tag "application" %>
+      <%= yield %>
+      <%= javascript_include_tag "application" %>
+    </div>
+    
   </body>
 </html>
