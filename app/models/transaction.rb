@@ -38,13 +38,27 @@ class Transaction < ActiveRecord::Base
     @@tx_logger ||= Logger.new("#{Rails.root}/log/tx.log")
   end
 
-  def update_transaction_balances
-    tx_logger.info "New? #{self.id_was.nil?} Destoryed? #{self.destroyed?} Changes #{self.changed}"
+  def update_transaction_balances(*accounts_to_update) # It's a bit obscure, but accounts_to_update is used in csv import
+
+    if !self.destroyed? && self.update_balance == false
+      self.update_balance = nil
+      tx_logger.info "Caught update_balance = false, return'ing"
+      return
+    end
+
+    tx_logger.info "New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}"
 
     recalculate_balance = true
     if self.id_was.nil? || self.destroyed? 
       sort_min = self.sort
       account_to_update_balances = {self.account_id => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif self.update_balance = true
+      sort_min = self.sort
+      tx_logger.debug "#{accounts_to_update}"
+      accounts_to_update.each do |account_id|
+        account_to_update_balances[account_id] = 0
+      end
       to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
     elsif (["amount", "account_id", "sort"] - self.changed).empty?
       sort_min = [self.sort, self.sort_was].min
