@@ -39,32 +39,72 @@ class Transaction < ActiveRecord::Base
   end
 
   def update_transaction_balances
-    if self.id_was.nil? || self.destroyed?
-      tx_logger.info "New? #{self.id_was.nil?}, Destroyed? #{self.destroyed?}"
-      
-      to_update = self.user.transactions.where("sort >= ?", self.sort).order(sort: :asc)
-      tx_logger.debug "Gonna update #{to_update.count}"
-      
-      last_tx = self.user.transactions.where("sort < ?", self.sort).order(sort: :desc).first
-      last_account_tx = self.user.transactions.where("sort < ?", self.sort).where(account: self.account).order(sort: :desc).first
-      
+    tx_logger.info "New? #{self.id_was.nil?} Destoryed? #{self.destroyed?} Changes #{self.changed}"
+
+    recalculate_balance = true
+    if self.id_was.nil? || self.destroyed? 
+      sort_min = self.sort
+      account_to_update_balances = {self.account_id => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif (["amount", "account_id", "sort"] - self.changed).empty?
+      sort_min = [self.sort, self.sort_was].min
+      account_to_update_balances = {self.account_id => 0, self.account_id_was => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif (["amount", "sort"] - self.changed).empty?
+      sort_min = [self.sort, self.sort_was].min
+      account_to_update_balances = {self.account_id => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif (["amount", "account_id"] - self.changed).empty?
+      sort_min = self.sort
+      account_to_update_balances = {self.account_id => 0, self.account_id_was => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif (["account_id", "sort"] - self.changed).empty?
+      sort_min = [self.sort, self.sort_was].min
+      sort_max = [self.sort, self.sort_was].max
+      account_to_update_balances = {self.account_id => 0, self.account_id_was => 0}
+      to_update = self.user.transactions.where(sort: sort_min..sort_max).order(sort: :asc)
+    elsif (["amount"] - self.changed).empty?
+      sort_min = self.sort
+      account_to_update_balances = {self.account_id => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif (["account_id"] - self.changed).empty?
+      sort_min = self.sort
+      account_to_update_balances = {self.account_id => 0, self.account_id_was => 0}
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+      recalculate_balance = false
+    elsif (["sort"] - self.changed).empty?
+      sort_min = [self.sort, self.sort_was].min
+      sort_max = [self.sort, self.sort_was].max
+      account_to_update_balances = {self.account_id => 0}
+      to_update = self.user.transactions.where(sort: sort_min..sort_max).order(sort: :asc)
+    end
+
+    tx_logger.debug "Gonna update #{to_update.count}"
+
+    if recalculate_balance
+      last_tx = self.user.transactions.where("sort < ?", sort_min).order(sort: :desc).first
       balance = last_tx.nil? ? 0 : last_tx.balance
-      account_balance = last_account_tx.nil? ? 0 : last_account_tx.account_balance
-      tx_logger.debug "Balance: #{balance}, Account Balance: #{account_balance}"
-      
-      ActiveRecord::Base.transaction do
-        to_update.each do |tx|
+    end
+
+    account_to_update_balances.keys.each do |account_id|
+      last_account_tx = self.user.transactions.where("sort < ?", sort_min).where(account_id: account_id).order(sort: :desc).first
+      account_to_update_balances[account_id] = last_account_tx.nil? ? 0 : last_account_tx.account_balance
+    end
+
+    ActiveRecord::Base.transaction do
+      to_update.each do |tx|
+        if recalculate_balance
           balance += tx.amount
           tx.update_columns(balance: balance)
-          if tx.account_id == self.account_id
-            account_balance += tx.amount
-            tx.update_columns(account_balance: account_balance)
-          end
+        end
+
+        if account_to_update_balances.include?(tx.account_id)
+          account_to_update_balances[tx.account_id] += tx.amount
+          tx.update_columns(account_balance: account_to_update_balances[tx.account_id])
         end
       end
-    else
-      tx_logger.info "Changed? #{self.changes}, #{self.inspect}"
     end
+
   end
 
 end
