@@ -75,3 +75,5 @@ The data structure on splits will vary, depending on how strict they need to be:
   end
 
   @transaction.parent = params :id
+
+  FIXME If no budgets, budgets/latest errors
