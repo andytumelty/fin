@@ -6,12 +6,10 @@ class BudgetsController < ApplicationController
   # FIXME prevent editing budgets that aren't yours
   # FIXME prevent deleting budgets that aren't yours
 
-  # GET /budgets
   def index
     @budgets = current_user.budgets
   end
 
-  # GET /budgets/1
   def show
     if @budget.blank?
       redirect_to new_budget_url, notice: 'No budgets found'
@@ -27,16 +25,13 @@ class BudgetsController < ApplicationController
     end
   end
 
-  # GET /budgets/new
   def new
     @budget = Budget.new
   end
 
-  # GET /budgets/1/edit
   def edit
   end
 
-  # POST /budgets
   def create
     @budget = Budget.new(budget_params)
     @budget.user = current_user
@@ -44,7 +39,6 @@ class BudgetsController < ApplicationController
     if @budget.name.blank?
       @budget.name = @budget.start_date.to_s + " to " + @budget.end_date.to_s
     end
-    p(@budget)
     if @budget.save
       redirect_to @budget, notice: 'Budget was successfully created.'
     else
@@ -52,7 +46,6 @@ class BudgetsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /budgets/1
   def update
     if @budget.update(budget_params)
       redirect_to @budget, notice: 'Budget was successfully updated.'
@@ -61,14 +54,12 @@ class BudgetsController < ApplicationController
     end
   end
 
-  # DELETE /budgets/1
   def destroy
     @budget.destroy
     redirect_to budgets_url
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_budget
       if params[:id] == "latest"
         @budget = current_user.budgets.order(start_date: :asc).last
@@ -77,7 +68,6 @@ class BudgetsController < ApplicationController
       end
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def budget_params
       params.require(:budget).permit(:name, :start_date, :end_date, :balance, :user_id)
     end
