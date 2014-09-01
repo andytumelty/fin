@@ -7,7 +7,7 @@ Fin::Application.routes.draw do
 
   resources :transactions, except: [:show, :new]
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
-  get '/budgets/latest' => 'budgets#show', :as => :latest_budget
+  get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
 
   resources :accounts, except: :show
   resources :categories, except: :show
