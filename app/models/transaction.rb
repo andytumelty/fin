@@ -53,7 +53,7 @@ class Transaction < ActiveRecord::Base
       sort_min = self.sort
       account_to_update_balances = {self.account_id => 0}
       to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
-    elsif self.update_balance = true
+    elsif self.update_balance == true
       sort_min = self.sort
       tx_logger.debug "#{accounts_to_update}"
       accounts_to_update.each do |account_id|
