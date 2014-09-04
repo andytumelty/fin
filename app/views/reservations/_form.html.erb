@@ -1,3 +1,4 @@
+<div style="width:300px;margin:0 auto">
 <%= form_for [@budget, @reservation] do |f| %>
   <% if @reservation.errors.any? %>
     <div id="error_explanation">
@@ -12,18 +13,16 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :category %><br>
     <%= @categories.find(@reservation.category_id).name %>
   </div>
   <div class="field">
-    <%= f.label :amount %><br>
     <%= f.text_field :amount %>
   </div>
   <div class="field">
-    <%= f.label :ignored %><br>
-    <%= f.check_box :ignored %>
+    <%= f.label :Ignored? %> <%= f.check_box :ignored %>
   </div>
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+</div>
