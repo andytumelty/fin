@@ -10,9 +10,9 @@ class Transaction < ActiveRecord::Base
   validates :category, presence: true
 
   before_create :generate_order, prepend: true
-  after_create :update_transaction_balances
-  after_update :update_transaction_balances
-  after_destroy :update_transaction_balances
+  after_create :update_transaction_balances, :update_budget_balances
+  after_update :update_transaction_balances, :update_budget_balances
+  after_destroy :update_transaction_balances, :update_budget_balances
 
   # TODO Split transactions
   
@@ -42,11 +42,11 @@ class Transaction < ActiveRecord::Base
 
     if !self.destroyed? && self.update_balance == false
       self.update_balance = nil
-      tx_logger.info "Caught update_balance = false, return'ing"
+      # tx_logger.info "Caught update_balance = false, return'ing"
       return
     end
 
-    tx_logger.info "New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}"
+    # tx_logger.info "New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}"
 
     recalculate_balance = true
     if self.id_was.nil? || self.destroyed? 
@@ -55,7 +55,7 @@ class Transaction < ActiveRecord::Base
       to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
     elsif self.update_balance == true
       sort_min = self.sort
-      tx_logger.debug "#{accounts_to_update}"
+      # tx_logger.debug "#{accounts_to_update}"
       accounts_to_update.each do |account_id|
         account_to_update_balances[account_id] = 0
       end
@@ -93,7 +93,7 @@ class Transaction < ActiveRecord::Base
       to_update = self.user.transactions.where(sort: sort_min..sort_max).order(sort: :asc)
     end
 
-    tx_logger.debug "Gonna update #{to_update.count}"
+    # tx_logger.debug "Gonna update #{to_update.count}"
 
     if recalculate_balance
       last_tx = self.user.transactions.where("sort < ?", sort_min).order(sort: :desc).first
@@ -119,6 +119,42 @@ class Transaction < ActiveRecord::Base
       end
     end
 
+  end
+
+  def update_budget_balances
+    puts "%%%%% transaction.rb : update_budget_balances"
+    # has reservation changed?
+    # has reservation balance changed?
+    # has budget changed?
+    
+    # OPTIMIZE: deltas!
+
+    if self.id_was.nil? || self.destroyed?
+      budgets = self.user.budgets.where('start_date <= :budget_date and end_date >= :budget_date', { budget_date: self.budget_date })
+      reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id])
+    elsif (["category_id", "budget_date"] - self.changed).empty?
+      budgets = self.user.budgets.where('(start_date <= :budget_date AND end_date >= :budget_date) OR \
+        (start_date <= :budget_date_was AND end_date >= :budget_date_was)', { budget_date: self.budget_date, budget_date_was: self.budget_date_was })
+      reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id, self.category_id_was])
+    elsif (["budget_date"] - self.changed).empty?
+      budgets = self.user.budgets.where('(start_date <= :budget_date AND end_date >= :budget_date) OR \
+        (start_date <= :budget_date_was AND end_date >= :budget_date_was)', { budget_date: self.budget_date, budget_date_was: self.budget_date_was })
+      reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id])
+    elsif (["category_id"] - self.changed).empty?
+      budgets = self.user.budgets.where('start_date <= :budget_date and end_date >= :budget_date', { budget_date: self.budget_date })
+      reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id, self.category_id_was])
+    elsif (["amount"] - self.changed).empty?      
+      budgets = self.user.budgets.where('start_date <= :budget_date and end_date >= :budget_date', { budget_date: self.budget_date })
+      reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id])
+    end
+
+    reservations.each do |reservation|
+      reservation.update_reservation_balance
+    end
+
+    budgets.each do |budget|
+      budget.update_budget_balance
+    end
   end
 
 end

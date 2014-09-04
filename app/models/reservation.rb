@@ -1,14 +1,28 @@
 class Reservation < ActiveRecord::Base
   belongs_to :budget
   #belongs_to :category
+  has_one :user, :through => :budget
 
   validates :category_id, uniqueness: {scope: :budget, case_sensitive: false}
 
-  after_commit :trigger_budget_calcs
+  after_create :trigger_budget_calcs
   
   def trigger_budget_calcs
     puts "%%%%% reservation.rb : trigger_budget_calcs"
-    self.budget.update_reservation_balances
+    self.update_reservation_balance
+    self.budget.reservations.where(category_id: nil).update_reservation_balance
     self.budget.update_budget_balance
+  end
+
+  def update_reservation_balance
+    puts "%%%%% reservation.rb : update_reservation_balance"
+    if self.category_id.nil? # everything else
+      categories = self.budget.reservations.where.not(category_id: nil).select('category_id').collect{|c| c.category_id}
+      # OPTIMIZE select only what you need!
+      self.balance = self.user.transactions.where(date: self.budget.start_date..self.budget.end_date).where.not(category_id: categories).sum(:amount)
+    else
+      self.balance = self.user.transactions.where(date: self.budget.start_date..self.budget.end_date).where(category_id: self.category_id).sum(:amount)
+    end
+    self.save
   end
 end

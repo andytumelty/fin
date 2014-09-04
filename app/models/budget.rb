@@ -2,10 +2,11 @@ class Budget < ActiveRecord::Base
   belongs_to :user
   has_many :reservations, dependent: :destroy
 
-  after_create :copy_previous_reservations#, :update_reservation_balances, :update_budget_balance
-  #after_update :update_reservation_balances, :update_budget_balance
+  after_create :copy_previous_reservations, :update_reservation_balances, :update_budget_balance
+  after_update :update_reservation_balances, :update_budget_balance
 
   def update_reservation_balances
+    # OPTIMIZE: Is it quicker to grab all transactions like this or do a SQL sum for each reservation as in Reservation.update_reservation_balance
     puts "%%%%% budget.rb : update_reservation_balances"
     transactions = self.user.transactions.where(budget_date: (self.start_date..self.end_date))
     reservations = self.reservations
@@ -15,10 +16,6 @@ class Budget < ActiveRecord::Base
       if reservation.blank?
         reservation = reservations.where(category_id: nil).first
       end
-      #if transaction.category.id == 18
-      #  puts "%%%%% found Han, adding transaction: #{transaction.description} #{transaction.amount}"
-      #  puts "%%%%% new reservation balance will be #{reservation.balance + transaction.amount}"
-      #end
       reservation.update_column('balance', reservation.balance + transaction.amount)
     end
     self.reservations.reload
@@ -54,7 +51,5 @@ class Budget < ActiveRecord::Base
     else
       Reservation.create(budget: self, amount: 0)
     end
-    p(self)
-    p(self.reservations)
   end
 end
