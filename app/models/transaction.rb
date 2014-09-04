@@ -95,28 +95,32 @@ class Transaction < ActiveRecord::Base
 
     # tx_logger.debug "Gonna update #{to_update.count}"
 
-    if recalculate_balance
-      last_tx = self.user.transactions.where("sort < ?", sort_min).order(sort: :desc).first
-      balance = last_tx.nil? ? 0 : last_tx.balance
-    end
+    if to_update.present?
 
-    account_to_update_balances.keys.each do |account_id|
-      last_account_tx = self.user.transactions.where("sort < ?", sort_min).where(account_id: account_id).order(sort: :desc).first
-      account_to_update_balances[account_id] = last_account_tx.nil? ? 0 : last_account_tx.account_balance
-    end
+      if recalculate_balance
+        last_tx = self.user.transactions.where("sort < ?", sort_min).order(sort: :desc).first
+        balance = last_tx.nil? ? 0 : last_tx.balance
+      end
 
-    ActiveRecord::Base.transaction do
-      to_update.each do |tx|
-        if recalculate_balance
-          balance += tx.amount
-          tx.update_columns(balance: balance)
-        end
+      account_to_update_balances.keys.each do |account_id|
+        last_account_tx = self.user.transactions.where("sort < ?", sort_min).where(account_id: account_id).order(sort: :desc).first
+        account_to_update_balances[account_id] = last_account_tx.nil? ? 0 : last_account_tx.account_balance
+      end
 
-        if account_to_update_balances.include?(tx.account_id)
-          account_to_update_balances[tx.account_id] += tx.amount
-          tx.update_columns(account_balance: account_to_update_balances[tx.account_id])
+      ActiveRecord::Base.transaction do
+        to_update.each do |tx|
+          if recalculate_balance
+            balance += tx.amount
+            tx.update_columns(balance: balance)
+          end
+
+          if account_to_update_balances.include?(tx.account_id)
+            account_to_update_balances[tx.account_id] += tx.amount
+            tx.update_columns(account_balance: account_to_update_balances[tx.account_id])
+          end
         end
       end
+
     end
 
   end
