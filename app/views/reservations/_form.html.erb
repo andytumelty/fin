@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :category %><br>
-    <%= f.collection_select :category_id, @categories, :id, :name %>
+    <%= @categories.find(@reservation.category_id).name %>
   </div>
   <div class="field">
     <%= f.label :amount %><br>

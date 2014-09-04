@@ -34,6 +34,8 @@ TODO AJAX THE LOT!
 OPTIMIZE On account delete, skip budget calcs on transaction delete by destorying and trigger callbacks manually
 OPTIMIZE On category delete and reassignment, skip reservation callback and trigger manually
 
+TODO Reservation: prevent category from being edited
+
 TODO host on heroku
 heroku config:add TZ=Europe/London
 
