@@ -49,16 +49,17 @@ class Transaction < ActiveRecord::Base
     # tx_logger.info "New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}"
 
     recalculate_balance = true
-    if self.id_was.nil? || self.destroyed? 
-      sort_min = self.sort
-      account_to_update_balances = {self.account_id => 0}
-      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
-    elsif self.update_balance == true
+    if self.update_balance == true
       sort_min = self.sort
       # tx_logger.debug "#{accounts_to_update}"
+      account_to_update_balances = {}
       accounts_to_update.each do |account_id|
         account_to_update_balances[account_id] = 0
       end
+      to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
+    elsif self.id_was.nil? || self.destroyed? 
+      sort_min = self.sort
+      account_to_update_balances = {self.account_id => 0}
       to_update = self.user.transactions.where("sort >= ?", sort_min).order(sort: :asc)
     elsif (["amount", "account_id", "sort"] - self.changed).empty?
       sort_min = [self.sort, self.sort_was].min
