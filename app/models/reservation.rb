@@ -9,8 +9,9 @@ class Reservation < ActiveRecord::Base
   
   def trigger_budget_calcs
     # logger.debug { 'reservation.rb : trigger_budget_calcs' }
+    # logger.debug { self.inspect }
     self.update_reservation_balance
-    self.budget.reservations.where(category_id: nil).update_reservation_balance
+    self.budget.reservations.where(category_id: nil).first.update_reservation_balance unless self.category_id.nil?
     self.budget.update_budget_balance
   end
 

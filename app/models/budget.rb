@@ -22,7 +22,7 @@ class Budget < ActiveRecord::Base
   end
 
   def update_budget_balance
-    # logger.debug 'budget.rb : update_budget_balance' }
+    # logger.debug { 'budget.rb : update_budget_balance' }
     balance = 0
     self.reservations.each do |reservation|
       if !reservation.ignored
