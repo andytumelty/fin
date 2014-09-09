@@ -120,6 +120,8 @@ class TransactionsController < ApplicationController
         end
       end
       min_sort_transaction.update_balance = true
+      logger.debug { 'transactions_controller.rb : load_import loop done' }
+      logger.debug { "accounts_to_update: #{accounts_to_update.inspect}" }
       min_sort_transaction.update_transaction_balances(accounts_to_update)
       notice = "Import complete: #{successful.to_s} successfully imported"
       if errors > 0

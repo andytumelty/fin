@@ -27,5 +27,5 @@ Fin::Application.configure do
   # number of complex assets.
   config.assets.debug = true
   
-  #config.lograge.enabled = true
+  config.lograge.enabled = true
 end
