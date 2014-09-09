@@ -17,11 +17,11 @@ class BudgetsController < ApplicationController
       @budgets = current_user.budgets.order(start_date: :asc)
       @previous_budget = @budgets.where("start_date < :start_date", start_date: @budget.start_date).last
       @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
-      @budgeted_reservations = @budget.reservations.where(ignored: false).order(amount: :desc)
+      @budgeted_reservations = @budget.reservations.where(ignored: false).order("abs(amount) DESC")
       @ignored_reservations = @budget.reservations.where(ignored: true)
       @new_reservation = Reservation.new
       # TODO change to be only categories that don't already have a reservation in this budget
-      @categories = current_user.categories.where.not(id: @budgeted_reservations.pluck(:category_id)).order(name: :asc)
+      @categories = current_user.categories.where.not(id: @budgeted_reservations.pluck(:category_id) << @ignored_reservations.pluck(:category_id)).order(name: :asc)
     end
   end
 
