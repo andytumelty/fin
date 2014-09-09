@@ -24,3 +24,5 @@ gem 'bitters'
 gem 'refills'
 
 gem 'awesome_print', group: :development
+
+gem 'lograge'
