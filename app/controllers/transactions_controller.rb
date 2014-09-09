@@ -98,8 +98,8 @@ class TransactionsController < ApplicationController
         t = user_txs.find_by_id(row["id"]) || Transaction.new
         t.attributes = row.to_hash.slice("sort", "date", "budget_date", "description", "amount")
         t.account = Account.where(name: row["account"], user: current_user).first || Account.create(name: row["account"], user: current_user)
-        if t.category.nil?
-          t.category = Category.where(name: "unassigned", user:current_user).first
+        if row["category"].nil?
+          t.category = Category.where(name: "unassigned", user: current_user).first
         else
           t.category = Category.where(name: row["category"], user: current_user).first || Category.create(name: row["category"], user: current_user)
         end
