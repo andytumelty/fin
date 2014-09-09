@@ -9,7 +9,7 @@ class Transaction < ActiveRecord::Base
   validates :account, presence: true
   validates :category, presence: true
 
-  before_create :generate_order, prepend: true
+  before_create :check_budget_date, :generate_order, prepend: true
   after_create :update_transaction_balances, :update_budget_balances
   after_update :update_transaction_balances, :update_budget_balances
   after_destroy :update_transaction_balances, :update_budget_balances
@@ -22,6 +22,12 @@ class Transaction < ActiveRecord::Base
       all.each do |t|
         csv << [t.id, t.sort, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
       end
+    end
+  end
+
+  def check_budget_date
+    if self.budget_date.blank?
+      self.budget_date = self.date
     end
   end
 
@@ -38,7 +44,7 @@ class Transaction < ActiveRecord::Base
     @@tx_logger ||= Logger.new("#{Rails.root}/log/tx.log")
   end
 
-  def update_transaction_balances(*accounts_to_update) # It's a bit obscure, but accounts_to_update is used in csv import
+  def update_transaction_balances(*args) # It's a bit obscure, but args[0] = accounts_to_update is used in csv import
 
     if !self.destroyed? && self.update_balance == false
       self.update_balance = nil
@@ -51,7 +57,8 @@ class Transaction < ActiveRecord::Base
     recalculate_balance = true
     if self.update_balance == true
       sort_min = self.sort
-      logger.debug { "Accounts to update: #{accounts_to_update.inspect}" }
+      accounts_to_update = args[0]
+      logger.debug { "accounts_to_update: #{accounts_to_update.inspect}" }
       account_to_update_balances = {}
       accounts_to_update.each do |account_id|
         account_to_update_balances[account_id] = 0

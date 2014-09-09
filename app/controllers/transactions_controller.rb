@@ -53,9 +53,6 @@ class TransactionsController < ApplicationController
 
   def create
     @new_transaction = Transaction.new(transaction_params)
-    if @new_transaction.budget_date.blank?
-      @new_transaction.budget_date = @new_transaction.date
-    end
     if @new_transaction.save
       # mark transaction and any after to be updated
       # for each, mark reservations that need to be updated
@@ -109,9 +106,6 @@ class TransactionsController < ApplicationController
         t.update_balance = false
         if t.save
           min_sort_transaction = t if min_sort_transaction.nil? || min_sort_transaction.sort > t.sort
-          puts accounts_to_update
-          puts t.account_id
-          puts accounts_to_update.include?(t.account_id)
           accounts_to_update << t.account_id unless accounts_to_update.include?(t.account_id)
           successful += 1
         else
