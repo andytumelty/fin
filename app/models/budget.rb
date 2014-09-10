@@ -43,7 +43,7 @@ class Budget < ActiveRecord::Base
     if self.user.budgets.count > 1
       # logger.debug { 'self.user.budgets.count > 1' }
       prev_budget = self.user.budgets.where.not(id: self.id).order(start_date: :asc).last
-      prev_budget.reservations.each do |prev_reservation|
+      prev_budget.reservations.order(category_id: :desc).each do |prev_reservation|
         Reservation.create(budget: self, category_id: prev_reservation.category_id, amount: prev_reservation.amount, ignored: prev_reservation.ignored)
       end
     else
