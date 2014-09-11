@@ -32,12 +32,12 @@
   <small>left to spend</small>
 </h2>
 
-<table style="margin:0 auto;">
+<table style="margin:0 auto;width:500px;">
 
   <thead>
     <th width="200">Reservations</th>
-    <th width="90">Budgeted</th>
-    <th width="90">Balance</th>
+    <th style="text-align:center" width="90" colspan="2">Budgeted</th>
+    <th style="text-align:center" width="90" colspan="2">Balance</th>
     <th width="60"></th>
   </thead>
 
@@ -45,9 +45,9 @@
     <% if !reservation.category_id.nil? %>
       <tr>
         <td><%= Category.find(reservation.category_id).name %></td>
-        <td><%= reservation.amount %></td>
-        <td><%= reservation.balance %></td>
-        <td>
+        <%= number_to_currency_td(reservation.amount) %>
+        <%= number_to_currency_td(reservation.balance) %>
+        <td style="text-align:center">
           <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
           <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
         </td>
@@ -57,8 +57,8 @@
   
   <tr>
     <td>Everything else</td>
-    <td></td>
-    <td><%= @budgeted_reservations.where(category_id: nil).first.balance %></td>
+    <td colspan="2"></td>
+    <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance) %>
     <td></td>
   </tr>
   <tr>
@@ -67,9 +67,9 @@
   <% @ignored_reservations.each do |reservation| %>
     <tr>
       <td><%= Category.find(reservation.category_id).name %></td>
-      <td></td>
-      <td><%= reservation.balance %></td>
-      <td>
+      <td colspan="2"></td>
+      <%= number_to_currency_td(reservation.balance) %>
+      <td style="text-align:center">
         <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
         <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
       </td>
