@@ -18,7 +18,7 @@ class TransactionsController < ApplicationController
         @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
       }
       format.csv {
-        send_data @transactions.to_csv
+        send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
       }
     end
   end
