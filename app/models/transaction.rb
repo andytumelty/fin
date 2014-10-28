@@ -156,12 +156,16 @@ class Transaction < ActiveRecord::Base
       reservations = self.user.reservations.where(budget_id: budgets.collect{|b| b.id}, category_id: [nil, self.category_id])
     end
 
-    reservations.each do |reservation|
-      reservation.update_reservation_balance
+    if !reservations.nil?
+      reservations.each do |reservation|
+        reservation.update_reservation_balance
+      end
     end
 
-    budgets.each do |budget|
-      budget.update_budget_balance
+    if !budgets.nil?
+      budgets.each do |budget|
+        budget.update_budget_balance
+      end
     end
   end
 
