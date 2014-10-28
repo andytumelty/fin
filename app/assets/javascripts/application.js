@@ -28,10 +28,21 @@ $(function(){
   $("#sortable").sortable({
     update: function(event, ui){
       index = ui.item.index();
-      console.debug( $(this) );
-      console.debug( index );
-      console.debug( $(this).children().get(index - 1) );
-      console.debug( $(this).children().get(index + 1) );
+      
+      before = $(this).children().get(index - 1);
+      after = $(this).children().get(index + 1);
+
+      if(index - 1 < 0) {
+        new_sort = parseFloat($(after).data("sort")) + 1;
+      }
+      else if(after === undefined) {
+        new_sort = parseFloat($(before).data("sort")) - 1;
+      }
+      else {
+        new_sort = (parseFloat($(before).data("sort")) + parseFloat($(after).data("sort")))/2;
+      }
+
+      $(ui.item).data("sort", new_sort);
     }
   });
 });
