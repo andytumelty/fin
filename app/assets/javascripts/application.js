@@ -15,6 +15,7 @@
 //= require_tree .
 //= require jquery.ui.datepicker
 //= require jquery.ui.datepicker-en-GB
+//= require jquery.ui.sortable
 
 $(function(){ 
   $('.datepicker').datepicker();
@@ -23,4 +24,6 @@ $(function(){
   $("#transaction_filter_row_toggle").click(function() {
     $("#transaction_filter_row").toggle();
   });
+
+  $("#sortable").sortable();
 });

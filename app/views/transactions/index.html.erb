@@ -30,7 +30,7 @@
     <th width="100">Category</th>
     <th width="60" colspan="2">Actions</th>
   </thead>
-  <tbody>
+  <tbody id="sortable">
     <tr id="transaction_filter_row">
       <%= form_tag(transactions_filter_path, method: "get") do |f| %>
         <td>
