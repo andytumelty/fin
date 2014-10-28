@@ -25,5 +25,13 @@ $(function(){
     $("#transaction_filter_row").toggle();
   });
 
-  $("#sortable").sortable();
+  $("#sortable").sortable({
+    update: function(event, ui){
+      index = ui.item.index();
+      console.debug( $(this) );
+      console.debug( index );
+      console.debug( $(this).children().get(index - 1) );
+      console.debug( $(this).children().get(index + 1) );
+    }
+  });
 });

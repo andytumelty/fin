@@ -30,7 +30,7 @@
     <th width="100">Category</th>
     <th width="60" colspan="2">Actions</th>
   </thead>
-  <tbody id="sortable">
+  <tbody>
     <tr id="transaction_filter_row">
       <%= form_tag(transactions_filter_path, method: "get") do |f| %>
         <td>
@@ -63,9 +63,11 @@
         <td colspan="2"><%= f.submit "Add!" %></td>
       <% end %>
     </tr>
+  </tbody>
+  <tbody id="sortable">
     <% balance = 0 %>
     <% @transactions.each do |t| %>
-      <tr>
+      <tr data-sort="<%= t.sort %>">
         <td><%= t.date %></td>
         <td><%= t.budget_date %></td>
         <td><%= t.description %></td>
