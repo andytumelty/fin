@@ -67,7 +67,7 @@
   <tbody id="sortable">
     <% balance = 0 %>
     <% @transactions.each do |t| %>
-      <tr data-sort="<%= t.sort %>">
+      <tr data-id="<%= t.id %>" data-sort="<%= t.sort %>">
         <td><%= t.date %></td>
         <td><%= t.budget_date %></td>
         <td><%= t.description %></td>

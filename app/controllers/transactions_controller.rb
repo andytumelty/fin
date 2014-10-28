@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   before_filter :require_login
-  before_action :set_transaction, only: [:edit, :update, :destroy]
+  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   before_action :set_transactions, only: [:index, :filter]
   before_action :set_accounts_and_categories, only: [:index, :filter]
 
@@ -48,6 +48,13 @@ class TransactionsController < ApplicationController
     render 'index'
   end
 
+  def show
+    respond_to do |format|
+      format.html{ render html: nil }
+      format.json{ render json: @transaction, status: 422 }
+    end
+  end
+
   def edit
   end
 
@@ -66,10 +73,16 @@ class TransactionsController < ApplicationController
   end
 
   def update
-    if @transaction.update(transaction_params)
-      redirect_to transactions_path, notice: 'Transaction was successfully updated.'
+    if @transaction.update(transaction_params) 
+      respond_to do |format|
+        format.html { redirect_to transactions_path, notice: 'Transaction was successfully updated.' }
+        format.json { render json: @transaction }
+      end
     else
-      render action: 'edit'
+      respond_to do |format|
+        format.html { render action: 'edit' }
+        format.json { render json: @transaction.errors.full_messages, status: 422 } 
+      end
     end
   end
 

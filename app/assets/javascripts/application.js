@@ -28,6 +28,7 @@ $(function(){
   $("#sortable").sortable({
     update: function(event, ui){
       index = ui.item.index();
+      id = ui.item.data("id");
       
       before = $(this).children().get(index - 1);
       after = $(this).children().get(index + 1);
@@ -43,6 +44,29 @@ $(function(){
       }
 
       $(ui.item).data("sort", new_sort);
+
+      $.ajax({
+        type: "POST",
+        url: "/transactions/" + id,
+        data: {
+          transaction: {
+            id: id,
+            sort: new_sort
+          },
+          _method: 'put'
+        },
+        dataType: "json",
+        success: function(xhr){
+          //console.debug(xhr.responseText);
+          //success = $.parseJSON(xhr.responseText);
+          // TODO tie up with data refresh
+        },
+        error: function(xhr){
+          //console.debug(xhr.responseText);
+          //errors = $.parseJSON(xhr.responseText);
+          // TODO do something with errors
+        }
+      });
     }
   });
 });

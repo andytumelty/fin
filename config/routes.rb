@@ -5,7 +5,7 @@ Fin::Application.routes.draw do
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
-  resources :transactions, except: [:show, :new]
+  resources :transactions, except: [:new]
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
   get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
 
