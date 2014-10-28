@@ -28,6 +28,7 @@ $(function(){
   $("#sortable").sortable({
     update: function(event, ui){
       index = ui.item.index();
+      //console.debug(index)
       id = ui.item.data("id");
       
       before = $(this).children().get(index - 1);
@@ -66,6 +67,26 @@ $(function(){
           //errors = $.parseJSON(xhr.responseText);
           // TODO do something with errors
         }
+      });
+
+      $(".transaction").slice(0, index + 1).each(function(index){
+        id = $(this).data("id");
+        //console.debug($("#sortable:nth-child("+ index +")"));
+        $.ajax({
+          type: "GET",
+          url: "/transactions/" + id,
+          data: { },
+          dataType: "json",
+          success: function(data){
+            //console.debug(this);
+            //$(".transactionstd.balance_amount").html(data['balance']);
+          },
+          error: function(data){
+            console.debug(xhr);
+            //errors = $.parseJSON(xhr.responseText);
+            // TODO do something with errors
+          }
+        });
       });
     }
   });

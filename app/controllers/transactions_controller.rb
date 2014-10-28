@@ -51,7 +51,7 @@ class TransactionsController < ApplicationController
   def show
     respond_to do |format|
       format.html{ render html: nil }
-      format.json{ render json: @transaction, status: 422 }
+      format.json{ render json: @transaction }
     end
   end
 
