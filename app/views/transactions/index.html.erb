@@ -63,17 +63,19 @@
         <td colspan="2"><%= f.submit "Add!" %></td>
       <% end %>
     </tr>
+  </tbody>
+  <tbody id="sortable">
     <% balance = 0 %>
     <% @transactions.each do |t| %>
-      <tr>
-        <td><%= t.date %></td>
-        <td><%= t.budget_date %></td>
-        <td><%= t.description %></td>
-        <%= number_to_currency_td(t.amount) %>
-        <%= number_to_currency_td(t.account_balance) %>
-        <%= number_to_currency_td(t.balance) %>
-        <td align="center"><%= t.account.name %>
-        <td align="center"><%= t.category.name %>
+      <tr class="transaction" data-id="<%= t.id %>" data-sort="<%= t.sort %>">
+        <td class="date"><%= t.date %></td>
+        <td class="budget_date"><%= t.budget_date %></td>
+        <td class="description"><%= t.description %></td>
+        <%= number_to_currency_td(t.amount, 'amount') %>
+        <%= number_to_currency_td(t.account_balance, 'account_balance') %>
+        <%= number_to_currency_td(t.balance, 'balance') %>
+        <td class="account" align="center"><%= t.account.name %>
+        <td class="category" align="center"><%= t.category.name %>
         <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
         <td><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
