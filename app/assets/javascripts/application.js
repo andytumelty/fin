@@ -26,9 +26,16 @@ $(function(){
   });
 
   $("#sortable").sortable({
-    update: function(event, ui){
+    start: function(e, ui){
+      $(this).data('previndex', ui.item.index());
+    },
+    update: function(e, ui){
       index = ui.item.index();
-      //console.debug(index)
+      prev_index = $(this).data('previndex');
+      $(this).removeAttr('data-previndex');
+      
+      //console.debug(prev_index + " -> " + index)
+      
       id = ui.item.data("id");
       
       before = $(this).children().get(index - 1);
@@ -36,11 +43,9 @@ $(function(){
 
       if(index - 1 < 0) {
         new_sort = parseFloat($(after).data("sort")) + 1;
-      }
-      else if(after === undefined) {
+      } else if(after === undefined) {
         new_sort = parseFloat($(before).data("sort")) - 1;
-      }
-      else {
+      } else {
         new_sort = (parseFloat($(before).data("sort")) + parseFloat($(after).data("sort")))/2;
       }
 
@@ -69,17 +74,24 @@ $(function(){
         }
       });
 
-      $(".transaction").slice(0, index + 1).each(function(index){
-        id = $(this).data("id");
-        //console.debug($("#sortable:nth-child("+ index +")"));
+      $(".transaction").slice(0, Math.max(prev_index, index) + 1).each(function(index, value){
+        id = $(value).data("id");
+        //console.debug(value);
         $.ajax({
           type: "GET",
           url: "/transactions/" + id,
           data: { },
           dataType: "json",
           success: function(data){
-            //console.debug(this);
-            //$(".transactionstd.balance_amount").html(data['balance']);
+            balance_amount = Math.abs( parseFloat(data['balance']) ).toFixed(2);
+            balance_sign = ( balance_amount != parseFloat(data['balance']) ) ? "-" : "";
+            $("[data-id=" + data['id'] + "]").find('.balance_sign').html(balance_sign);
+            $("[data-id=" + data['id'] + "] > .balance_amount").html(balance_amount);
+
+            account_balance_amount = Math.abs( parseFloat(data['account_balance']) ).toFixed(2);
+            account_balance_sign = ( account_balance_amount != parseFloat(data['account_balance']) ) ? "-" : "";
+            $("[data-id=" + data['id'] + "]").find('.account_balance_sign').html(account_balance_sign);
+            $("[data-id=" + data['id'] + "] > .account_balance_amount").html(account_balance_amount);
           },
           error: function(data){
             console.debug(xhr);
@@ -88,6 +100,16 @@ $(function(){
           }
         });
       });
+    },
+    helper: function(e, tr){
+      var $originals = tr.children();
+      var $helper = tr.clone();
+      $helper.children().each(function(index)
+      {
+        // Set helper cell sizes to match the original sizes
+        $(this).width($originals.eq(index).width());
+      });
+      return $helper;
     }
   });
 });
