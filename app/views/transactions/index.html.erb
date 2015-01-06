@@ -23,12 +23,16 @@
     <th width="80">Date</th>
     <th width="80">Budget Date</th>
     <th width="520">Description</th>
-    <th colspan="2" width="90">Amount</th>
-    <th colspan="2" width="90">Account<br>Balance</th>
-    <th colspan="2" width="90">Balance</th>
+    <th width="20"></th>
+    <th width="70">Amount</th>
+    <th width="20"></th>
+    <th width="70">Account<br>Balance</th>
+    <th width="20"></th>
+    <th width="70">Balance</th>
     <th width="120">Account</th>
     <th width="100">Category</th>
-    <th width="60" colspan="2">Actions</th>
+    <th width="80">Actions</th>
+    <th width="20"></th>
   </thead>
   <tbody>
     <tr id="transaction_filter_row">
@@ -76,8 +80,16 @@
         <%= number_to_currency_td(t.balance, 'balance') %>
         <td class="account" align="center"><%= t.account.name %>
         <td class="category" align="center"><%= t.category.name %>
-        <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
-        <td><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td class="edit">
+          <span>
+            <%= link_to 'Edit', edit_transaction_path(t), { :class=>"edit" } %>
+          </span>
+          <span style="display:none">
+            <a class="save" href="#">Save</a> |
+            <a class="cancel" href="#">Cancel</a>
+          </span>
+        </td>
+        <td style="text-align:center"><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
