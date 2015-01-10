@@ -112,4 +112,33 @@ $(function(){
       return $helper;
     }
   });
+
+  // $("tr.transaction:not(.editing)").click(function(){
+  //   console.debug("Caught (.editing) click");
+  //   $(this).addClass("editing");
+  //   $(this).children("td.date").html('<input type="text" class="datepicker" value="' + $(this).children('td.date').html() + '">');
+  // });
+
+  // $(":not(.editing)").click(function(){
+  //   console.debug("Caught :not(.editing) click");
+  //   console.debug($("tr.editing"));
+  //   $("tr.editing > td.date").html($("tr.editing > td.date > input").val());
+  //   $('tr.editing').removeClass('editing');
+  //   //post and revert
+  // });
+
+  $("a.edit").click(function(e){
+    e.preventDefault();
+    $(this).parents("td").children("span").toggle();
+  });
+
+  $("a.save").click(function(e){
+    e.preventDefault();
+    $(this).parents("td").children("span").toggle();
+  });
+
+  $("a.cancel").click(function(e){
+    e.preventDefault();
+    $(this).parents("td").children("span").toggle();
+  });
 });
