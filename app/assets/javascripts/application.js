@@ -131,16 +131,32 @@ $(function(){
 
   $("a.edit").click(function(e){
     e.preventDefault();
+    $(this).parents("tr").children("td.date").html('<input type="text" class="datepicker" value="' + $(this).parents("tr").children('td.date').html() + '">');
+    $(this).parents("tr").children("td.budget_date").html('<input type="text" class="datepicker" value="' + $(this).parents("tr").children('td.budget_date').html() + '">');
+    $(this).parents("tr").children("td.description").html('<input type="text" value="' + $(this).parents("tr").children('td.description').html() + '">');
+    
+    $('.datepicker').datepicker({
+      dateFormat: "yy-mm-dd"
+    });
     $(this).parents("td").children("span").toggle();
   });
 
   $("a.save").click(function(e){
     e.preventDefault();
+    // save
+    // should this replace based on the input values or just replace with the data returned in ajax query?
+    $(this).parents("tr").children("td.date").html($(this).parents("tr").children('td.date').children('input').val());
+    $(this).parents("tr").children("td.budget_date").html($(this).parents("tr").children('td.budget_date').children('input').val());
+    $(this).parents("tr").children("td.description").html($(this).parents("tr").children('td.description').children('input').val());
+    // update those above
     $(this).parents("td").children("span").toggle();
   });
 
   $("a.cancel").click(function(e){
     e.preventDefault();
+    $(this).parents("tr").children("td.date").html($(this).parents("tr").children('td.date').children('input').val());
+    $(this).parents("tr").children("td.budget_date").html($(this).parents("tr").children('td.budget_date').children('input').val());
+    $(this).parents("tr").children("td.description").html($(this).parents("tr").children('td.description').children('input').val());
     $(this).parents("td").children("span").toggle();
   });
 });
