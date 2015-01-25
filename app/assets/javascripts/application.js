@@ -134,7 +134,9 @@ $(function(){
     $(this).parents("tr").children("td.date").html('<input type="text" class="datepicker" value="' + $(this).parents("tr").children('td.date').html() + '">');
     $(this).parents("tr").children("td.budget_date").html('<input type="text" class="datepicker" value="' + $(this).parents("tr").children('td.budget_date').html() + '">');
     $(this).parents("tr").children("td.description").html('<input type="text" value="' + $(this).parents("tr").children('td.description').html() + '">');
-    
+    // Eurgh, td.amount doesn't exist, and you want to replace two cells with one otherwise it's gonna look shitty
+    // see http://stackoverflow.com/questions/5264267/jquery-1-5-how-to-find-and-replace-2-cells-in-a-table-with-a-new-table-row-cell
+    //$(this).parents("tr").children("td.amount").html('<input type="text" value="' + $(this).parents("tr").find('span.amount_sign').html() + $(this).parents("tr").children('td.amount_amount').html() + '">')
     $('.datepicker').datepicker({
       dateFormat: "yy-mm-dd"
     });
@@ -144,19 +146,21 @@ $(function(){
   $("a.save").click(function(e){
     e.preventDefault();
     // save
-    // should this replace based on the input values or just replace with the data returned in ajax query?
-    $(this).parents("tr").children("td.date").html($(this).parents("tr").children('td.date').children('input').val());
-    $(this).parents("tr").children("td.budget_date").html($(this).parents("tr").children('td.budget_date').children('input').val());
-    $(this).parents("tr").children("td.description").html($(this).parents("tr").children('td.description').children('input').val());
+    // replace based on the data returned in ajax query
+    
     // update those above
     $(this).parents("td").children("span").toggle();
   });
 
   $("a.cancel").click(function(e){
     e.preventDefault();
+    // Fuck, you're an idiot. It's cancel. If you change the input values then they don't get reverted.
     $(this).parents("tr").children("td.date").html($(this).parents("tr").children('td.date').children('input').val());
     $(this).parents("tr").children("td.budget_date").html($(this).parents("tr").children('td.budget_date').children('input').val());
     $(this).parents("tr").children("td.description").html($(this).parents("tr").children('td.description').children('input').val());
+    //amount = 
+    //$(this).parents("tr").find("span.amount_sign").html($(this).parents("tr").children('td.description').children('input').val());
+    //$(this).parents("tr").children("td.amount_amount").html($(this).parents("tr").children('td.description').children('input').val());
     $(this).parents("td").children("span").toggle();
   });
 });
