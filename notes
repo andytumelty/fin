@@ -1,0 +1,26 @@
+Remote account mapping
+
+to update:
+account.sync
+  this.remote_account.sync
+
+account
+can have one remote account
+
+remote_account
+belongs to account
+description
+inverse values (if it's a credit card you probably want this)
+user_credential
+remote_account_identifier
+
+natwest
+user_credential: customer number
+remote_account_identifier: account number (or credit card number)
+password (prompt)
+pin (prompt)
+
+amex
+user_credential: username (email?)
+remote_account_identifier: credit card number
+password (prompt)
