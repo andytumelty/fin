@@ -5,7 +5,8 @@ account.sync
   this.remote_account.sync
 
 account
-can have one remote account
+has_one :remote_account
+default to nil? do you have to create a dummy nil remote account or just not populate it?
 
 remote_account
 belongs to account

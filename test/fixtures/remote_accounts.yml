@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  inverse_values: false
+  user_credential: MyString
+  remote_account_identifier: MyString
+  account_id: 
+  remote_account_type_id: 
+
+two:
+  title: MyString
+  inverse_values: false
+  user_credential: MyString
+  remote_account_identifier: MyString
+  account_id: 
+  remote_account_type_id: 
