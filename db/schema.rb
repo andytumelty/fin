@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825173309) do
+ActiveRecord::Schema.define(version: 20150319162610) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "accounts", force: true do |t|
     t.string   "name"
@@ -58,6 +61,26 @@ ActiveRecord::Schema.define(version: 20140825173309) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "remote_account_types", force: true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "remote_accounts", force: true do |t|
+    t.string   "title"
+    t.boolean  "inverse_values"
+    t.string   "user_credential"
+    t.string   "remote_account_identifier"
+    t.integer  "account_id"
+    t.integer  "remote_account_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "remote_accounts", ["account_id"], name: "index_remote_accounts_on_account_id", using: :btree
+  add_index "remote_accounts", ["remote_account_type_id"], name: "index_remote_accounts_on_remote_account_type_id", using: :btree
 
   create_table "reservations", force: true do |t|
     t.integer  "category_id"
