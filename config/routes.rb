@@ -1,5 +1,15 @@
 Fin::Application.routes.draw do
 
+  get 'remote_accounts/index'
+
+  get 'remote_accounts/new'
+
+  get 'remote_accounts/create'
+
+  get 'remote_accounts/update'
+
+  get 'remote_accounts/destroy'
+
   root 'transactions#index'
 
   get 'login' => 'user_sessions#new', :as => :login

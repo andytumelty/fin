@@ -1,0 +1,45 @@
+<%= form_for(@remote_account) do |f| %>
+  <% if @remote_account.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@remote_account.errors.count, "error") %> prohibited this remote_account from being saved:</h2>
+
+      <ul>
+      <% @remote_account.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_account_type_id %><br>
+    <%= f.collection_select :remote_account_type_id, @remote_account_types, :id, :name %>
+  </div>
+  <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.collection_select :account_id, current_user.accounts, :id, :name %>
+  </div>
+  <div class="field">
+    <%= f.label :user_credential %><br>
+    <%= f.text_field :user_credential %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_account_identifier %><br>
+    <%= f.text_field :remote_account_identifier %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+
+belongs to account
+description
+inverse values (if it's a credit card you probably want this)
+user_credential
+remote_account_identifier

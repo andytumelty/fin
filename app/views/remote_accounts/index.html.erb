@@ -1,0 +1,25 @@
+<h2>Listing remote accounts</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @remote_accounts.each do |remote_account| %>
+      <tr>
+        <td><%= remote_account.description %></td>
+        <td><%= link_to 'Edit', edit_remote_account_path(remote_account) %></td>
+        <td><%= link_to 'Delete', remote_account, method: :delete, data: { confirm: "Are you sure?" } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Remote Account', new_remote_account_path %>
