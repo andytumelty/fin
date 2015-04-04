@@ -147,6 +147,33 @@ $(function(){
     e.preventDefault();
     // save
     // replace based on the data returned in ajax query
+    //index = $(this).parents("tr").item.index();
+    console.debug($(this).parents("tr")[0]);
+    //console.debug(index);
+   // $.ajax({
+   //   type: "POST",
+   //   url: "/transactions/" + id,
+   //   data: {
+   //     transaction: {
+   //       id: id,
+   //       date: date,
+   //       bugdet_date: budget_date,
+
+   //     },
+   //     _method: 'put'
+   //   },
+   //   dataType: "json",
+   //   success: function(xhr){
+   //     //console.debug(xhr.responseText);
+   //     //success = $.parseJSON(xhr.responseText);
+   //     // TODO tie up with data refresh
+   //   },
+   //   error: function(xhr){
+   //     //console.debug(xhr.responseText);
+   //     //errors = $.parseJSON(xhr.responseText);
+   //     // TODO do something with errors
+   //   }
+   // });
     
     // update those above
     $(this).parents("td").children("span").toggle();
