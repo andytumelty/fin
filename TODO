@@ -26,8 +26,8 @@ TODO must create account to create transaction
 TODO mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 
 TODO theme datepicker
-
 TODO datepicker for transaction edit
+TODO make datepicker show ISO format dates (noticed on budget date edit)
 
 TODO AJAX THE LOT!
 
@@ -85,3 +85,8 @@ The data structure on splits will vary, depending on how strict they need to be:
 
 Sync all remote accounts
 
+How should remote account syncing be managed?
+- store when last sync'd and use that to download against
+  - what if transactions come in past a date? or half way through?
+- log against each transaction a hash of some stuff, then use that to check against
+- store raw transactions and ETL it
