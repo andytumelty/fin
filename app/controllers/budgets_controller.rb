@@ -21,7 +21,7 @@ class BudgetsController < ApplicationController
       @ignored_reservations = @budget.reservations.where(ignored: true)
       @new_reservation = Reservation.new
       # TODO change to be only categories that don't already have a reservation in this budget
-      @categories = current_user.categories.where.not(id: @budgeted_reservations.pluck(:category_id) << @ignored_reservations.pluck(:category_id)).order(name: :asc)
+      @categories = current_user.categories.where.not(id: @budgeted_reservations.pluck(:category_id) + @ignored_reservations.pluck(:category_id)).order(name: :asc)
     end
   end
 
