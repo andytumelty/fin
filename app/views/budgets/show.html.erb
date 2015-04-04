@@ -45,8 +45,8 @@
     <% if !reservation.category_id.nil? %>
       <tr>
         <td><%= Category.find(reservation.category_id).name %></td>
-        <%= number_to_currency_td(reservation.amount) %>
-        <%= number_to_currency_td(reservation.balance) %>
+        <%= number_to_currency_td(reservation.amount, '') %>
+        <%= number_to_currency_td(reservation.balance, '') %>
         <td style="text-align:center">
           <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
           <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
@@ -58,7 +58,7 @@
   <tr>
     <td>Everything else</td>
     <td colspan="2"></td>
-    <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance) %>
+    <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance, '') %>
     <td></td>
   </tr>
   <tr>
@@ -68,7 +68,7 @@
     <tr>
       <td><%= Category.find(reservation.category_id).name %></td>
       <td colspan="2"></td>
-      <%= number_to_currency_td(reservation.balance) %>
+      <%= number_to_currency_td(reservation.balance, '') %>
       <td style="text-align:center">
         <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
         <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
