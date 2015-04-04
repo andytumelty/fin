@@ -1,15 +1,5 @@
 Fin::Application.routes.draw do
 
-  get 'remote_accounts/index'
-
-  get 'remote_accounts/new'
-
-  get 'remote_accounts/create'
-
-  get 'remote_accounts/update'
-
-  get 'remote_accounts/destroy'
-
   root 'transactions#index'
 
   get 'login' => 'user_sessions#new', :as => :login
@@ -19,9 +9,10 @@ Fin::Application.routes.draw do
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
   get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
 
-  resources :accounts, except: :show
+  resources :accounts, except: :show do
+    resources :remote_accounts
+  end
   resources :categories, except: :show
-
   resources :users, except: [:index, :show]
   resources :user_sessions
   resources :budgets do

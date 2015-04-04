@@ -82,3 +82,6 @@ The data structure on splits will vary, depending on how strict they need to be:
   @transaction.parent = params :id
 
   FIXME If no budgets, budgets/latest errors
+
+Sync all remote accounts
+

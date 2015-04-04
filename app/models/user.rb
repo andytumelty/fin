@@ -11,4 +11,5 @@ class User < ActiveRecord::Base
   has_many :transactions, :through => :accounts, dependent: :destroy
   has_many :budgets, dependent: :destroy
   has_many :reservations, :through => :budgets
+  has_many :remote_accounts, :through => :accounts
 end
