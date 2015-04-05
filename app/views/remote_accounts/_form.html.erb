@@ -12,24 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
+    <%= f.text_field :title, placeholder: 'Title' %>
   </div>
   <div class="field">
-    <%= f.label :remote_account_type_id %><br>
-    <%= f.collection_select :remote_account_type_id, @remote_account_types, :id, :title %>
+    Remote Account Type: <%= f.collection_select :remote_account_type_id, @remote_account_types, :id, :title %>
   </div>
   <div class="field">
-    <%= f.label 'Account' %><br>
-    <%= @account.name %>
+    Account: <%= @account.name %>
   </div>
   <div class="field">
-    <%= f.label :user_credential %><br>
-    <%= f.text_field :user_credential %>
+    <%= f.text_field :user_credential, placeholder: 'User Credential' %>
   </div>
   <div class="field">
-    <%= f.label :remote_account_identifier %><br>
-    <%= f.text_field :remote_account_identifier %>
+    <%= f.text_field :remote_account_identifier, placeholder: 'Remote Account Identifier' %>
   </div>
   <div class="field">
     <%= f.text_field :sync_from, placeholder: 'Sync From', class: 'datepicker' %>
