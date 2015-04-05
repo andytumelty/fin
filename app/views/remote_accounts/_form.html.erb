@@ -31,6 +31,9 @@
     <%= f.label :remote_account_identifier %><br>
     <%= f.text_field :remote_account_identifier %>
   </div>
+  <div class="field">
+    <%= f.text_field :sync_from, placeholder: 'Sync From', class: 'datepicker' %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

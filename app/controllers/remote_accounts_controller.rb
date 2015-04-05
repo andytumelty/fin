@@ -1,4 +1,5 @@
 class RemoteAccountsController < ApplicationController
+  # TODO before create and update check that remote account type exists
   before_filter :require_login
   before_action :set_account, only: [:new, :edit, :update, :destroy]
   before_action :set_remote_account, only: [:edit, :update, :destroy]
@@ -19,7 +20,7 @@ class RemoteAccountsController < ApplicationController
 
   def create
     @remote_account = RemoteAccount.new(remote_account_params)
-    @remote_account.account = Account.find(params[:account_id])
+    @remote_account.account = current_user.accounts.find(params[:account_id])
 
     if @remote_account.save
       redirect_to accounts_path, notice: 'Remote Account was successfully created.'
@@ -39,6 +40,23 @@ class RemoteAccountsController < ApplicationController
   def destroy
     @remote_account.destroy
     redirect_to accounts_path, notice: 'Remote Account was successfully deleted.'
+  end
+
+  def sync_remote_account
+    # get transactions until we find 3 that we've already got, or hit the remote_account.sync_from date
+
+    #credentials = map from post vars and remote account details (or all from post?)
+    Natwest::Customer.new.tap do |nw|
+      nw.login credentials
+      transactions = nw.transactions(ARGV[1], ARGV[2], ARGV[3]) # start, end, last 3 numbers, get from post
+      #puts "Transactions for account ending #{ARGV[3]}, between #{ARGV[1]} and #{ARGV[2]}"
+      #puts "Date       Description                                                 Amount"
+      transactions.each do |t|
+        # 
+        #puts "#{t[:date]} #{sprintf('%-60.60s',t[:description])} #{sprintf('%9.2f', t[:amount])}"
+      end
+    end
+
   end
 
   private

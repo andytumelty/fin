@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150405144549) do
+ActiveRecord::Schema.define(version: 20150405144747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20150405144549) do
     t.integer  "remote_account_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "sync_from"
   end
 
   add_index "remote_accounts", ["account_id"], name: "index_remote_accounts_on_account_id", using: :btree
