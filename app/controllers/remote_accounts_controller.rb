@@ -1,7 +1,7 @@
 class RemoteAccountsController < ApplicationController
   # TODO before create and update check that remote account type exists
   before_filter :require_login
-  before_action :set_account, only: [:new, :edit, :update, :destroy]
+  before_action :set_account, only: [:new, :edit, :create, :update, :destroy]
   before_action :set_remote_account, only: [:edit, :update, :destroy]
   
   def index
@@ -20,11 +20,12 @@ class RemoteAccountsController < ApplicationController
 
   def create
     @remote_account = RemoteAccount.new(remote_account_params)
-    @remote_account.account = current_user.accounts.find(params[:account_id])
+    @remote_account.account = @account
 
     if @remote_account.save
       redirect_to accounts_path, notice: 'Remote Account was successfully created.'
     else
+      @remote_account_types = RemoteAccountType.all
       render action: 'new'
     end
   end
@@ -73,6 +74,6 @@ class RemoteAccountsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def remote_account_params
-      params.require(:remote_account).permit(:title, :inverse_values, :user_credential, :remote_account_identifier, :remote_account_type_id)
+      params.require(:remote_account).permit(:title, :inverse_values, :user_credential, :remote_account_identifier, :remote_account_type_id, :sync_from)
     end
 end
