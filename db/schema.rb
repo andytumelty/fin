@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150405144747) do
+ActiveRecord::Schema.define(version: 20150406123554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20150405144747) do
     t.float    "sort"
     t.boolean  "update_balance"
     t.string   "remote_identifier"
+    t.date     "remote_date"
   end
 
   add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree
