@@ -90,3 +90,11 @@ How should remote account syncing be managed?
   - what if transactions come in past a date? or half way through?
 - log against each transaction a hash of some stuff, then use that to check against
 - store raw transactions and ETL it
+
+FIXME remove show route for remote_accounts
+TODO check all routes currently defined are valid and needed
+TODO add general exception handling and pass to error page (also reporting)
+TODO add sync history for remote accounts
+
+TODO filter secure attributes: file:///home/laycat/git/fin/doc/guides/security.html#logging
+g
