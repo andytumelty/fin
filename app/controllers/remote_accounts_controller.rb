@@ -49,20 +49,22 @@ class RemoteAccountsController < ApplicationController
 
   def sync
     credentials = credential_params
-    puts credentials
-    #Natwest::Customer.new.tap do |nw|
-      #nw.login credentials
-      start_date = Date.today.to_s
-      end_date = [@remote_account.transactions.maximum(:remote_date), @remote_account.sync_from].max
-      #puts "finding transactions from #{start_date} to #{end_date}"
-      #transactions = nw.transactions(start_date, end_date, @remote_account.remote_account_identifier)
-      #puts "Transactions for account ending #{ARGV[3]}, between #{ARGV[1]} and #{ARGV[2]}"
-      #puts "Date       Description                                                 Amount"
-      #transactions.each do |t|
-        # 
-        #puts "#{t[:date]} #{sprintf('%-60.60s',t[:description])} #{sprintf('%9.2f', t[:amount])}"
-      #end
-    #end
+    if @remote_account.remote_account_type.title = 'natwest' 
+      credentials['customer_number'] = @remote_account.user_credential
+      Natwest::Customer.new.tap do |nw|
+        nw.login credentials
+        start_date = Date.today.to_s
+        end_date = [@remote_account.transactions.maximum(:remote_date), @remote_account.sync_from].max
+        transactions = nw.transactions(start_date, end_date, @remote_account.remote_account_identifier)
+        transactions.each do |t|
+          if current_user.transactions.where(remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}").nil?
+            Transaction.create(date: t[:date], description: t[:description], amount: t[:amount], account: @account]
+            # TODO did the transaction save successfully? where to pipe errors?
+          end
+        end
+      end
+    end
+    # TODO check whether sync was successful and return: took x seconds, synced between, saved x transactions successfully, x failed
     redirect_to transactions_path, notice: 'sync complete, not sure if it was successful tho'
   end
 
