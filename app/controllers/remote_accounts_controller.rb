@@ -58,7 +58,7 @@ class RemoteAccountsController < ApplicationController
         transactions = nw.transactions(start_date, end_date, @remote_account.remote_account_identifier)
         transactions.each do |t|
           if current_user.transactions.where(remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}").nil?
-            Transaction.create(date: t[:date], description: t[:description], amount: t[:amount], account: @account]
+            Transaction.create(date: t[:date], description: t[:description], amount: t[:amount], account: @account, remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}"]
             # TODO did the transaction save successfully? where to pipe errors?
           end
         end
