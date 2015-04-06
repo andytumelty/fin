@@ -1,5 +1,3 @@
-TODO
-
 TODO categories, accounts checkbox select
 
 TODO On show budget, ability to click on a reservation and see the transactions that apply
@@ -81,15 +79,9 @@ The data structure on splits will vary, depending on how strict they need to be:
 
   @transaction.parent = params :id
 
-  FIXME If no budgets, budgets/latest errors
+FIXME If no budgets, budgets/latest errors
 
-Sync all remote accounts
-
-How should remote account syncing be managed?
-- store when last sync'd and use that to download against
-  - what if transactions come in past a date? or half way through?
-- log against each transaction a hash of some stuff, then use that to check against
-- store raw transactions and ETL it
+TODO Sync all remote accounts
 
 FIXME remove show route for remote_accounts
 TODO check all routes currently defined are valid and needed
@@ -97,4 +89,3 @@ TODO add general exception handling and pass to error page (also reporting)
 TODO add sync history for remote accounts
 
 TODO filter secure attributes: file:///home/laycat/git/fin/doc/guides/security.html#logging
-g
