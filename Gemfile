@@ -26,3 +26,6 @@ gem 'refills'
 gem 'awesome_print', group: :development
 
 gem 'lograge'
+
+# nw sync
+gem 'mechanize'

@@ -1,6 +1,7 @@
 class RemoteAccount < ActiveRecord::Base
   belongs_to :account
   belongs_to :remote_account_type
+  has_many :transactions, :through => :account
 
   validates :title, presence: true
   validates :user_credential, presence: true

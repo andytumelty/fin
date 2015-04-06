@@ -6,7 +6,7 @@
       <th>Name</th>
       <th></th>
       <th></th>
-      <th colspan="3">Remote Account</th>
+      <th colspan="4">Remote Account</th>
     </tr>
   </thead>
 
@@ -17,11 +17,12 @@
         <td><%= link_to 'Edit', edit_account_path(account) %></td>
         <td><%= link_to 'Delete', account, method: :delete, data: { confirm: "This will also delete any transactions currently tied to this account (#{account.transactions.count} transactions). Are you sure?" } %></td>
         <% if account.remote_account.nil? %>
-          <td colspan="3"><%= link_to 'New', new_account_remote_account_path(account) %></td>
+          <td colspan="4"><%= link_to 'New', new_account_remote_account_path(account) %></td>
         <% else %>
           <td><%= account.remote_account.title %></td>
           <td><%= link_to 'Edit', edit_account_remote_account_path(account, account.remote_account) %></td>
           <td><%= link_to 'Delete', account_remote_account_path(account, account.remote_account), method: :delete, data: { confirm: "Are you sure?" } %></td>
+          <td><%= link_to 'Sync', account_remote_account_get_credentials_path(account, account.remote_account) %></td>
         <% end %>
       </tr>
     <% end %>

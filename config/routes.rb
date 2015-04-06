@@ -10,7 +10,9 @@ Fin::Application.routes.draw do
   get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
 
   resources :accounts, except: :show do
-    resources :remote_accounts
+    resources :remote_accounts, except: :show
+    get 'remote_accounts/:id/sync' => 'remote_accounts#get_credentials', as: :remote_account_get_credentials
+    post 'remote_accounts/:id/sync' => 'remote_accounts#sync', as: :remote_account_sync
   end
   resources :categories, except: :show
   resources :users, except: [:index, :show]

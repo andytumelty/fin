@@ -1,5 +1,6 @@
 class Transaction < ActiveRecord::Base
   belongs_to :account
+  has_one :remote_account, :through => :account
   belongs_to :category
   has_one :user, :through => :account
 

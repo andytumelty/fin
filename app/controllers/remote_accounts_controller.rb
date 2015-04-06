@@ -1,8 +1,8 @@
 class RemoteAccountsController < ApplicationController
   # TODO before create and update check that remote account type exists
   before_filter :require_login
-  before_action :set_account, only: [:new, :edit, :create, :update, :destroy]
-  before_action :set_remote_account, only: [:edit, :update, :destroy]
+  before_action :set_account, only: [:new, :edit, :create, :update, :destroy, :get_credentials, :sync]
+  before_action :set_remote_account, only: [:edit, :update, :destroy, :get_credentials, :sync]
   
   def index
     @remote_accounts = current_user.remote_accounts
@@ -43,21 +43,27 @@ class RemoteAccountsController < ApplicationController
     redirect_to accounts_path, notice: 'Remote Account was successfully deleted.'
   end
 
-  def sync_remote_account
-    # get transactions until we find 3 that we've already got, or hit the remote_account.sync_from date
+  def get_credentials
+    @credentials = ['pin', 'password'] if @remote_account.remote_account_type.title = 'natwest'
+  end
 
-    #credentials = map from post vars and remote account details (or all from post?)
-    Natwest::Customer.new.tap do |nw|
-      nw.login credentials
-      transactions = nw.transactions(ARGV[1], ARGV[2], ARGV[3]) # start, end, last 3 numbers, get from post
+  def sync
+    credentials = credential_params
+    puts credentials
+    #Natwest::Customer.new.tap do |nw|
+      #nw.login credentials
+      start_date = Date.today.to_s
+      end_date = [@remote_account.transactions.maximum(:remote_date), @remote_account.sync_from].max
+      #puts "finding transactions from #{start_date} to #{end_date}"
+      #transactions = nw.transactions(start_date, end_date, @remote_account.remote_account_identifier)
       #puts "Transactions for account ending #{ARGV[3]}, between #{ARGV[1]} and #{ARGV[2]}"
       #puts "Date       Description                                                 Amount"
-      transactions.each do |t|
+      #transactions.each do |t|
         # 
         #puts "#{t[:date]} #{sprintf('%-60.60s',t[:description])} #{sprintf('%9.2f', t[:amount])}"
-      end
-    end
-
+      #end
+    #end
+    redirect_to transactions_path, notice: 'sync complete, not sure if it was successful tho'
   end
 
   private
@@ -72,7 +78,10 @@ class RemoteAccountsController < ApplicationController
       @remote_account = current_user.remote_accounts.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def credential_params
+      params.require(:credentials).permit(:pin, :password) if @remote_account.remote_account_type.title = 'natwest'
+    end
+
     def remote_account_params
       params.require(:remote_account).permit(:title, :inverse_values, :user_credential, :remote_account_identifier, :remote_account_type_id, :sync_from)
     end
