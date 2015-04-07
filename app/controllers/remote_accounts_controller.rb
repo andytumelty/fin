@@ -49,16 +49,23 @@ class RemoteAccountsController < ApplicationController
 
   def sync
     credentials = credential_params
+    unassigned = current_user.categories.where(name: 'unassigned').first
     if @remote_account.remote_account_type.title = 'natwest' 
       credentials['customer_number'] = @remote_account.user_credential
       Natwest::Customer.new.tap do |nw|
         nw.login credentials
         start_date = Date.today.to_s
-        end_date = [@remote_account.transactions.maximum(:remote_date), @remote_account.sync_from].max
-        transactions = nw.transactions(start_date, end_date, @remote_account.remote_account_identifier)
+        last_synced = @remote_account.transactions.maximum(:remote_date)
+        end_date = last_synced.nil? ? @remote_account.sync_from.to_s : [last_synced, @remote_account.sync_from].max.to_s
+        # puts "Syncing from #{start_date} to #{end_date}"
+        # TODO reverse sort this
+        transactions = nw.transactions(end_date, start_date, @remote_account.remote_account_identifier).reverse
         transactions.each do |t|
-          if current_user.transactions.where(remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}").nil?
-            Transaction.create(date: t[:date], description: t[:description], amount: t[:amount], account: @account, remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}"]
+          # puts "#{t[:date]}##{t[:description]}##{t[:amount]}"
+          if current_user.transactions.where(remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}").count == 0
+            t = Transaction.new(date: t[:date], description: t[:description], amount: t[:amount], account: @account, category: unassigned, remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}")
+            t.save
+            # puts t.errors.inspect
             # TODO did the transaction save successfully? where to pipe errors?
           end
         end
