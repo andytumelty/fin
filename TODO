@@ -89,3 +89,7 @@ TODO add general exception handling and pass to error page (also reporting)
 TODO add sync history for remote accounts
 
 TODO filter secure attributes: file:///home/laycat/git/fin/doc/guides/security.html#logging
+
+TODO bulk issue operations, shift and ctrl click, : delete, sort by (x then x then x then...)
+
+TODO history of operations (to allow undoing)
