@@ -29,6 +29,10 @@
   <div class="field">
     <%= f.text_field :sync_from, placeholder: 'Sync From', class: 'datepicker' %>
   </div>
+  <div class="field">
+    <%= f.label :inverse_values %><br>
+    <%= f.check_box :inverse_values %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

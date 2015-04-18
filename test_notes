@@ -1,0 +1,10 @@
+TESTS
+
+log in no details
+log in wrong password
+log in wrong username
+log in right details
+register username already taken
+register password doesn't meet requirements
+register
+
