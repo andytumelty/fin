@@ -6,4 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-RemoteAccountType.create(title: 'natwest')
+remote_account_types = ['natwest', 'amex']
+remote_account_types.each do |rmt|
+  RemoteAccountType.where(title: rmt).first_or_create
+end

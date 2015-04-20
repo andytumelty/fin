@@ -29,3 +29,5 @@ gem 'lograge'
 
 # nw sync
 gem 'mechanize'
+# amex sync
+gem 'watir'
