@@ -56,15 +56,18 @@ class RemoteAccountsController < ApplicationController
     last_synced = @remote_account.transactions.maximum(:remote_date)
     end_date = last_synced.nil? ? @remote_account.sync_from.to_s : [last_synced, @remote_account.sync_from].max.to_s
 
-    p(@remote_account)
-    p(@remote_account.remote_account_type)
-    p(@remote_account.remote_account_type.title)
+    # p(@remote_account)
+    # p(@remote_account.remote_account_type)
+    # p(@remote_account.remote_account_type.title)
+    # p(credentials)
+    transactions = []
 
     if @remote_account.remote_account_type.title == 'natwest'
       credentials['customer_number'] = @remote_account.user_credential
       Natwest::Customer.new.tap do |nw|
         nw.login credentials
         transactions = nw.transactions(end_date, start_date, @remote_account.remote_account_identifier).reverse
+        #p transactions 
       end
     elsif @remote_account.remote_account_type.title == 'amex'
       credentials['username'] = @remote_account.user_credential
@@ -78,6 +81,8 @@ class RemoteAccountsController < ApplicationController
         end
       end
     end
+
+    #p(transactions)
 
     transactions.each do |t|
       # puts "#{t[:date]}##{t[:description]}##{t[:amount]}"
@@ -108,8 +113,7 @@ class RemoteAccountsController < ApplicationController
     end
 
     def credential_params
-      params.require(:credentials).permit(:pin, :password) if @remote_account.remote_account_type.title == 'natwest'
-      params.require(:credentials).permit(:password) if @remote_account.remote_account_type.title == 'amex'
+      params.require(:credentials).permit(:pin, :password)
     end
 
     def remote_account_params

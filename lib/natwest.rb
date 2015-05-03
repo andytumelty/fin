@@ -124,6 +124,7 @@ module Natwest
         form.field_with(name: 'ctl00$mainContent$TS2DEB_day').value = this_end_date.day
         form.field_with(name: 'ctl00$mainContent$TS2DEB_month').value = this_end_date.month
         form.field_with(name: 'ctl00$mainContent$TS2DEB_year').value = this_end_date.year
+        # FIXME what if account doesn't exist?
         form.field_with(name: 'ctl00$mainContent$TS2ACCDDA').option_with(text: /(.*?)#{account}/).select
         self.page = form.click_button
         assert(page.title.include?('Transaction search details'),
