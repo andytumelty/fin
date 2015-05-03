@@ -1,9 +1,3 @@
-TODO categories, accounts checkbox select
-
-TODO On show budget, ability to click on a reservation and see the transactions that apply
-
-TODO ability to show/hide columns on transactions index
-
 FIXME account (and possibly category) being blank seem to be flagged as imported successfully
 FIXME case sensitivity when looking for column headers on import
 FIXME concatenate all errors in error export, shows just first
@@ -11,15 +5,11 @@ FIXME validate prescence of transaction date, category, account to generate erro
 TODO add text on transaction import describing necessary format
 TODO allow column mapping for transaction import
 
-TODO "No transactions found"
-
 TODO Metrics on transaction#index and transaction#filter (collapsable div): opening balance, closing balance, income, spent, category breakdown
 
 TODO lessen padding around fitler/new transaction form
 TODO errors are highlighted under form for new transaction (see http://foundation.zurb.com/docs/components/forms.html error states)
 TODO prefix for amount
-
-TODO must create account to create transaction
 
 TODO mass assign account, category, delete (have a bar on bottom that follows, with selected do this:)
 
@@ -33,9 +23,6 @@ OPTIMIZE On account delete, skip budget calcs on transaction delete by destoryin
 OPTIMIZE On category delete and reassignment, skip reservation callback and trigger manually
 
 TODO Reservation: prevent category from being edited
-
-TODO host on heroku
-heroku config:add TZ=Europe/London
 
 dashboard
 - current overall balance
@@ -79,16 +66,4 @@ The data structure on splits will vary, depending on how strict they need to be:
 
   @transaction.parent = params :id
 
-FIXME If no budgets, budgets/latest errors
-
-TODO Sync all remote accounts
-
 FIXME remove show route for remote_accounts
-TODO check all routes currently defined are valid and needed
-TODO add general exception handling and pass to error page (also reporting)
-TODO add sync history for remote accounts
-
-TODO bulk issue operations, shift and ctrl click, : delete, sort by (x then x then x then...)
-
-TODO history of operations (to allow undoing)
-TODO don't allow changing unassigned category
