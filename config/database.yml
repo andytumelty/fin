@@ -4,3 +4,9 @@ development:
   database: fin_development
   pool: 5
   host: localhost
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: fin_test
+  pool: 5
+  host: localhost
