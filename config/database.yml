@@ -10,3 +10,9 @@ test:
   database: fin_test
   pool: 5
   host: localhost
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: fin_production
+  pool: 5
+  host: localhost
