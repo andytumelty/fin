@@ -31,3 +31,4 @@ gem 'lograge'
 gem 'mechanize'
 # amex sync
 gem 'watir'
+gem 'selenium-webdriver'
