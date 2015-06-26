@@ -18,8 +18,8 @@ gem 'delayed_job_active_record'
 gem 'unicorn'
 
 # stylingz
-gem 'bourbon', '~> 4.0.2'
-gem 'neat', '~> 1.6.0'
+gem 'bourbon'
+gem 'neat'
 gem 'bitters'
 gem 'refills'
 
