@@ -1,7 +1,12 @@
 @import "bourbon";
-@import "bitters/bitters";
+@import "base/base";
 @import "neat";
 
+body {
+  margin: 0;
+}
+
+/*
 button {
   @include button;
   padding:6px 8px;
@@ -10,11 +15,6 @@ button {
     color: white;
   }
 }
-
-body {
-  margin: 0;
-}
-
 header.navigation {
   $navigation-padding: 1em;
   $navigation-background: #8ef8a6;
@@ -96,3 +96,4 @@ header.navigation {
     }
   }
 }
+*/
