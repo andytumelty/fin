@@ -13,9 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require jquery.ui.datepicker
-//= require jquery.ui.datepicker-en-GB
-//= require jquery.ui.sortable
+//= require jquery-ui/datepicker
+//= require jquery-ui/datepicker-en-GB
+//= require jquery-ui/sortable
 
 $(function(){ 
   $('.datepicker').datepicker();
