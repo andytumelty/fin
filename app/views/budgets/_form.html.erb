@@ -16,10 +16,10 @@
     <%= f.text_field :name, placeholder: 'Name (optional)' %>
   </div>
   <div class="field">
-    <%= f.text_field :start_date, placeholder: 'Start Date', class: 'datepicker' %>
+    <%= f.date_field :start_date, placeholder: 'Start Date' %>
   </div>
   <div class="field">
-    <%= f.text_field :end_date, placeholder: 'End Date', class: 'datepicker' %>
+    <%= f.date_field :end_date, placeholder: 'End Date' %>
   </div>
   <div class="actions">
     <%= f.submit %>

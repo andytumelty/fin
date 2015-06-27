@@ -13,12 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require jquery-ui/datepicker
-//= require jquery-ui/datepicker-en-GB
 //= require jquery-ui/sortable
 
 $(function(){ 
-  $('.datepicker').datepicker();
+  //$('.datepicker').datepicker();
 
   $("#transaction_filter_row").hide();
   $("#transaction_filter_row_toggle").click(function() {

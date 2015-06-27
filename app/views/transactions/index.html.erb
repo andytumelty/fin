@@ -34,12 +34,12 @@
     <tr id="transaction_filter_row">
       <%= form_tag(transactions_filter_path, method: "get") do |f| %>
         <td>
-          <%= text_field_tag('date_from', @transaction_filter[:date_from], class: "datepicker") %>
-          <%= text_field_tag('date_to', @transaction_filter[:date_to], class: "datepicker") %>
+          <%= date_field_tag('date_from', @transaction_filter[:date_from]) %>
+          <%= date_field_tag('date_to', @transaction_filter[:date_to]) %>
         </td>
         <td>
-          <%= text_field_tag('budget_date_from', @transaction_filter[:budget_date_from], class: "datepicker") %>
-          <%= text_field_tag('budget_date_to', @transaction_filter[:budget_date_to], class: "datepicker") %>
+          <%= date_field_tag('budget_date_from', @transaction_filter[:budget_date_from]) %>
+          <%= date_field_tag('budget_date_to', @transaction_filter[:budget_date_to]) %>
         </td>
         <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
         <td colspan="2"></td>
@@ -52,8 +52,8 @@
     </tr>
     <tr>
       <%= form_for(@new_transaction) do |f| %>
-        <td><%= f.text_field(:date, class: "datepicker") %></td>
-        <td><%= f.text_field(:budget_date, class: "datepicker") %></td>
+        <td><%= f.date_field(:date) %></td>
+        <td><%= f.date_field(:budget_date) %></td>
         <td><%= f.text_field(:description, size: 40) %></td>
         <td colspan="2"><%= f.text_field(:amount, size: 5) %></td>
         <td colspan="2"></td>
