@@ -10,35 +10,40 @@
     <%= csrf_meta_tags %>
   </head>
 
-  <body style="margin:5px 10px;">
-    <h1 style="float:left;padding-right:10px;">Fin</h1>
+  <body>
 
-    <div style="float:left;">
-      <% if current_user %>
-        <%= link_to "Transactions" , transactions_path   %> |
-        <%= link_to "Accounts"     , accounts_path       %> |
-        <%= link_to "Categories"   , categories_path     %> |
-        <%= link_to "Budgets"      , latest_budget_path  %>
-      <% end %>
+  <div class="header">
+    <div class="menu-button">
     </div>
-
-    <div style="float:right;">
+    <h1>Fin</h1>
+  </div>
+  
+  <div class="sidebar">
+    <ul>
       <% if current_user %>
-        <%= link_to "Edit Profile", edit_user_path(current_user.id) %> |
-        <%= link_to "Logout", logout_path, method: :post %>
+        <li><%= link_to "Transactions" , transactions_path   %></li>
+        <li><%= link_to "Accounts"     , accounts_path       %></li>
+        <li><%= link_to "Categories"   , categories_path     %></li>
+        <li><%= link_to "Budgets"      , latest_budget_path  %></li>
+      <% end %>
+    </ul>
+
+    <ul>
+      <% if current_user %>
+        <li><%= link_to "Edit Profile", edit_user_path(current_user.id) %></li>
+        <li><%= link_to "Logout", logout_path, method: :post %></li>
       <% else %>
-        <%= link_to "Register", new_user_path %> |
-        <%= link_to "Login", login_path %>
+        <li><%= link_to "Register", new_user_path %></li>
+        <li><%= link_to "Login", login_path %></li>
       <% end %>
-    </div>
+    </ul>
+  </div>
 
-    <div style="clear:both;">
+  <div class="outer-container">
       <div class="notice"><%= flash[:notice] %></div>
       <div class="alert"><%= flash[:alert] %></div>
-
       <%= yield %>
       <%= javascript_include_tag "application" %>
-    </div>
-    
+  </div>
   </body>
 </html>

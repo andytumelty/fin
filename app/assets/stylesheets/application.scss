@@ -2,9 +2,89 @@
 @import "base/base";
 @import "neat";
 
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700,400);
+
+$background-color: #eafef4;
+
 body {
+  @include clearfix;
+  background-color: $background-color;
   margin: 0;
+
+  h1, h2, h3 {
+    font-family: 'Roboto Slab', serif;
+    font-weight: bold;
+  }
+  
+  $header-height: 50px;
+  div.header {
+    $header-background: #077c41;
+    $header-title-color: #fafffc;
+    $menu-button-opacity: 0.8;
+    $menu-button-opacity-hover: 1;
+
+    @include clearfix;
+    @include position(fixed);
+
+    background-color: $header-background;
+    width: 100%;
+    border-bottom: 1px solid darken($header-background, 10);
+    height: $header-height;
+    z-index: 999;
+
+    div.menu-button {
+      float:left;
+      width: 30px;
+      height: 30px;
+      margin: 10px 20px;
+      background-image: image-url("menu-button.png");
+      &:hover{
+        background-image: image-url("menu-button-hover.png");
+      }
+    }
+
+    h1 {
+      color: $header-title-color;
+      font-size: 1.6em;
+      padding: 0.3em 0em;
+      margin: 0;
+    }
+  }
+
+  $sidebar-width: 200px;
+  div.sidebar {
+    $sidebar-background-color: #cafce2;
+
+    @include position(fixed, $header-height null 0 0);
+    
+    background-color: $sidebar-background-color;
+    border-right: 1px solid darken($sidebar-background-color, 10);
+    width: 200px;
+  }
+
+  div.outer-container {
+    @include position(relative, $header-height null null $sidebar-width);
+    @include calc(width, "100% - #{$sidebar-width}");
+
+    min-width: 700px;
+
+    table {
+      background-color: #FFFFFF;
+    }
+  }
 }
+
+
+//// When setting up grid
+//// Change the grid settings
+//$column: 90px;
+//$gutter: 30px;
+//$grid-columns: 10; // default 12?
+//$max-width: 1200px;
+//
+//// Define your breakpoints
+//$tablet: new-breakpoint(max-width 768px 8);
+//$mobile: new-breakpoint(max-width 480px 4);
 
 /*
 button {
