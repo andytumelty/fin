@@ -41,9 +41,10 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  def tx_logger
-    @@tx_logger ||= Logger.new("#{Rails.root}/log/tx.log")
-  end
+  # FIXME What?!
+  #def tx_logger
+  #  @@tx_logger ||= Logger.new("#{Rails.root}/log/tx.log")
+  #end
 
   def update_transaction_balances(*args) # It's a bit obscure, but args[0] = accounts_to_update is used in csv import
 
@@ -53,13 +54,13 @@ class Transaction < ActiveRecord::Base
       return
     end
 
-    # logger.debug { "New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}" }
+    logger.debug { "Updating tx #{self.id}: New? #{self.id_was.nil?} Destroyed? #{self.destroyed?} Changes #{self.changed}" }
 
     recalculate_balance = true
     if self.update_balance == true
       sort_min = self.sort
       accounts_to_update = args[0]
-      logger.debug { "accounts_to_update: #{accounts_to_update.inspect}" }
+      #logger.debug { "accounts_to_update: #{accounts_to_update.inspect}" }
       account_to_update_balances = {}
       accounts_to_update.each do |account_id|
         account_to_update_balances[account_id] = 0
@@ -102,7 +103,7 @@ class Transaction < ActiveRecord::Base
       to_update = self.user.transactions.where(sort: sort_min..sort_max).order(sort: :asc)
     end
 
-    # logger.debug { "Gonna update #{to_update.count}" }
+    logger.debug { "Gonna update #{to_update.count}" }
 
     if to_update.present?
 
