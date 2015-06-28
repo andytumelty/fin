@@ -4,7 +4,7 @@
 
 @import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700,400);
 
-$background-color: #eafef4;
+$background-color: #f0f2f1;
 
 body {
   @include clearfix;
@@ -51,15 +51,33 @@ body {
     }
   }
 
-  $sidebar-width: 200px;
+  $sidebar-width: 180px;
   div.sidebar {
-    $sidebar-background-color: #cafce2;
-
     @include position(fixed, $header-height null 0 0);
-    
-    background-color: $sidebar-background-color;
-    border-right: 1px solid darken($sidebar-background-color, 10);
-    width: 200px;
+
+    width: $sidebar-width;
+    padding: 10px;
+
+    a {
+      text-decoration: none;
+    }
+
+    ul {
+      padding: 5px;
+      li {
+        //display: block;
+        font-size: 0.9em;
+        font-weight: bold;
+        padding: 0.4em 0.8em;
+        &.is-active {
+          background-color: darken($background-color, 6);
+        }
+      }
+    }
+
+    .separator {
+      border-bottom: 1px solid darken($background-color, 15);
+    }
   }
 
   div.outer-container {
@@ -67,6 +85,7 @@ body {
     @include calc(width, "100% - #{$sidebar-width}");
 
     min-width: 700px;
+    padding: 20px;
 
     table {
       background-color: #FFFFFF;
