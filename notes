@@ -1,3 +1,15 @@
+Forget HTML, let's sort out JSON then get tests set up for each model and route
+
+Trimming logic, defining boundaries:
+- Remove transaction updating crap, set up as a database view instead
+- Make sure every controller has a proper JSON response
+
+Setting up testing:
+- Needs thinking about: what types of testing? Unit vs integration vs functional
+  vs non-functional
+- Test of every route
+
+
 Remote account mapping
 
 to update:
