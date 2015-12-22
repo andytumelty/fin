@@ -1,3 +1,5 @@
+-- http://sqlfiddle.com/#!15/7de01/1
+
 CREATE TABLE users (
   id int primary key
   , email varchar(6)

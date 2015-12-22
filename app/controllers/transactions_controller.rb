@@ -10,6 +10,7 @@ class TransactionsController < ApplicationController
 
   def index
     respond_to do |format|
+      format.json { render json: @transactions }
       format.html {
         #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
         @transaction_filter = {description: nil, date_from: nil, date_to: nil}
@@ -17,9 +18,9 @@ class TransactionsController < ApplicationController
         @category_breakdown = set_category_breakdown(@transactions)
         @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
       }
-      format.csv {
-        send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
-      }
+      #format.csv {
+      #  send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
+      #}
     end
   end
 
@@ -50,8 +51,8 @@ class TransactionsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html{ render html: nil }
       format.json{ render json: @transaction }
+      format.html{ render html: nil }
     end
   end
 
@@ -176,6 +177,7 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_params
+      # JSON accept data?
       params.require(:transaction).permit(:sort, :date, :budget_date, :description, :amount, :account_id, :category_id)
     end
 
