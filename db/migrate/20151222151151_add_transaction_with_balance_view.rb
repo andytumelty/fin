@@ -3,7 +3,7 @@ class AddTransactionWithBalanceView < ActiveRecord::Migration
     execute <<-SQL
       CREATE VIEW transaction_with_balances as(
         SELECT
-          t.*
+          t.id as transaction_id
           , sum(amount) over(partition by t.account_id order by t.sort, t.id) as account_balance
           , sum(amount) over(partition by a.user_id order by t.sort, t.id) as balance
         FROM transactions t

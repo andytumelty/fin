@@ -303,18 +303,7 @@ CREATE TABLE transactions (
 --
 
 CREATE VIEW transaction_with_balances AS
- SELECT t.id,
-    t.date,
-    t.description,
-    t.amount,
-    t.account_id,
-    t.category_id,
-    t.created_at,
-    t.updated_at,
-    t.budget_date,
-    t.sort,
-    t.remote_identifier,
-    t.remote_date,
+ SELECT t.id AS transaction_id,
     sum(t.amount) OVER (PARTITION BY t.account_id ORDER BY t.sort, t.id) AS account_balance,
     sum(t.amount) OVER (PARTITION BY a.user_id ORDER BY t.sort, t.id) AS balance
    FROM ((transactions t
