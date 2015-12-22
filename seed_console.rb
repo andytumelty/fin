@@ -28,7 +28,7 @@ u.each do |user|
   rand(t_per_u).times do |n|
     t << Transaction.create(
       date: Time.now - rand(1..30).days,
-      description: "transaction_#{n}",
+      description: "test_transaction",
       amount: rand(-100.00..100.00).round(2),
       account: a.sample,
       category: c.sample
