@@ -3,8 +3,8 @@ class Transaction < ActiveRecord::Base
   has_one :remote_account, :through => :account
   belongs_to :category
   has_one :user, :through => :account
-  has_one :transaction_with_balance, foreign_key: "transaction_id"
-  delegate :balance, :account_balance, to: :transaction_with_balance
+  has_one :transaction_balance, foreign_key: "transaction_id"
+  delegate :balance, :account_balance, to: :transaction_balance
 
   validates :description, presence: true
   validates :amount, presence: true

@@ -299,10 +299,10 @@ CREATE TABLE transactions (
 
 
 --
--- Name: transaction_with_balances; Type: VIEW; Schema: public; Owner: -
+-- Name: transaction_balances; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW transaction_with_balances AS
+CREATE VIEW transaction_balances AS
  SELECT t.id AS transaction_id,
     sum(t.amount) OVER (PARTITION BY t.account_id ORDER BY t.sort, t.id) AS account_balance,
     sum(t.amount) OVER (PARTITION BY a.user_id ORDER BY t.sort, t.id) AS balance
@@ -619,4 +619,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150406123554');
 INSERT INTO schema_migrations (version) VALUES ('20151222142139');
 
 INSERT INTO schema_migrations (version) VALUES ('20151222151151');
+
+INSERT INTO schema_migrations (version) VALUES ('20151222181801');
 
