@@ -1,15 +1,12 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# naming convention: budget_a_b means budget a that belongs to user b
+budget_1_1:
+  name: budget_1_1
+  start_date: 2015-11-01
+  end_date: 2015-12-01
+  user: user_1 
 
-one:
-  name: MyString
-  start_date: 2014-01-09
-  end_date: 2014-01-09
-  balance: 9.99
-  user_id: 
-
-two:
-  name: MyString
-  start_date: 2014-01-09
-  end_date: 2014-01-09
-  balance: 9.99
-  user_id: 
+budget_2_1:
+  name: budget_2_1
+  start_date: 2015-12-01
+  end_date: 2016-01-01
+  user: user_1 
