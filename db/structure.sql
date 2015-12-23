@@ -251,6 +251,41 @@ CREATE TABLE reservations (
 
 
 --
+-- Name: transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE transactions (
+    id integer NOT NULL,
+    date date,
+    description character varying(255),
+    amount numeric(19,4),
+    account_id integer,
+    category_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    budget_date date,
+    sort double precision,
+    remote_identifier character varying(255),
+    remote_date date
+);
+
+
+--
+-- Name: reservation_balances; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW reservation_balances AS
+ SELECT r.id AS reservation_id,
+    sum(t.amount) AS sum
+   FROM (((reservations r
+     JOIN budgets b ON ((b.id = r.budget_id)))
+     JOIN categories c ON ((c.id = r.category_id)))
+     JOIN transactions t ON ((r.category_id = t.category_id)))
+  WHERE ((t.budget_date >= b.start_date) AND (t.budget_date <= b.end_date))
+  GROUP BY r.id;
+
+
+--
 -- Name: reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -275,26 +310,6 @@ ALTER SEQUENCE reservations_id_seq OWNED BY reservations.id;
 
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
-);
-
-
---
--- Name: transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE transactions (
-    id integer NOT NULL,
-    date date,
-    description character varying(255),
-    amount numeric(19,4),
-    account_id integer,
-    category_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    budget_date date,
-    sort double precision,
-    remote_identifier character varying(255),
-    remote_date date
 );
 
 
@@ -621,4 +636,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151222142139');
 INSERT INTO schema_migrations (version) VALUES ('20151222151151');
 
 INSERT INTO schema_migrations (version) VALUES ('20151222181801');
+
+INSERT INTO schema_migrations (version) VALUES ('20151222220142');
 
