@@ -1,5 +1,3 @@
--- http://sqlfiddle.com/#!15/7de01/1
-
 CREATE TABLE users (
   id int primary key
   , email varchar(6)
@@ -38,7 +36,8 @@ VALUES
   (1, 1, 'Test 1'),
   (2, 1, 'Test 2'),
   (3, 2, 'Test 3'),
-  (4, 2, 'Test 4')
+  (4, 2, 'Test 4'),
+  (5, 1, 'Test 5')
 ;
 
 CREATE TABLE budgets (
@@ -53,9 +52,9 @@ INSERT INTO budgets
   (id, user_id, name, start_date, end_date)
 VALUES
   (1, 1, 'November 2015', date('2015-11-01'), date('2015-11-30')),
-  (2, 2, 'November 2015', date('2015-11-01'), date('2015-11-30')),
-  (3, 1, 'December 2015', date('2015-12-01'), date('2015-12-30')),
-  (4, 2, 'December 2015', date('2015-12-01'), date('2015-12-30'))
+  (2, 1, 'January 2016', date('2016-01-01'), date('2016-01-31')),
+  (3, 2, 'January 2016', date('2016-01-01'), date('2016-01-31')),
+  (4, 2, 'November 2015', date('2015-11-01'), date('2015-11-30'))
 ;
 
 -- TODO make this representative
@@ -63,19 +62,17 @@ CREATE TABLE reservations (
   id int primary key
   , budget_id int references budgets(id)
   , category_id int references categories(id)
+  , amount int
+  , ignored BOOLEAN default false
 );
 
 INSERT INTO reservations
-  (id, budget_id, category_id)
+  (id, budget_id, category_id, amount, ignored)
 VALUES
-  (1, 1, 1),
-  (2, 1, 2),
-  (3, 3, 1),
-  (4, 3, 2),
-  (5, 2, 3),
-  (6, 2, 4),
-  (7, 4, 3),
-  (8, 4, 4)
+  (1,  1, 1, 10, FALSE),
+  (2,  1, 2, 10, FALSE),
+  (3,  3, 3, 10, FALSE),
+  (4,  3, 4, 10, FALSE)
 ;
 
 CREATE TABLE transactions (
@@ -97,9 +94,9 @@ VALUES
   (4 , 3, 3, '2015-12-02', '2015-12-02', 'Test 4' , -24),
   (5 , 1, 1, '2015-12-02', '2015-12-02', 'Test 5' ,  50),
   (6 , 2, 1, '2015-12-04', '2015-11-04', 'Test 6' ,  10),
-  (7 , 3, 4, '2015-12-05', '2015-11-05', 'Test 7' ,  50),
-  (8 , 1, 2, '2015-12-05', '2015-11-05', 'Test 8' ,  16),
-  (9 , 2, 2, '2015-12-05', '2015-11-05', 'Test 9' ,  18),
+  (7 , 3, 3, '2015-12-05', '2015-11-05', 'Test 7' ,  50),
+  (8 , 1, 5, '2015-12-05', '2015-11-05', 'Test 8' ,  16),
+  (9 , 2, 5, '2015-12-05', '2015-11-05', 'Test 9' ,  18),
   (10, 2, 1, '2015-12-06', '2015-11-06', 'Test 10', -21)
 ;
 
@@ -117,41 +114,45 @@ CREATE VIEW transaction_view as(
   ORDER BY user_id, date, t.id
 );
 
-CREATE VIEW reservation_view as(
+-- They call me the SQL cowboy
+create view reservation_transaction as(
   select
-    r.*
-    --, to_char(b.start_date, 'YYYY-MM-DD') as start_date
-    --, to_char(b.end_date, 'YYYY-MM-DD') as end_date
-    --, c.name as category_name
-    , sum(t.amount)
-  from reservations r
-  join budgets b on b.id = r.budget_id
-  join categories c on c.id = r.category_id
-  join transactions t on r.category_id = t.category_id
-  where t.budget_date between b.start_date and b.end_date
-  group by r.id, r.budget_id, r.category_id --, b.start_date, b.end_date, c.name
+  greatest(b_t.budget_id, b_r.budget_id) as budget_id
+  , b_r.reservation_id
+  , b_t.transaction_id
+  --, sum(b_t.amount) as balance
+  from (
+    select
+    b.id as budget_id
+    , transaction_id
+    , category_id
+    , amount
+    from budgets b
+    left join
+    (
+      select
+      t.id as transaction_id
+      , t.budget_date
+      , t.amount
+      , c.id as category_id
+      , c.user_id
+      from transactions t
+      join categories c on t.category_id = c.id
+    ) t_c
+    on
+    t_c.budget_date between b.start_date
+    and b.end_date and b.user_id = t_c.user_id
+  ) b_t
+  full outer join (
+    select
+    b.id as budget_id
+    , r.id as reservation_id
+    , r.category_id
+    from budgets b
+    join reservations r
+    on r.budget_id = b.id
+  ) b_r
+  on b_r.budget_id = b_t.budget_id
+  and (b_r.category_id = b_t.category_id or b_t.category_id is null)
+  --group by greatest(b_t.budget_id, b_r.budget_id), reservation_id
 );
-
--- create budget view showing budget balance
-
--- DATA VIEW
-select
-  id
-  , to_char(date, 'YYYY-MM-DD') as date
-  , to_char(budget_date, 'YYYY-MM-DD') as budget_date
-  , description
-  , user_id
-  , account_name
-  , category_name
-  , amount
-  , account_balance
-  , balance
-from transaction_view
-where user_id = 1
-;
-
-select
-  *
-from reservation_view
-where budget_id = 1
-;

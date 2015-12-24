@@ -5,6 +5,7 @@ class Transaction < ActiveRecord::Base
   has_one :user, :through => :account
   has_one :transaction_balance, foreign_key: "transaction_id"
   delegate :balance, :account_balance, to: :transaction_balance
+  has_and_belongs_to_many :reservations
 
   validates :description, presence: true
   validates :amount, presence: true

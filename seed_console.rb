@@ -1,7 +1,10 @@
-num_users = 10
+# you're using this as a test, move it into the formal test framework and define
+# pass/fail criteria
+num_users = 2
 a_per_u = (1..5)
 c_per_u = (0..10)
-t_per_u = (10..1000)
+t_per_u = (10..100)
+t_dates = (Time.now - 30.days..Time.now)
 
 u = []
 num_users.times do |n|
@@ -27,11 +30,12 @@ u.each do |user|
   t = []
   rand(t_per_u).times do |n|
     t << Transaction.create(
-      date: Time.now - rand(1..30).days,
+      date: rand(t_dates),
       description: "test_transaction",
       amount: rand(-100.00..100.00).round(2),
       account: a.sample,
       category: c.sample
     )
   end
+
 end

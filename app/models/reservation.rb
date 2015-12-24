@@ -1,9 +1,10 @@
 class Reservation < ActiveRecord::Base
   belongs_to :budget
-  #belongs_to :category
+  belongs_to :category
   has_one :user, :through => :budget
-  has_one :reservation_balace, foreign_key: "reservation_id"
-  delegate :balance, to: :reservation_balance
+  has_and_belongs_to_many :related_transactions, class_name: "Transaction"
+  #has_one :reservation_balace, foreign_key: "reservation_id"
+  #delegate :balance, to: :reservation_balance
 
   validates :category_id, uniqueness: {scope: :budget, case_sensitive: false}
 

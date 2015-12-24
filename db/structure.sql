@@ -251,6 +251,25 @@ CREATE TABLE reservations (
 
 
 --
+-- Name: reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE reservations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reservations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE reservations_id_seq OWNED BY reservations.id;
+
+
+--
 -- Name: transactions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -271,37 +290,30 @@ CREATE TABLE transactions (
 
 
 --
--- Name: reservation_balances; Type: VIEW; Schema: public; Owner: -
+-- Name: reservations_transactions; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE VIEW reservation_balances AS
- SELECT r.id AS reservation_id,
-    sum(t.amount) AS sum
-   FROM (((reservations r
-     JOIN budgets b ON ((b.id = r.budget_id)))
-     JOIN categories c ON ((c.id = r.category_id)))
-     JOIN transactions t ON ((r.category_id = t.category_id)))
-  WHERE ((t.budget_date >= b.start_date) AND (t.budget_date <= b.end_date))
-  GROUP BY r.id;
-
-
---
--- Name: reservations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE reservations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: reservations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE reservations_id_seq OWNED BY reservations.id;
+CREATE VIEW reservations_transactions AS
+ SELECT GREATEST(b_t.budget_id, b_r.budget_id) AS budget_id,
+    b_r.reservation_id,
+    b_t.transaction_id
+   FROM (( SELECT b.id AS budget_id,
+            t_c.transaction_id,
+            t_c.category_id,
+            t_c.amount
+           FROM (budgets b
+             LEFT JOIN ( SELECT t.id AS transaction_id,
+                    t.budget_date,
+                    t.amount,
+                    c.id AS category_id,
+                    c.user_id
+                   FROM (transactions t
+                     JOIN categories c ON ((t.category_id = c.id)))) t_c ON ((((t_c.budget_date >= b.start_date) AND (t_c.budget_date <= b.end_date)) AND (b.user_id = t_c.user_id))))) b_t
+     FULL JOIN ( SELECT b.id AS budget_id,
+            r.id AS reservation_id,
+            r.category_id
+           FROM (budgets b
+             JOIN reservations r ON ((r.budget_id = b.id)))) b_r ON (((b_r.budget_id = b_t.budget_id) AND ((b_r.category_id = b_t.category_id) OR (b_t.category_id IS NULL)))));
 
 
 --
@@ -637,5 +649,7 @@ INSERT INTO schema_migrations (version) VALUES ('20151222151151');
 
 INSERT INTO schema_migrations (version) VALUES ('20151222181801');
 
-INSERT INTO schema_migrations (version) VALUES ('20151222220142');
+INSERT INTO schema_migrations (version) VALUES ('20151224173421');
+
+INSERT INTO schema_migrations (version) VALUES ('20151224180444');
 
