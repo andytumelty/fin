@@ -88,7 +88,8 @@ class TransactionsController < ApplicationController
   end
 
   def destroy
-    @transaction.destroy
+    # FIXME reservations association tries to delete if destroy, even with restrict
+    @transaction.delete
     redirect_to transactions_path
   end
 

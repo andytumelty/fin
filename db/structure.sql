@@ -294,26 +294,30 @@ CREATE TABLE transactions (
 --
 
 CREATE VIEW reservations_transactions AS
- SELECT GREATEST(b_t.budget_id, b_r.budget_id) AS budget_id,
-    b_r.reservation_id,
-    b_t.transaction_id
-   FROM (( SELECT b.id AS budget_id,
-            t_c.transaction_id,
-            t_c.category_id,
-            t_c.amount
-           FROM (budgets b
-             LEFT JOIN ( SELECT t.id AS transaction_id,
-                    t.budget_date,
-                    t.amount,
-                    c.id AS category_id,
-                    c.user_id
-                   FROM (transactions t
-                     JOIN categories c ON ((t.category_id = c.id)))) t_c ON ((((t_c.budget_date >= b.start_date) AND (t_c.budget_date <= b.end_date)) AND (b.user_id = t_c.user_id))))) b_t
-     FULL JOIN ( SELECT b.id AS budget_id,
+ WITH reservation_transactions AS (
+         SELECT t.id AS transaction_id,
+            b.id AS budget_id,
+            b.start_date AS budget_start_date,
+            b.end_date AS budget_end_date,
             r.id AS reservation_id,
-            r.category_id
-           FROM (budgets b
-             JOIN reservations r ON ((r.budget_id = b.id)))) b_r ON (((b_r.budget_id = b_t.budget_id) AND ((b_r.category_id = b_t.category_id) OR (b_t.category_id IS NULL)))));
+            r.category_id,
+            b.user_id
+           FROM ((budgets b
+             JOIN reservations r ON ((b.id = r.budget_id)))
+             LEFT JOIN transactions t ON ((((t.budget_date >= b.start_date) AND (t.budget_date <= b.end_date)) AND (t.category_id = r.category_id))))
+        )
+ SELECT rt.budget_id,
+    rt.reservation_id,
+    COALESCE(rt.transaction_id, t_2.transaction_id) AS transaction_id
+   FROM (reservation_transactions rt
+     LEFT JOIN ( SELECT t.id AS transaction_id,
+            t.budget_date,
+            c.user_id
+           FROM (transactions t
+             JOIN categories c ON ((t.category_id = c.id)))
+          WHERE (NOT (t.id IN ( SELECT reservation_transactions.transaction_id
+                   FROM reservation_transactions
+                  WHERE (reservation_transactions.transaction_id IS NOT NULL))))) t_2 ON (((((t_2.budget_date >= rt.budget_start_date) AND (t_2.budget_date <= rt.budget_end_date)) AND (t_2.user_id = rt.user_id)) AND (rt.category_id IS NULL))));
 
 
 --

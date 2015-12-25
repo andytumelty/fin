@@ -1,3 +1,11 @@
+There are duplicate transactions in reservations_transactions where there
+shouldn't be: transactions with reservations against are appearing next to the
+everything else reservation too. I think this is to do with the ordering of the
+joins, and the fact we should map all transactions with no matching category to
+this reservation, rather than mapping directly to the budget. Can the join be
+simplified??
+
+
 Forget HTML, let's sort out JSON then get tests set up for each model and route
 
 Trimming logic, defining boundaries:
