@@ -35,7 +35,9 @@ class ReservationsController < ApplicationController
         flash[:error] = "You can't delete the everything else reservation!"
       else
         flash[:notice] = "Reservation destroyed"
-        @reservation.destroy
+        # FIXME tries to delete from reservations_transactions with destroy
+        # even with a restrict
+        @reservation.delete
       end
     else
       flash[:error] = "That's not your reservation!"
@@ -53,6 +55,6 @@ class ReservationsController < ApplicationController
     end
 
     def reservation_params
-      params.require(:reservation).permit(:category_id, :amount, :balance, :ignored)
+      params.require(:reservation).permit(:category_id, :amount, :ignored)
     end
 end

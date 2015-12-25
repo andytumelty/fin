@@ -17,7 +17,7 @@ class BudgetsController < ApplicationController
       @budgets = current_user.budgets.order(start_date: :asc)
       @previous_budget = @budgets.where("start_date < :start_date", start_date: @budget.start_date).last
       @next_budget = @budgets.where("start_date > :start_date", start_date: @budget.start_date).first
-      @budgeted_reservations = @budget.reservations.where(ignored: false).order("abs(amount) DESC")
+      @budgeted_reservations = @budget.reservations.where(ignored: false)
       @ignored_reservations = @budget.reservations.where(ignored: true)
       @new_reservation = Reservation.new
       # TODO change to be only categories that don't already have a reservation in this budget
@@ -35,10 +35,6 @@ class BudgetsController < ApplicationController
   def create
     @budget = Budget.new(budget_params)
     @budget.user = current_user
-    @budget.balance = 0
-    if @budget.name.blank?
-      @budget.name = @budget.start_date.to_s + " to " + @budget.end_date.to_s
-    end
     if @budget.save
       redirect_to @budget, notice: 'Budget was successfully created.'
     else
@@ -69,6 +65,6 @@ class BudgetsController < ApplicationController
     end
 
     def budget_params
-      params.require(:budget).permit(:name, :start_date, :end_date, :balance, :user_id)
+      params.require(:budget).permit(:name, :start_date, :end_date, :user_id)
     end
 end
