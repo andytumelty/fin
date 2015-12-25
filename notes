@@ -1,17 +1,10 @@
-There are duplicate transactions in reservations_transactions where there
-shouldn't be: transactions with reservations against are appearing next to the
-everything else reservation too. I think this is to do with the ordering of the
-joins, and the fact we should map all transactions with no matching category to
-this reservation, rather than mapping directly to the budget. Can the join be
-simplified??
+JQuery sortable is now broken :-(
 
 
 Forget HTML, let's sort out JSON then get tests set up for each model and route
 
 Trimming logic, defining boundaries:
 - Make sure every controller has a proper JSON response
-- Budgets: calculating balance based on the max of not-ignored reservations 
-  amount/allocated: how is it done at the moment?
 
 Setting up testing:
 - Needs thinking about: what types of testing? Unit vs integration vs functional
