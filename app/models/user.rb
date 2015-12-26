@@ -12,4 +12,10 @@ class User < ActiveRecord::Base
   has_many :budgets, dependent: :destroy
   has_many :reservations, :through => :budgets
   has_many :remote_accounts, :through => :accounts
+  
+  before_destroy :delete_unassigned_category
+
+  def delete_unassigned_category
+    self.categories.where(name: "unassigned").delete_all
+  end
 end
