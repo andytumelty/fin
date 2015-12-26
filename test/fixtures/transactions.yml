@@ -1,5 +1,6 @@
 # naming convention: transaction_a_b means category: category a that belongs to user b
 transaction_1_1:
+  sort: 1
   date: 2015-12-04
   budget_date: 2015-11-04
   description: transaction_1_1
@@ -8,6 +9,7 @@ transaction_1_1:
   amount: 10
 
 transaction_2_1:
+  sort: 2
   date: 2015-12-05
   budget_date: 2015-11-05
   description: transaction_2_1
@@ -16,6 +18,7 @@ transaction_2_1:
   amount: 16
 
 transaction_3_1:
+  sort: 3
   date: 2015-12-05
   budget_date: 2015-11-05
   description: transaction_3_1
@@ -24,6 +27,7 @@ transaction_3_1:
   amount: 18
 
 transaction_4_1:
+  sort: 4
   date: 2015-12-06
   budget_date: 2015-11-06
   description: transaction_4_1
@@ -32,6 +36,7 @@ transaction_4_1:
   amount: -21
 
 transaction_5_1:
+  sort: 5
   date: 2015-12-01
   budget_date: 2015-12-01
   description: transaction_5_1
@@ -40,6 +45,7 @@ transaction_5_1:
   amount: 10
 
 transaction_6_1:
+  sort: 6
   date: 2015-12-01
   budget_date: 2015-12-01
   description: transaction_6_1
@@ -48,6 +54,7 @@ transaction_6_1:
   amount: -10
 
 transaction_7_1:
+  sort: 7
   date: 2015-12-02
   budget_date: 2015-12-02
   description: transaction_7_1
@@ -56,6 +63,7 @@ transaction_7_1:
   amount: 12
 
 transaction_8_1:
+  sort: 8
   date: 2015-12-02
   budget_date: 2015-12-02
   description: transaction_8_1
@@ -64,6 +72,7 @@ transaction_8_1:
   amount: 50
 
 transaction_1_2:
+  sort: 1
   date: 2015-12-05
   budget_date: 2015-11-05
   description: transaction_1_2
@@ -72,6 +81,7 @@ transaction_1_2:
   amount: 50
 
 transaction_2_2:
+  sort: 2
   date: 2015-12-02
   budget_date: 2015-12-02
   description: transaction_2_2
