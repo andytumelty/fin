@@ -35,9 +35,7 @@ class ReservationsController < ApplicationController
         flash[:error] = "You can't delete the everything else reservation!"
       else
         flash[:notice] = "Reservation destroyed"
-        # FIXME tries to delete from reservations_transactions with destroy
-        # even with a restrict
-        @reservation.delete
+        @reservation.destroy
       end
     else
       flash[:error] = "That's not your reservation!"
