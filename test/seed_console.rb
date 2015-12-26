@@ -1,8 +1,8 @@
 # you're using this as a test, move it into the formal test framework and define
 # pass/fail criteria
-num_users = 2
+num_users = 3
 a_per_u = (1..5)
-c_per_u = (0..10)
+c_per_u = (0..5)
 t_per_u = (10..100)
 t_dates = (Time.now - 30.days..Time.now)
 
@@ -22,7 +22,6 @@ u.each do |user|
   end
 
   c = []
-  c << Category.create(name: "unassigned", user: user)
   rand(c_per_u).times do |n|
     c << Category.create(name: "category_#{n}", user: user)
   end

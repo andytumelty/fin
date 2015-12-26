@@ -13,7 +13,12 @@ class User < ActiveRecord::Base
   has_many :reservations, :through => :budgets
   has_many :remote_accounts, :through => :accounts
   
+  after_create :create_unassigned_category
   before_destroy :delete_unassigned_category
+
+  def create_unassigned_category
+    Category.create(name: "unassigned", user: self)
+  end
 
   def delete_unassigned_category
     self.categories.where(name: "unassigned").delete_all
