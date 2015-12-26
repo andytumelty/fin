@@ -7,14 +7,16 @@ class User < ActiveRecord::Base
   validates :username, uniqueness: {case_sensitive: :false}
 
   has_many :accounts, dependent: :destroy, inverse_of: :user
-  has_many :categories, dependent: :destroy
-  has_many :transactions, :through => :accounts, dependent: :destroy
+  has_many :categories, inverse_of: :user
   has_many :budgets, dependent: :destroy
   has_many :reservations, :through => :budgets
+  has_many :transactions, :through => :accounts
   has_many :remote_accounts, :through => :accounts
   
   after_create :create_unassigned_category
-  before_destroy :delete_unassigned_category
+  after_destroy :delete_unassigned_category
+
+  private
 
   def create_unassigned_category
     Category.create(name: "unassigned", user: self)
