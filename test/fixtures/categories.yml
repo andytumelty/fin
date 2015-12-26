@@ -1,16 +1,20 @@
 # naming convention: category_a_b means category a that belongs to user b
 category_1_1:
-  name: category_1
+  name: category_1_1
   user: user_1
 
 category_2_1:
-  name: category_2
+  name: category_2_1
   user: user_1
 
+category_1_2:
+  name: category_1_2
+  user: user_2
+
+category_2_2:
+  name: category_2_2
+  user: user_2
+ 
 category_3_1:
-  name: category_3
-  user: user_1
-
-category_4_1:
-  name: category_4
+  name: category_3_1
   user: user_1

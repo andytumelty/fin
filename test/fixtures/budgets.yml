@@ -2,11 +2,23 @@
 budget_1_1:
   name: budget_1_1
   start_date: 2015-11-01
-  end_date: 2015-12-01
-  user: user_1 
+  end_date: 2015-11-30
+  user: user_1
 
 budget_2_1:
   name: budget_2_1
-  start_date: 2015-12-01
-  end_date: 2016-01-01
-  user: user_1 
+  start_date: 2016-01-01
+  end_date: 2016-01-31
+  user: user_1
+
+budget_1_2:
+  name: budget_1_2
+  start_date: 2015-11-01
+  end_date: 2015-11-30
+  user: user_2
+
+budget_2_2:
+  name: budget_2_2
+  start_date: 2016-01-01
+  end_date: 2016-01-31
+  user: user_2
