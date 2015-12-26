@@ -1,40 +1,26 @@
-# you're using this as a test, move it into the formal test framework and define
-# pass/fail criteria
-num_users = 3
-a_per_u = (1..5)
-c_per_u = (0..5)
-t_per_u = (10..100)
-t_dates = (Time.now - 30.days..Time.now)
+def add_user(num_accounts, num_categories, num_transactions, t_dates)
+  u = User.new()
+  user_id = User.count + 1
+  u.username = "user_#{user_id}"
+  u.password = "user_#{user_id}"
+  u.password_confirmation = "user_#{user_id}"
+  u.save
 
-u = []
-num_users.times do |n|
-  u << User.create(
-    username: "user_#{n}", 
-    password: "user_#{n}",
-    password_confirmation: "user_#{n}"
-  )
-end
-
-u.each do |user|
-  a = []
-  rand(a_per_u).times do |n|
-    a << Account.create(name: "account_#{n}", user: user)
+  num_accounts.times do |n|
+    Account.create(name: "account_#{n}_#{u.id}", user: u)
   end
 
-  c = []
-  rand(c_per_u).times do |n|
-    c << Category.create(name: "category_#{n}", user: user)
+  num_categories.times do |n|
+    Category.create(name: "category_#{n}_#{u.id}", user: u)
   end
 
-  t = []
-  rand(t_per_u).times do |n|
-    t << Transaction.create(
+  num_transactions.times do |n|
+    Transaction.create(
       date: rand(t_dates),
       description: "test_transaction",
       amount: rand(-100.00..100.00).round(2),
-      account: a.sample,
-      category: c.sample
+      account: u.accounts.sample,
+      category: u.categories.sample
     )
   end
-
 end
