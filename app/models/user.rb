@@ -14,7 +14,9 @@ class User < ActiveRecord::Base
   has_many :remote_accounts, :through => :accounts
   
   after_create :create_unassigned_category
-  after_destroy :delete_unassigned_category
+  # a bit crummy, but dependent: :destroy won't work as we can't control the
+  # order of delete
+  after_destroy :delete_categories
 
   private
 
@@ -22,7 +24,7 @@ class User < ActiveRecord::Base
     Category.create(name: "unassigned", user: self)
   end
 
-  def delete_unassigned_category
-    self.categories.where(name: "unassigned").delete_all
+  def delete_categories
+    self.categories.delete_all
   end
 end
