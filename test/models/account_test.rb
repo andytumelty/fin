@@ -17,20 +17,27 @@ class AccountTest < ActiveSupport::TestCase
     assert_not a3.save
   end
 
-  test "should delete related transactions when deleting account" do
+  test "should delete dependents when deleting account" do
     u = users(:user_1)
     a = Account.create(user: u, name: "account_test_transaction_delete")
-    t = Transaction.new(
+    Transaction.create(
       date: Date.parse('2015-01-01'),
       description: "account_test_transaction_delete",
       category: categories(:category_1_1),
       account: a,
       amount: 10
     )
-    t.save
-    ts = a.transactions
-    assert a.destroy
-    ts.reload
-    assert ts.empty?
+    ra = RemoteAccount.create(
+      title: "account_test_remote_account_delete",
+      inverse_values: false,
+      user_credential: "user_1",
+      remote_account_identifier: "1234",
+      account: a,
+      remote_account_type: RemoteAccountType.all.sample,
+      sync_from: Date.today
+    )
+    assert a.destroy, "account not successfully destroyed"
+    assert_empty a.transactions, "transactions not destroyed with account"
+    assert_not RemoteAccount.exists?(ra.id), "remote account not destroyed with account"
   end
 end
