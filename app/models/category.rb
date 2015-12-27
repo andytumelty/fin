@@ -1,19 +1,22 @@
 class Category < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, inverse_of: :categories
   has_many :transactions
-  #has_many :transaction_with_balances
-  has_and_belongs_to_many :reservations
+  has_many :reservations
 
   validates :name, presence: true, uniqueness: { scope: :user, case_sensitive: false }
 
-  after_destroy :reassign_transactions#, :delete_reservations
+  before_destroy :confirm_not_unassigned
+  after_destroy :reassign_transactions
 
   def reassign_transactions
     transactions = self.user.transactions.where(category: self)
     transactions.update_all(category_id: self.user.categories.where(name: "unassigned").first.id)
   end
 
-  #def delete_reservations
-  #  reservations.where(category_id: self.id).delete
-  #end
+  def confirm_not_unassigned
+    # FIXME is there a better way of checking rather than checking name?
+    if self.name == "unassigned"
+      return false
+    end
+  end
 end

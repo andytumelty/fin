@@ -1,11 +1,12 @@
 class Transaction < ActiveRecord::Base
-  belongs_to :account
+  belongs_to :account, inverse_of: :transactions
   has_one :remote_account, :through => :account
   belongs_to :category
   has_one :user, :through => :account
   has_one :transaction_balance, foreign_key: "transaction_id"
   delegate :balance, :account_balance, to: :transaction_balance
-  has_and_belongs_to_many :reservations, :dependent => :restrict_with_error
+  has_many :reservation_transactions
+  has_many :reservations, :through => :reservation_transactions
 
   validates :description, presence: true
   validates :amount, presence: true

@@ -1,15 +1,31 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  category_id: 
-  amount: 9.99
-  balance: 9.99
+# naming convention: reservation_a_b_c means reservation a that belongs to
+# budget b_c (so the budget b that belongs to user c)
+reservation_1_1_1:
+  budget: budget_1_1
+  category: nil
   ignored: false
-  budget_id: 
 
-two:
-  category_id: 
-  amount: 9.99
-  balance: 9.99
+reservation_2_1_1:
+  budget: budget_1_1
+  category: category_2_1
   ignored: false
-  budget_id: 
+
+reservation_1_2_1:
+  budget: budget_2_1
+  category: nil
+  ignored: false
+
+reservation_1_1_2:
+  budget: budget_1_2
+  category: nil
+  ignored: false
+
+reservation_2_1_2:
+  budget: budget_1_2
+  category: category_2_2
+  ignored: false
+
+reservation_1_2_2:
+  budget: budget_2_2
+  category: nil
+  ignored: false

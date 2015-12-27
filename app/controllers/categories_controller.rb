@@ -43,7 +43,6 @@ class CategoriesController < ApplicationController
 
   # DELETE /categories/1
   def destroy
-    # FIXME prevent deleting unassigned
     @category.destroy
     redirect_to categories_path
   end

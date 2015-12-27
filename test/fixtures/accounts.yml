@@ -1,8 +1,12 @@
 # naming convention: account_a_b means account a that belongs to user b
 account_1_1:
-  name: account_1
+  name: account_1_1
   user: user_1
 
 account_2_1:
-  name: account_2
+  name: account_2_1
   user: user_1
+
+account_1_2:
+  name: account_1_2
+  user: user_2
