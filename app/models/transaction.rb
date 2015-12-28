@@ -28,6 +28,8 @@ class Transaction < ActiveRecord::Base
   #  end
   #end
 
+  private
+
   def check_budget_date
     if self.budget_date.blank?
       self.budget_date = self.date

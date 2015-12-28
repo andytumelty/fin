@@ -51,7 +51,7 @@ class TransactionsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.json{ render json: @transaction }
+      format.json{ render json: @transaction.to_json(methods: [:balance, :account_balance]) }
       format.html{ render html: nil }
     end
   end
