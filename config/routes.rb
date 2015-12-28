@@ -5,6 +5,9 @@ Fin::Application.routes.draw do
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
+  get '/transactions/import' => 'transactions#import', :as => :transactions_import
+  post '/transactions/import' => 'transactions#load_import', :as => :transactions_load_import
+  get '/transactions/import/errors' => 'transactions#import_errors', :as => :transactions_import_errors
   resources :transactions, except: [:new]
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
   get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
@@ -21,9 +24,6 @@ Fin::Application.routes.draw do
     resources :reservations
   end
 
-  get '/transactions/import' => 'transactions#import', :as => :transactions_import
-  post '/transactions/import' => 'transactions#load_import', :as => :transactions_load_import
-  get '/transactions/import/errors' => 'transactions#import_errors', :as => :transactions_import_errors
 
   get 'pages/about'
   get 'pages/privacy'
