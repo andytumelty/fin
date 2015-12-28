@@ -8,6 +8,7 @@ class Transaction < ActiveRecord::Base
   has_many :reservation_transactions
   has_many :reservations, :through => :reservation_transactions
 
+  # validates :date??
   validates :description, presence: true
   validates :amount, presence: true
   validates :amount, numericality: true, if: "!amount.nil?"
@@ -15,9 +16,6 @@ class Transaction < ActiveRecord::Base
   validates :category, presence: true
 
   before_create :check_budget_date, :generate_order, prepend: true
-  #after_create :update_transaction_balances, :update_budget_balances
-  #after_update :update_transaction_balances, :update_budget_balances
-  #after_destroy :update_transaction_balances, :update_budget_balances
 
   # TODO Split transactions
   
@@ -36,13 +34,12 @@ class Transaction < ActiveRecord::Base
     end
   end
 
-  # this is causing a error with seed_console: is this a worry?
   def generate_order
     # TODO Surley this could look a bit nicer? a = b? c : d
     if self.user.transactions.empty?
       self.sort = 1
     else
-      self.sort = self.user.transactions.order(sort: :desc).first.sort + 1
+      self.sort = self.user.transactions.maximum("sort") + 1
     end
   end
 end

@@ -2,6 +2,10 @@ class Budget < ActiveRecord::Base
   # TODO validate attributes
   belongs_to :user
   has_many :reservations, dependent: :delete_all
+  
+  # FIXME should this validate as dates?
+  validates :start_date, presence: true
+  validates :end_date, presence: true
 
   before_create :apply_name
   after_create :copy_previous_reservations
@@ -35,7 +39,7 @@ class Budget < ActiveRecord::Base
     # else, propagate previous reservations
     if self.user.budgets.count > 1
       # logger.debug { 'self.user.budgets.count > 1' }
-      prev_budget = self.user.budgets.where.not(id: self.id).order(start_date: :asc).last
+      prev_budget = self.user.budgets.where.not(id: self.id).order(id: :asc).last
       prev_budget.reservations.order(category_id: :desc).each do |prev_reservation|
         Reservation.create(
           budget: self,
