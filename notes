@@ -1,3 +1,49 @@
+JQuery sortable is now broken :-(
+Sort out CSV import/export again
+Test data consistency across docker upgrades
+Clear up db: remove recalc columns and delayed job tables
+
+Forget HTML, let's sort out JSON then get tests set up for each model and route
+
+Trimming logic, defining boundaries:
+- Make sure every controller has a proper JSON response
+
+Setting up testing:
+- Needs thinking about: what types of testing? Unit vs integration vs functional
+  vs non-functional
+- Test of every route
+
+TESTING BUDGET BALANCES
+for each non-ignored reservation, need to determine which to sum as budget
+balance: amount vs balance
+
+amount -ve, min(amount, balance)
+amount +ve, max(amount, balance)
+amount = 0, balance
+
+to test:
+- amount -ve, amount < balance : amount   t6
+- amount -ve, balance < amount : balance  
+- amount +ve, amount < balance : balance
+- amount -ve, balance < amount : amount
+- amount 0 : balance
+
+edge cases:
+- reservation has no transactions
+
+What about categories with no reservations?
+What about reservations of the unassigned category?
+
+Actual requirement:
+- For a budget, show me:
+  - the balance of each reservation
+  - the balance of any categories I've not assigned a reservation too (as "anything else")
+  - the total budget balance, which is a sum of:
+    - the modulus maximum of amount & balance of each non-ignored reservation
+
+
+
+
 Remote account mapping
 
 to update:

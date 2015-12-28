@@ -21,7 +21,6 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      Category.create(name: "unassigned", user: @user)
       auto_login(@user)
       redirect_to root_url, notice: 'User was successfully created.'
     else

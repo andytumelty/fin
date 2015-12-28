@@ -53,6 +53,6 @@ class ReservationsController < ApplicationController
     end
 
     def reservation_params
-      params.require(:reservation).permit(:category_id, :amount, :balance, :ignored)
+      params.require(:reservation).permit(:category_id, :amount, :ignored)
     end
 end

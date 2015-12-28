@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class ReservationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  # test "related_transactions"
+  # test "related_transactions.sum"
 end

@@ -1,7 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+natwest:
+  title: natwest
 
-one:
-  title: MyString
-
-two:
-  title: MyString
+amex:
+  title: amex
