@@ -2,6 +2,10 @@ require 'test_helper'
 
 class TransactionTest < ActiveSupport::TestCase
   test "transaction balances should be calculated correctly" do
+    # FIXME this should test all transaction edge cases:
+    # - first transaction
+    # - first account transaction
+    # - transaction created then moved to be the first
     t = Transaction.all.sample
     assert_equal t.user.transactions.where("sort <= #{t.sort}").sum("amount"), t.balance
     assert_equal t.account.transactions.where("sort <= #{t.sort}").sum("amount"), t.account_balance
