@@ -1,18 +1,20 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: fin_development
   pool: 5
   host: localhost
+  database: fin_development
 test:
   adapter: postgresql
   encoding: unicode
-  database: fin_test
   pool: 5
   host: localhost
+  database: fin_test
 production:
   adapter: postgresql
   encoding: unicode
-  database: fin_production
   pool: 5
-  host: localhost
+  host: db
+  database: fin_test
+  username: postgres
+  password:
