@@ -1,7 +1,8 @@
-JQuery sortable is now broken :-(
 Sort out CSV import/export again
 Test data consistency across docker upgrades
 Clear up db: remove recalc columns and delayed job tables
+Add ActionController::Live to auto update data in browser
+move UI to purely JSON and angular?
 
 Forget HTML, let's sort out JSON then get tests set up for each model and route
 
