@@ -22,5 +22,8 @@ module Fin
     # config.i18n.default_locale = :de
     config.autoload_paths << Rails.root.join('lib')
     config.active_record.schema_format = :sql
+
+    config.assets.compile = true
+    config.assets.precompile =  ['*.js', '*.css', '*.css.erb'] 
   end
 end

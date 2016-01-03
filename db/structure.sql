@@ -35,7 +35,7 @@ SET default_with_oids = false;
 
 CREATE TABLE accounts (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying,
     user_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -67,7 +67,7 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 CREATE TABLE budgets (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying,
     start_date date,
     end_date date,
     user_id integer,
@@ -101,7 +101,7 @@ ALTER SEQUENCE budgets_id_seq OWNED BY budgets.id;
 
 CREATE TABLE categories (
     id integer NOT NULL,
-    name character varying(255),
+    name character varying,
     user_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -140,8 +140,8 @@ CREATE TABLE delayed_jobs (
     run_at timestamp without time zone,
     locked_at timestamp without time zone,
     failed_at timestamp without time zone,
-    locked_by character varying(255),
-    queue character varying(255),
+    locked_by character varying,
+    queue character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -172,7 +172,7 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 CREATE TABLE remote_account_types (
     id integer NOT NULL,
-    title character varying(255),
+    title character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -203,10 +203,10 @@ ALTER SEQUENCE remote_account_types_id_seq OWNED BY remote_account_types.id;
 
 CREATE TABLE remote_accounts (
     id integer NOT NULL,
-    title character varying(255),
+    title character varying,
     inverse_values boolean,
-    user_credential character varying(255),
-    remote_account_identifier character varying(255),
+    user_credential character varying,
+    remote_account_identifier character varying,
     account_id integer,
     remote_account_type_id integer,
     created_at timestamp without time zone,
@@ -276,7 +276,7 @@ ALTER SEQUENCE reservations_id_seq OWNED BY reservations.id;
 CREATE TABLE transactions (
     id integer NOT NULL,
     date date,
-    description character varying(255),
+    description character varying,
     amount numeric(19,4),
     account_id integer,
     category_id integer,
@@ -284,7 +284,7 @@ CREATE TABLE transactions (
     updated_at timestamp without time zone,
     budget_date date,
     sort double precision,
-    remote_identifier character varying(255),
+    remote_identifier character varying,
     remote_date date
 );
 
@@ -325,7 +325,7 @@ CREATE VIEW reservations_transactions AS
 --
 
 CREATE TABLE schema_migrations (
-    version character varying(255) NOT NULL
+    version character varying NOT NULL
 );
 
 
@@ -368,9 +368,9 @@ ALTER SEQUENCE transactions_id_seq OWNED BY transactions.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    username character varying(255) NOT NULL,
-    crypted_password character varying(255),
-    salt character varying(255),
+    username character varying NOT NULL,
+    crypted_password character varying,
+    salt character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );

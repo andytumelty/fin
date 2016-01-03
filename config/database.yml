@@ -15,6 +15,6 @@ production:
   encoding: unicode
   pool: 5
   host: db
-  database: fin_test
-  username: postgres
-  password:
+  database: fin
+  username: fin
+  password: fin
