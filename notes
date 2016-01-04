@@ -2,6 +2,7 @@ Running docker-compose:
 docker-compose build
 docker-compose up
 docker-compose run -e RAILS_ENV=production fin bundle exec rake db:migrate db:schema:load
+docker-compose run -e RAILS_ENV=production fin bundle exec rake db:seed
 Outstanding questions: how to migrate data across releases?
 How is environment specific stuff managed?
 - http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/

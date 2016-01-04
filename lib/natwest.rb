@@ -107,9 +107,7 @@ module Natwest
         assert(page.title.include?('Statements'),
                "Got '#{page.title}' instead of Statements")
         
-        form = page.form_with(action: 'StatementsLandingPageA.aspx')
-        button = form.button_with(value: 'Search transactions')
-        self.page = form.submit(button)
+        self.page = page.link_with(text: 'Search transactions').click
         assert(page.title.include?('Statements - Transaction search - Select account and period'),
                "Got '#{page.title}' instead of Transaction search")
 
