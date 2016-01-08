@@ -63,7 +63,7 @@ class Amex
       transaction[:date] = Date.parse(text[i*3])
       transaction[:description] = text[i*3 + 1]
       # TODO parse different currencies
-      transaction[:amount] = text[i*3 + 2].split(/ /).last.tr('£','').to_f
+      transaction[:amount] = text[i*3 + 2].split(/ /).last.gsub(/[£,]/,'').to_f
       transactions << transaction
       i = i + 1
     end
