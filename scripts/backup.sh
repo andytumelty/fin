@@ -1,6 +1,8 @@
 #!/bin/bash
+base_dir="$(dirname $0)/.."
+
 project="fin"
-compose_file="web/docker-compose.yml"
+compose_file="$base_dir/web/docker-compose.yml"
 
 db="fin"
 u="fin"
@@ -12,4 +14,4 @@ cip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $cid)"
 echo "$cip:5432:$db:$u:$pw" > ~/.pgpass
 chmod 600 ~/.pgpass
 
-pg_dump -F c -U $u -h $cip $db > backups/fin_db_$(date +%FT%H-%M-%S).psql
+pg_dump -F c -U $u -h $cip $db > $base_dir/backups/fin_db_$(date +%FT%H-%M-%S).psql
