@@ -3,9 +3,10 @@
 # todo: currently uses current dir to determine project name: change this
 # todo: add parameter to clean up containers based on given service name
 
-project="fin"
+base_dir="$(dirname $0)/.."
+. $base_dir/scripts/vars.sh
+
 service="fin"
-compose_file="web/docker-compose.yml"
 
 docker-compose -f $compose_file -p $project rm -f "$service"
 

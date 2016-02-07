@@ -1,8 +1,9 @@
 #!/bin/bash
 # docker-compose.yml specifies build, but building here means the image can be
 # cached before future stop and remove steps later
-project="fin"
-compose_file="web/docker-compose.yml"
+base_dir="$(dirname $0)/.."
+. $base_dir/scripts/vars.sh
+
 docker-compose -p $project -f $compose_file build 
 docker-compose -p $project -f $compose_file stop fin 
 docker-compose -p $project -f $compose_file rm -f fin
@@ -18,4 +19,4 @@ if [[ -z "$(docker-compose -f $compose_file -p $project ps db | grep Up)" ]]; th
 fi
 docker-compose -p $project -f $compose_file run -e RAILS_ENV=production fin bundle exec rake db:migrate db:schema:load
 docker-compose -p $project -f $compose_file run -e RAILS_ENV=production fin bundle exec rake db:seed
-$(dirname $0)/clean-containers.sh
+$base_dir/scripts/clean-containers.sh

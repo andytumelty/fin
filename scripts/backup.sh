@@ -1,8 +1,6 @@
 #!/bin/bash
 base_dir="$(dirname $0)/.."
-
-project="fin"
-compose_file="$base_dir/web/docker-compose.yml"
+. $base_dir/scripts/vars.sh
 
 db="fin"
 u="fin"
