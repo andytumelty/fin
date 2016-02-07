@@ -8,8 +8,8 @@ Fin::Application.routes.draw do
   get '/transactions/import' => 'transactions#import', :as => :transactions_import
   post '/transactions/import' => 'transactions#load_import', :as => :transactions_load_import
   get '/transactions/import/errors' => 'transactions#import_errors', :as => :transactions_import_errors
-  resources :transactions, except: [:new]
   get '/transactions/filter' => 'transactions#filter', :as => :transactions_filter
+  resources :transactions, except: [:new]
   get '/budgets/latest' => 'budgets#show', id: 'latest', :as => :latest_budget
 
   resources :accounts, except: :show do
