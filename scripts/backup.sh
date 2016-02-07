@@ -14,4 +14,4 @@ cip="$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' $cid)"
 echo "$cip:5432:$db:$u:$pw" > ~/.pgpass
 chmod 600 ~/.pgpass
 
-pg_dump -F c -U $u -h $cip $db > $base_dir/backups/fin_db_$(date +%FT%H-%M-%S).psql
+pg_dump -U $u -h $cip $db > $base_dir/backups/fin_db_$(date +%FT%H-%M-%S).sql
