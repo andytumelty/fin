@@ -16,4 +16,4 @@ web/log/*.log
 web/tmp
 
 # ignore backups
-backups/*.psql
+backups/*.sql
