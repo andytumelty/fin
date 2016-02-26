@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # docker-compose.yml specifies build, but building here means the image can be
 # cached before future stop and remove steps later
 base_dir="$(dirname $0)/.."
