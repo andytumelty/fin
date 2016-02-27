@@ -13,7 +13,7 @@ class Amex
     @ua.close
     @headless.destroy
   end
-  
+
   def login(credentials)
     @ua.text_field(name: "UserID").set(credentials[:username])
     @ua.text_field(name: "Password").set(credentials[:password])
@@ -56,9 +56,13 @@ class Amex
       cp = @ua.div(id: "statement-data-table_info").text
     end
 
+    text.delete("No transactions found.")
+    #puts text.inspect
+
     i = 0
     transactions = []
     while i*3 < text.size do
+      #puts text[i*3]
       transaction = {}
       transaction[:date] = Date.parse(text[i*3])
       transaction[:description] = text[i*3 + 1]
