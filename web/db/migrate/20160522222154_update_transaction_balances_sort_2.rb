@@ -1,4 +1,4 @@
-class UpdateTransactionBalancesSort < ActiveRecord::Migration
+class UpdateTransactionBalancesSort2 < ActiveRecord::Migration
   def up
     execute <<-SQL
       CREATE OR REPLACE VIEW transaction_with_balances as(
