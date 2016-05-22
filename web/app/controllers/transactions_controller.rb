@@ -168,7 +168,7 @@ class TransactionsController < ApplicationController
     end
 
     def set_transactions
-      @transactions = current_user.transactions.includes(:account, :category, :transaction_balance).order(sort: :desc)
+      @transactions = current_user.transactions.includes(:account, :category, :transaction_balance).order(date: :desc, description: :asc, id: :asc)
     end
 
     def set_accounts_and_categories
