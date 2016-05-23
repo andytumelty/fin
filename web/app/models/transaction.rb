@@ -19,14 +19,14 @@ class Transaction < ActiveRecord::Base
 
   # TODO Split transactions
   
-  #def self.to_csv
-  #  CSV.generate do |csv|
-  #    csv << ["id", "sort", "date", "budget_date","description", "amount", "account_balance", "balance", "account", "category"]
-  #    all.each do |t|
-  #      csv << [t.id, t.sort, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
-  #    end
-  #  end
-  #end
+  def self.to_csv
+    CSV.generate do |csv|
+      csv << ["id", "sort", "date", "budget_date","description", "amount", "account_balance", "balance", "account", "category"]
+      all.each do |t|
+        csv << [t.id, t.sort, t.date, t.budget_date, t.description, t.amount, t.account_balance, t.balance, t.account.name, t.category.name]
+      end
+    end
+  end
 
   private
 

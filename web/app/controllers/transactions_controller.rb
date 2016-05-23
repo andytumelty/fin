@@ -18,9 +18,9 @@ class TransactionsController < ApplicationController
         @category_breakdown = set_category_breakdown(@transactions)
         @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
       }
-      #format.csv {
-      #  send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
-      #}
+      format.csv {
+        send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
+      }
     end
   end
 

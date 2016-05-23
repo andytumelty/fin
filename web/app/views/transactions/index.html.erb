@@ -2,8 +2,8 @@
 
 <div style="float:left;">
   <%= link_to "Filter Toggle", '#', id: 'transaction_filter_row_toggle' %> |
-  <!--<%= link_to "Download all", transactions_path(format: "csv") %> |
-  <%= link_to "Import", transactions_import_path %> --!>
+  <%= link_to "Download all", transactions_path(format: "csv") %> |
+  <!-- <%= link_to "Import", transactions_import_path %> --!>
 </div>
 
 <% if @new_transaction.errors.any? %>
