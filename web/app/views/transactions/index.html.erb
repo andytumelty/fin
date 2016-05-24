@@ -74,8 +74,12 @@
         <%= number_to_currency_td(t.amount, 'amount') %>
         <%= number_to_currency_td(t.account_balance, 'account_balance') %>
         <%= number_to_currency_td(t.balance, 'balance') %>
-        <td class="account" align="center"><%= t.account.name %>
-        <td class="category" align="center"><%= t.category.name %>
+        <td class="account" align="center"><%= t.account.name %></td>
+        <td class="category" align="center">
+          <%= form_for t, html: {class: 'autopost'} do |f| %>
+            <%= f.collection_select :category_id, @categories, :id, :name %>
+          <% end %>
+        </td>
         <td><%= link_to 'Edit', edit_transaction_path(t) %></td>
         <td><%= link_to 'X', t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

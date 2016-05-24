@@ -25,6 +25,34 @@ $(function(){
     $("#transaction_filter_row").toggle();
   });
 
+  $('form.autopost > select').change(function(){
+    category_id = $(this).val();
+    url = $(this).parent().attr("action");
+    id = url.split("/")[1]
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+          transaction: {
+            id: id,
+            category_id: category_id
+          },
+          _method: 'put'
+        },
+        dataType: "json",
+        success: function(xhr){
+          //console.debug(xhr.responseText);
+          //success = $.parseJSON(xhr.responseText);
+          // TODO tie up with data refresh
+        },
+        error: function(xhr){
+          //console.debug(xhr.responseText);
+          //errors = $.parseJSON(xhr.responseText);
+          // TODO do something with errors
+        }
+      });
+  });
+
   //$("#sortable").sortable({
   //  start: function(e, ui){
   //    $(this).data('previndex', ui.item.index());
