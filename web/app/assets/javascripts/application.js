@@ -25,6 +25,12 @@ $(function(){
     $("#transaction_filter_row").toggle();
   });
 
+  $('tr.transaction').hover(function() {
+      $(this).css("background-color","#ecf8fe");
+    }, function() {
+      $(this).css("background-color","");
+  });
+
   $('form.autopost > select').change(function(){
     category_id = $(this).val();
     url = $(this).parent().attr("action");
