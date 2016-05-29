@@ -11,7 +11,7 @@ class Budget < ActiveRecord::Base
   after_create :copy_previous_reservations
 
   # TODO Should this logic sit in the model or database as a view?
-  def balance
+  def float
     balance = 0
     self.reservations.each do |reservation|
       if !reservation.ignored
@@ -23,6 +23,14 @@ class Budget < ActiveRecord::Base
           balance += [reservation.balance, reservation.amount].min
         end
       end
+    end
+    return balance
+  end
+
+  def balance
+    balance = 0
+    self.reservations.where(ignored: false).each do |r|
+      balance += r.balance
     end
     return balance
   end

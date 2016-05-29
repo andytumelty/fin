@@ -7,86 +7,101 @@
 <%= link_to 'Edit', edit_budget_path(@budget) %> |
 <%= link_to 'Delete', budget_path(@budget), method: :delete, data: { confirm: 'Are you sure?' } %>
 
-<h2>
-  <% if @previous_budget.nil? %>
-    <
-  <% else %>
-    <%= link_to '<', budget_path(@previous_budget) %>
-  <% end %>
-</h2>
-
-<p style="width:200px;margin:0 auto;">Jump to: <%= collection_select(nil, :budget, @budgets, :id, :name, size: 5) %></p>
-<p><%= link_to 'New Budget', new_budget_path %></p>
-
-<h2>
-  <% if @next_budget.nil? %>
-    >
-  <% else %>
-    <%= link_to '>', budget_path(@next_budget) %>
-  <% end %>
-</h2>
-
-<h2>
-  <small>You've got</small>
-  <%= number_to_currency(@budget.balance) %>
-  <small>left to spend</small>
-</h2>
-
-<table style="margin:0 auto;width:500px;">
-
-  <thead>
-    <th width="200">Reservations</th>
-    <th style="text-align:center" width="90" colspan="2">Budgeted</th>
-    <th style="text-align:center" width="90" colspan="2">Balance</th>
-    <th width="60"></th>
-  </thead>
-
-  <% @budgeted_reservations.each do |reservation| %>
-    <% if !reservation.category_id.nil? %>
-      <tr>
-        <td><%= Category.find(reservation.category_id).name %></td>
-        <%= number_to_currency_td(reservation.amount, '') %>
-        <%= number_to_currency_td(reservation.balance, '') %>
-        <td style="text-align:center">
-          <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
-          <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
-        </td>
-      </tr>
-    <% end %>
-  <% end %>
-  
+<table>
   <tr>
-    <td>Everything else</td>
-    <td colspan="2"></td>
-    <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance, '') %>
-    <td></td>
+    <td>
+      <h2>
+        <% if @previous_budget.nil? %>
+          <
+        <% else %>
+          <%= link_to '<', budget_path(@previous_budget) %>
+        <% end %>
+      </h2>
+    </td>
+    <td style="text-align:center">
+      <p style="width:200px;margin:0 auto;">Jump to: <%= collection_select(nil, :budget, @budgets, :id, :name, size: 5) %></p>
+      <p><%= link_to 'New Budget', new_budget_path %></p>
+    </td>
+    <td>
+      <h2>
+        <% if @next_budget.nil? %>
+          >
+        <% else %>
+          <%= link_to '>', budget_path(@next_budget) %>
+        <% end %>
+      </h2>
+    </td>
   </tr>
   <tr>
-    <td style="padding-top:20px;" colspan="6"><i>Ignored Reservations</i></td>
-  </tr>
-  <% @ignored_reservations.each do |reservation| %>
-    <tr>
-      <td><%= Category.find(reservation.category_id).name %></td>
-      <td colspan="2"></td>
-      <%= number_to_currency_td(reservation.balance, '') %>
-      <td style="text-align:center">
-        <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
-        <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
-      </td>
-    </tr>
-  <% end %>
-  <tr>
-    <td style="padding-top:20px;"><i>New Reservation</i></td>
-    <td>Amount</td>
-    <td>Ignored?</td>
-    <td></td>
+    <td colspan="3" style="text-align:center">
+      <h2>
+        <small>You've got</small>
+        <%= number_to_currency(@budget.float) %>
+        <small>left to spend</small>
+        <p><small>Balance: <%= number_to_currency(@budget.balance) %></small></p>
+      </h2>
+    </td>
   </tr>
   <tr>
-    <%= form_for [@budget, @new_reservation] do |f| %>
-      <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
-      <td><%= f.text_field(:amount, size: 5) %></td>
-      <td><%= f.check_box :ignored %></td>
-      <td><%= f.submit "Add!" %></td>
-    <% end %>
+    <td colspan="3">
+      <table style="margin:0 auto;width:500px;">
+
+        <thead>
+          <th width="200">Reservations</th>
+          <th style="text-align:center" width="90" colspan="2">Budgeted</th>
+          <th style="text-align:center" width="90" colspan="2">Balance</th>
+          <th width="60"></th>
+        </thead>
+
+        <% @budgeted_reservations.each do |reservation| %>
+          <% if !reservation.category_id.nil? %>
+            <tr>
+              <td><%= Category.find(reservation.category_id).name %></td>
+              <%= number_to_currency_td(reservation.amount, '') %>
+              <%= number_to_currency_td(reservation.balance, '') %>
+              <td style="text-align:center">
+                <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
+                <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+        
+        <tr>
+          <td>Everything else</td>
+          <td colspan="2"></td>
+          <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance, '') %>
+          <td></td>
+        </tr>
+        <tr>
+          <td style="padding-top:20px;" colspan="6"><i>Ignored Reservations</i></td>
+        </tr>
+        <% @ignored_reservations.each do |reservation| %>
+          <tr>
+            <td><%= Category.find(reservation.category_id).name %></td>
+            <td colspan="2"></td>
+            <%= number_to_currency_td(reservation.balance, '') %>
+            <td style="text-align:center">
+              <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
+              <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
+            </td>
+          </tr>
+        <% end %>
+        <tr>
+          <td style="padding-top:20px;"><i>New Reservation</i></td>
+          <td>Amount</td>
+          <td>Ignored?</td>
+          <td></td>
+        </tr>
+        <tr>
+          <%= form_for [@budget, @new_reservation] do |f| %>
+            <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
+            <td><%= f.text_field(:amount, size: 5) %></td>
+            <td><%= f.check_box :ignored %></td>
+            <td><%= f.submit "Add!" %></td>
+          <% end %>
+        </tr>
+      </table>
+    </td>
   </tr>
 </table>
