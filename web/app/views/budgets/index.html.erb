@@ -20,8 +20,8 @@
         <td><%= budget.name %></td>
         <td><%= budget.start_date %></td>
         <td><%= budget.end_date %></td>
-        <td><%= number_to_currency(budget.balance) %></td>
-        <td><%= number_to_currency(budget.float) %></td>
+        <td style-"text-align:right"><%= number_to_currency(budget.balance) %></td>
+        <td style-"text-align:right"><%= number_to_currency(budget.float) %></td>
         <td><%= link_to 'Show', budget %></td>
         <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
         <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>
