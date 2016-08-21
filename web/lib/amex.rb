@@ -23,24 +23,30 @@ class Amex
   def transactions(start_date, end_date, account)
     @ua.link(text: "Your Statement").click
     @ua.link(text: "Your Card Activity").click
-    @ua.link(id: "date-layer-link").parent.click
-    @ua.link(text: "Date range").click
-    #puts "from: #{start_date}"
-    wait_count = 0
-    while ! @ua.div(id: "from-datepicker").visible? && wait_count < 5
-      #puts "Can't find datepicker yet, sleeping"
-      sleep 1
-      wait_count += 1
-    end
-    @ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(start_date).strftime("%Y"))
-    @ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(start_date).strftime("%-m").to_i - 1)
-    @ua.div(id: "from-datepicker").link(text: Date.parse(start_date).strftime("%-d")).click
-    #puts "to: #{end_date}"
-    @ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(end_date).strftime("%Y"))
-    @ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(end_date).strftime("%-m").to_i - 1)
-    @ua.div(id: "to-datepicker").link(text: Date.parse(end_date).strftime("%-d")).click
+    @ua.div(id: "daterange").click
+    @ua.click(title: "Select start and end dates").click
+    @ua.th(class: "months").button().click
 
-    @ua.link(id: "date-go-button").click
+
+
+    #@ua.link(id: "date-layer-link").parent.click
+    #@ua.link(text: "Date range").click
+    ##puts "from: #{start_date}"
+    #wait_count = 0
+    #while ! @ua.div(id: "from-datepicker").visible? && wait_count < 5
+    #  #puts "Can't find datepicker yet, sleeping"
+    #  sleep 1
+    #  wait_count += 1
+    #end
+    #@ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(start_date).strftime("%Y"))
+    #@ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(start_date).strftime("%-m").to_i - 1)
+    #@ua.div(id: "from-datepicker").link(text: Date.parse(start_date).strftime("%-d")).click
+    ##puts "to: #{end_date}"
+    #@ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(end_date).strftime("%Y"))
+    #@ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(end_date).strftime("%-m").to_i - 1)
+    #@ua.div(id: "to-datepicker").link(text: Date.parse(end_date).strftime("%-d")).click
+
+    #@ua.link(id: "date-go-button").click
 
     cp = @ua.div(id: "statement-data-table_info").text
     prev_cp = ''
