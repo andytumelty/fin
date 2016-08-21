@@ -6,7 +6,7 @@ class Amex
   def initialize
     @headless = Headless.new
     @headless.start
-    @ua = Watir::Browser.new(:firefox, profile: 'default')
+    @ua = Watir::Browser.new()
     @ua.goto("https://www.americanexpress.com/uk")
   end
 
