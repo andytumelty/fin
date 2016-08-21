@@ -6,7 +6,8 @@ class Amex
   def initialize
     @headless = Headless.new
     @headless.start
-    @ua = Watir::Browser.start("https://www.americanexpress.com/uk")
+    @ua = Watir::Browser.new(:firefox, profile: 'default')
+    @ua.goto("https://www.americanexpress.com/uk")
   end
 
   def close
@@ -15,6 +16,11 @@ class Amex
   end
 
   def login(credentials)
+    if @ua.button(id: "sprite-ContinueButton_EN").exists?
+      if @ua.button(id: "sprite-ContinueButton_EN").visible?
+        @ua.button(id: "sprite-ContinueButton_EN").click
+      end
+    end
     @ua.text_field(name: "UserID").set(credentials[:username])
     @ua.text_field(name: "Password").set(credentials[:password])
     @ua.form(id: 'ssoform').submit
@@ -22,48 +28,34 @@ class Amex
 
   def transactions(start_date, end_date, account)
     @ua.link(text: "Your Statement").click
-    @ua.link(text: "Your Card Activity").click
-    @ua.div(id: "daterange").click
-    @ua.click(title: "Select start and end dates").click
-    @ua.th(class: "months").button().click
 
+    # TODO: more reliable way of doing this?
+    sleep 2
 
-
-    #@ua.link(id: "date-layer-link").parent.click
-    #@ua.link(text: "Date range").click
-    ##puts "from: #{start_date}"
-    #wait_count = 0
-    #while ! @ua.div(id: "from-datepicker").visible? && wait_count < 5
-    #  #puts "Can't find datepicker yet, sleeping"
-    #  sleep 1
-    #  wait_count += 1
-    #end
-    #@ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(start_date).strftime("%Y"))
-    #@ua.div(id: "from-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(start_date).strftime("%-m").to_i - 1)
-    #@ua.div(id: "from-datepicker").link(text: Date.parse(start_date).strftime("%-d")).click
-    ##puts "to: #{end_date}"
-    #@ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-year").select(Date.parse(end_date).strftime("%Y"))
-    #@ua.div(id: "to-datepicker").select_list(class: "ui-datepicker-month").select_value(Date.parse(end_date).strftime("%-m").to_i - 1)
-    #@ua.div(id: "to-datepicker").link(text: Date.parse(end_date).strftime("%-d")).click
-
-    #@ua.link(id: "date-go-button").click
-
-    cp = @ua.div(id: "statement-data-table_info").text
-    prev_cp = ''
-    text = []
-
-    until prev_cp == cp
-      text += @ua.table(id: "statement-data-table").tbody.text.split(/\n/)
-      #ap @ua.link(id: "statement-data-table_next").methods
-      if @ua.link(id: "statement-data-table_next").visible?
-        @ua.link(id: "statement-data-table_next").click
-      end
-      prev_cp = cp
-      cp = @ua.div(id: "statement-data-table_info").text
+    if @ua.span(class: "interstitial-message").visible?
+      @ua.link(class: "close-interstitial").click
     end
 
-    text.delete("No transactions found.")
-    #puts text.inspect
+    @ua.div(id: "daterange").click
+    @ua.div(title: "Select start and end dates").click
+
+    [start_date, end_date].each do |date|
+      @ua.th(class: "months").button().click
+      while @ua.strong(class: "uib").text.to_i > Date.parse(date).year
+        # max clicks?
+        @ua.button(class: "pull-left").click
+      end
+      @ua.button(title: Date.parse(date).strftime("%B")).click
+      @ua.span(text: Date.parse(date).strftime("%d")).click
+    end
+
+    @ua.button(class: "action_button").click
+
+    while @ua.button(title: "Show more transactions").visible?
+      @ua.button(title: "Show more transactions").click
+    end
+
+    text = @ua.table(id: "transaction-table").tbody.text.split(/\n/)
 
     i = 0
     transactions = []
