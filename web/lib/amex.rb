@@ -51,8 +51,10 @@ class Amex
 
     @ua.button(class: "action_button").click
 
-    while @ua.button(title: "Show more transactions").visible?
-      @ua.button(title: "Show more transactions").click
+    if @ua.button(title: "Show more transactions").exists?
+      while @ua.button(title: "Show more transactions").visible?
+        @ua.button(title: "Show more transactions").click
+      end
     end
 
     text = @ua.table(id: "transaction-table").tbody.text.split(/\n/)
