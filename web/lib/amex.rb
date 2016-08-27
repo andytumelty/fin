@@ -57,6 +57,12 @@ class Amex
       end
     end
 
+    n = 0
+    while (! @ua.table(id: "transaction-table").exists? ) && n < 3
+      sleep 1
+      n += 1
+    end
+
     text = @ua.table(id: "transaction-table").tbody.text.split(/\n/)
 
     i = 0
