@@ -33,3 +33,5 @@ gem 'mechanize'
 gem 'watir'
 gem 'selenium-webdriver'
 gem 'headless'
+
+gem 'string-similarity'

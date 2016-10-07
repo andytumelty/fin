@@ -85,9 +85,17 @@ class RemoteAccountsController < ApplicationController
     #p(transactions)
 
     transactions.each do |t|
-      # puts "#{t[:date]}##{t[:description]}##{t[:amount]}"
-      if current_user.transactions.where(remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}").count == 0
-        t = Transaction.new(date: t[:date], description: t[:description], amount: t[:amount], account: @account, category: unassigned, remote_identifier: "#{t[:date]}##{t[:description]}##{t[:amount]}")
+      matching_transactions = current_user.transactions.where(
+        date: t[:date],
+        amount: t[:amount]
+      ).select{ |t|
+        String::Similarity.cosine(
+          t.description.gsub(/Type.*/, ''), t[:description]
+        ) > 0.7
+      }
+
+      if matching_transactions.count == 0
+        t = Transaction.new(date: t[:date], description: t[:description], amount: t[:amount], account: @account, category: unassigned)
         if @remote_account.inverse_values
           t.amount = -t.amount
         end
