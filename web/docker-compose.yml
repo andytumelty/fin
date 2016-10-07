@@ -3,6 +3,8 @@ db:
   environment:
     - POSTGRES_USER=fin
     - POSTGRES_PASSWORD=fin
+  volumes:
+    - /data/fin-db:/var/lib/postgresql
 fin:
   build: .
   command: bundle exec rails s -e production -p 3000 -b '0.0.0.0'
