@@ -1,3 +1,5 @@
+require 'string/similarity'
+
 class RemoteAccountsController < ApplicationController
   # TODO before create and update check that remote account type exists
   before_filter :require_login
@@ -85,14 +87,8 @@ class RemoteAccountsController < ApplicationController
     #p(transactions)
 
     transactions.each do |t|
-      matching_transactions = current_user.transactions.where(
-        date: t[:date],
-        amount: t[:amount]
-      ).select{ |t|
-        String::Similarity.cosine(
-          t.description.gsub(/Type.*/, ''), t[:description]
-        ) > 0.7
-      }
+      matching_transactions = current_user.transactions.where( date: t[:date], amount: t[:amount]).select{ |m| String::Similarity.cosine( m.description.gsub(/Type.*/, ''), t[:description].gsub(/Type.*/, '')) > 0.7 }
+      puts matching_transactions.inspect
 
       if matching_transactions.count == 0
         t = Transaction.new(date: t[:date], description: t[:description], amount: t[:amount], account: @account, category: unassigned)
