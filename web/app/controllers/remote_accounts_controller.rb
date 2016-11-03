@@ -72,16 +72,17 @@ class RemoteAccountsController < ApplicationController
         #p transactions 
       end
     elsif @remote_account.remote_account_type.title == 'amex'
-      credentials['username'] = @remote_account.user_credential
-      Amex.new.tap do |am| 
-        begin
-          # FIXME catch exceptions
-          am.login credentials
-          transactions = am.transactions(end_date, start_date, @remote_account.remote_account_identifier).reverse
-        ensure
-          am.close
-        end
+      client = Amex::Client.new(@remote_account.user_credential, credentials['password'])
+      account = client.accounts.find{ |a| a.card_number_suffix = @remote_account.remote_account_identifier }
+      raw_transactions = []  
+      n = 0 
+      while raw_transactions.find{ |t| t.date < Date.parse(end_date) }.nil? and n < 24 do
+        raw_transactions += account.transactions(n)
+        n += 1
       end
+      raw_transactions.each do |r|
+        transactions << { date: r.date, description: r.narrative, amount: r.amount }
+      end 
     end
 
     #p(transactions)
