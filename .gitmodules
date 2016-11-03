@@ -1,0 +1,3 @@
+[submodule "web/lib/amex"]
+	path = web/lib/amex
+	url = git@github.com:laycat/amex-1.git
