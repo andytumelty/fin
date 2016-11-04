@@ -88,14 +88,17 @@ class RemoteAccountsController < ApplicationController
     #p(transactions)
 
     transactions.each do |t|
-      matching_transactions = current_user.transactions.where( date: t[:date], amount: t[:amount]).select{ |m| String::Similarity.cosine( m.description.gsub(/Type.*/, ''), t[:description].gsub(/Type.*/, '')) > 0.7 }
-      puts matching_transactions.inspect
+      if @remote_account.inverse_values
+        t[:amount] = -t[:amount]
+      end
+      #puts "looking for #{t[:date]}, #{@account}, #{t[:amount]}"
+      #potential_matches = current_user.transactions.where( date: t[:date], account: @account, amount: t[:amount])
+      #puts "found #{potential_matches.count} potential matches"
+      matching_transactions = current_user.transactions.where( date: t[:date], account: @account, amount: t[:amount]).select{ |m| String::Similarity.cosine( m.description.gsub(/Type.*/, ''), t[:description].gsub(/Type.*/, '')) > 0.7 }
+      #puts matching_transactions.inspect
 
       if matching_transactions.count == 0
         t = Transaction.new(date: t[:date], description: t[:description], amount: t[:amount], account: @account, category: unassigned)
-        if @remote_account.inverse_values
-          t.amount = -t.amount
-        end
         t.save
         # puts t.errors.inspect
         # TODO did the transaction save successfully? where to pipe errors?
