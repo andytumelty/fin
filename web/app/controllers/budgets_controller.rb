@@ -7,7 +7,7 @@ class BudgetsController < ApplicationController
   # FIXME prevent deleting budgets that aren't yours
 
   def index
-    @budgets = current_user.budgets
+    @budgets = current_user.budgets.order(start_date: :asc)
   end
 
   def show
