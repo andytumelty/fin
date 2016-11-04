@@ -1,13 +1,19 @@
 <h1>Listing budgets</h1>
 
+<style type="text/css">
+td {
+    padding: 4px 4px;
+}
+</style>
+
 <table>
   <thead>
     <tr>
       <th>Name</th>
       <th>Start date</th>
       <th>End date</th>
-      <th>Balance</th>
-      <th>Float</th>
+      <th colspan="2">Balance</th>
+      <th colspan="2">Float</th>
       <th></th>
       <th></th>
       <th></th>
@@ -20,8 +26,8 @@
         <td><%= budget.name %></td>
         <td><%= budget.start_date %></td>
         <td><%= budget.end_date %></td>
-        <td style-"text-align:right"><%= number_to_currency(budget.balance) %></td>
-        <td style-"text-align:right"><%= number_to_currency(budget.float) %></td>
+        <%= number_to_currency_td(budget.balance, "balance") %>
+        <%= number_to_currency_td(budget.float, "float") %>
         <td><%= link_to 'Show', budget %></td>
         <td><%= link_to 'Edit', edit_budget_path(budget) %></td>
         <td><%= link_to 'Destroy', budget, method: :delete, data: { confirm: 'Are you sure?' } %></td>
