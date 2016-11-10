@@ -21,7 +21,6 @@
 <table style="clear:both">
   <thead>
     <th width="80">Date</th>
-    <th width="80">Budget Date</th>
     <th width="520">Description</th>
     <th colspan="2" width="90">Amount</th>
     <th colspan="2" width="90">Account<br>Balance</th>
@@ -37,10 +36,6 @@
           <%= text_field_tag('date_from', @transaction_filter[:date_from], class: "datepicker", size: 10) %>
           <%= text_field_tag('date_to', @transaction_filter[:date_to], class: "datepicker", size: 10) %>
         </td>
-        <td>
-          <%= text_field_tag('budget_date_from', @transaction_filter[:budget_date_from], class: "datepicker", size: 10) %>
-          <%= text_field_tag('budget_date_to', @transaction_filter[:budget_date_to], class: "datepicker", size: 10) %>
-        </td>
         <td><%= text_field_tag('description', @transaction_filter[:description], size: 40) %></td>
         <td colspan="2"></td>
         <td colspan="2"></td>
@@ -53,7 +48,6 @@
     <tr>
       <%= form_for(@new_transaction) do |f| %>
         <td><%= f.text_field(:date, class: "datepicker", size: 10) %></td>
-        <td><%= f.text_field(:budget_date, class: "datepicker", size: 10) %></td>
         <td><%= f.text_field(:description, size: 40) %></td>
         <td colspan="2"><%= f.text_field(:amount, size: 5) %></td>
         <td colspan="2"></td>
@@ -69,7 +63,6 @@
     <% @transactions.each do |t| %>
       <tr class="transaction" data-id="<%= t.id %>" data-sort="<%= t.sort %>">
         <td class="date"><%= t.date %></td>
-        <td class="budget_date"><%= t.budget_date %></td>
         <td class="description"><%= t.description %></td>
         <%= number_to_currency_td(t.amount, 'amount') %>
         <%= number_to_currency_td(t.account_balance, 'account_balance') %>
