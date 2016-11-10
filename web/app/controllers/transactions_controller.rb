@@ -10,43 +10,22 @@ class TransactionsController < ApplicationController
 
   def index
     respond_to do |format|
+      @transaction_filter = transaction_filter_params
+      ap @transaction_filter
+      @transactions = filter_transactions(current_user.transactions.order(date: :desc, id: :desc), @transaction_filter)
       format.json { render json: @transactions }
       format.html {
         #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
-        @transaction_filter = {description: nil, date_from: nil, date_to: nil}
+        puts "offset: #{@transaction_filter[:offset]}"
+        @transactions = @transactions.limit(150).offset(@transaction_filter[:offset])
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
-        @category_breakdown = set_category_breakdown(@transactions)
-        @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
+        #@category_breakdown = set_category_breakdown(@transactions)
+        #@total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
       }
       format.csv {
         send_data @transactions.to_csv, filename: "transactions-#{Time.now.strftime("%Y%m%dT%H%M")}.csv"
       }
     end
-  end
-
-  def filter # FIXME category and account selected don't persist
-    @transaction_filter = transaction_filter_params
-    if @transaction_filter[:date_from].present? && @transaction_filter[:date_to].present?
-      @transactions = @transactions.where(date: (@transaction_filter[:date_from]..@transaction_filter[:date_to]))
-    end
-    if @transaction_filter[:budget_date_from].present? && @transaction_filter[:budget_date_to].present?
-      @transactions = @transactions.where(budget_date: (@transaction_filter[:budget_date_from]..@transaction_filter[:budget_date_to]))
-    end
-    if @transaction_filter[:description].present?
-      @transactions = @transactions.where("description ILIKE :search", search: "%#{@transaction_filter[:description]}%")
-    end
-    if @transaction_filter[:category].present?
-      category = current_user.categories.where(name: @transaction_filter[:category]).first
-      @transactions = @transactions.where(category: category)
-    end
-    if @transaction_filter[:account].present?
-      account = current_user.accounts.where(name: @transaction_filter[:account]).first
-      @transactions = @transactions.where(account: account)
-    end
-    @category_breakdown = set_category_breakdown(@transactions)
-    @total_income, @total_expenditure, @balance_diff = set_metrics(@transactions)
-    @new_transaction = Transaction.new
-    render 'index'
   end
 
   def show
@@ -182,7 +161,29 @@ class TransactionsController < ApplicationController
     end
 
     def transaction_filter_params
-      params.permit(:date_from, :date_to, :budget_date_from, :budget_date_to, :description, :account, :category)
+      params.permit(:date_from, :date_to, :budget_date_from, :budget_date_to, :description, :account, :category, :offset)
+    end
+
+    def filter_transactions(transactions, transaction_filter) # FIXME category and account selected don't persist
+      # TODO add offset
+      if transaction_filter[:date_from].present? && transaction_filter[:date_to].present?
+        transactions = transactions.where(date: (transaction_filter[:date_from]..transaction_filter[:date_to]))
+      end
+      if transaction_filter[:budget_date_from].present? && transaction_filter[:budget_date_to].present?
+        transactions = transactions.where(budget_date: (transaction_filter[:budget_date_from]..transaction_filter[:budget_date_to]))
+      end
+      if transaction_filter[:description].present?
+        transactions = transactions.where("description ILIKE :search", search: "%#{transaction_filter[:description]}%")
+      end
+      if transaction_filter[:category].present?
+        category = current_user.categories.where(name: transaction_filter[:category]).first
+        transactions = transactions.where(category: category)
+      end
+      if transaction_filter[:account].present?
+        account = current_user.accounts.where(name: transaction_filter[:account]).first
+        transactions = transactions.where(account: account)
+      end
+      return transactions
     end
 
     def set_category_breakdown(transactions)
