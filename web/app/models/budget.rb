@@ -41,6 +41,10 @@ class Budget < ActiveRecord::Base
     end
   end
 
+  def transactions
+    self.user.transactions.where(budget_date: (self.start_date..self.end_date))
+  end
+
   def copy_previous_reservations
     # logger.debug { 'budget.rb : copy_previous_reservations' }
     # If this is the first budget, set up everything else reservation

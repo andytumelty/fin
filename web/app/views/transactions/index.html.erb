@@ -32,7 +32,7 @@
   </thead>
   <tbody>
     <tr id="transaction_filter_row">
-      <%= form_tag(transactions_filter_path, method: "get") do |f| %>
+      <%= form_tag(transactions_path, method: "get") do |f| %>
         <td>
           <%= text_field_tag('date_from', @transaction_filter[:date_from], class: "datepicker", size: 10) %>
           <%= text_field_tag('date_to', @transaction_filter[:date_to], class: "datepicker", size: 10) %>
