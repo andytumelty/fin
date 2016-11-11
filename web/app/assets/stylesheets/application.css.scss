@@ -10,5 +10,144 @@
 
 body {
   margin: 0;
-  font: 10px sans-serif;
+  font: 14px sans-serif;
+}
+
+table.transactions {
+    border-collapse: collapse;
+    margin: 1em 0;
+    font: 12px sans-serif;
+}
+
+table.transactions tr {
+  border-bottom: 1px solid #B3BFAA;
+}
+
+table.transactions th,
+table.transactions td{
+  padding: .2em .5em;
+}
+
+table.transactions td.amount,
+table.transactions td.account_balance,
+table.transactions td.balance {
+    letter-spacing: 1px;
+    text-align: right;
+}
+
+@media
+  (max-width: 40em)
+/*
+  only screen 
+  and (min-device-width: 375px) 
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2)
+*/
+{
+
+    table.transactions tbody.forms,
+    table.transactions thead {
+        display: none;
+    }
+
+    /*
+    table.transactions td:nth-child(1):before,
+    table.transactions td:nth-child(2):before{
+      position: absolute;
+      left: .5em;
+      font-weight: bold;
+    }
+*/
+    table.transactions {
+        width: 100%;
+    }
+
+    table.transactions tr{
+        display: block;
+        background: none;
+    }
+
+    table.transactions td{
+        display: block;
+        background: none;
+        border: none;
+    }
+
+    table.transactions tr{
+        position: relative;
+        /*
+        margin-bottom: 1em;
+        box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        */
+    }
+
+    table.transactions td.actions{
+        display: none;
+        /*
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10%;
+        background: none;
+        */
+    }
+
+    table.transactions td.date{
+        position: absolute;
+        bottom: 0.5em;
+        left: 0;
+        background: none;
+    }
+
+    table.transactions td.account{
+        /*
+        position: absolute;
+        bottom: 0;
+        */
+        position: relative;
+        left: 4em;
+        bottom: 0.5em;
+        background: none;
+    }
+
+    table.transactions td.category{
+        position: absolute;
+        bottom: 0;
+        left: 7em;
+        background: none;
+    }
+
+    table.transactions td.account_balance{
+        display: none;
+    }
+    
+    table.transactions td.description {
+        width: 80%;
+        padding: 0.8em 0.5em;
+    }
+    /*
+        white-space: nowrap;
+        text-overflow:ellipsis;
+        overflow: hidden;
+    */
+
+    table.transactions td.amount{
+        position: absolute;
+        top: 0.5em;
+        right: 0;
+        background: none;
+    }
+
+    table.transactions td.balance{
+        position: absolute;
+        bottom: 0.5em;
+        right: 0;
+        background: none;
+    }
+    table.transactions td.balance:before{
+        content: '(';
+    }
+    table.transactions td.balance:after{
+        content: ')';
+    }
 }
