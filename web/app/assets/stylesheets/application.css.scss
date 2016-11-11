@@ -10,6 +10,7 @@
 
 body {
   margin: 0;
+  padding: 5px;
   font: 14px sans-serif;
 }
 
@@ -44,6 +45,16 @@ table.transactions td.balance {
   and (-webkit-min-device-pixel-ratio: 2)
 */
 {
+    body{
+        padding: 0;
+        font-size:16px;
+    }
+
+    select,
+    textarea,
+    input {
+        font-size: 16px;
+    }
 
     table.transactions tbody.forms,
     table.transactions thead {
@@ -60,6 +71,7 @@ table.transactions td.balance {
 */
     table.transactions {
         width: 100%;
+        font-size:16px;
     }
 
     table.transactions tr{
@@ -100,6 +112,7 @@ table.transactions td.balance {
     }
 
     table.transactions td.account{
+        display:none;
         /*
         position: absolute;
         bottom: 0;
@@ -111,9 +124,9 @@ table.transactions td.balance {
     }
 
     table.transactions td.category{
-        position: absolute;
+        position: relative;
         bottom: 0;
-        left: 7em;
+        left: 0;
         background: none;
     }
 
@@ -123,7 +136,7 @@ table.transactions td.balance {
     
     table.transactions td.description {
         width: 80%;
-        padding: 0.8em 0.5em;
+        padding-top: 0.6em;
     }
     /*
         white-space: nowrap;
