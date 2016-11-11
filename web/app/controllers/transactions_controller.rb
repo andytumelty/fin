@@ -11,12 +11,10 @@ class TransactionsController < ApplicationController
   def index
     respond_to do |format|
       @transaction_filter = transaction_filter_params
-      ap @transaction_filter
       @transactions = filter_transactions(current_user.transactions.includes(:transaction_balance, :account).order(date: :desc, id: :desc), @transaction_filter)
       format.json { render json: @transactions }
       format.html {
         #@transactions = @transactions.where(date: (Date.today-1.month..Date.today))
-        puts "offset: #{@transaction_filter[:offset]}"
         @transactions = @transactions.limit(150).offset(@transaction_filter[:offset])
         @new_transaction = Transaction.new(category: current_user.categories.where(name: "unassigned").first)
         #@category_breakdown = set_category_breakdown(@transactions)
