@@ -11,25 +11,25 @@
   </head>
 
   <body style="margin:5px 10px;">
-    <h1 style="float:left;padding-right:10px;">Fin</h1>
+    <h1>Fin</h1>
 
-    <div style="float:left;">
-      <% if current_user %>
-        <%= link_to "Transactions" , transactions_path   %> |
-        <%= link_to "Accounts"     , accounts_path       %> |
-        <%= link_to "Categories"   , categories_path     %> |
-        <%= link_to "Budgets"      , budgets_path  %>
-        (<%= link_to "latest"      , latest_budget_path  %>)
-      <% end %>
-    </div>
-
-    <div style="float:right;">
+    <div>
       <% if current_user %>
         <%= link_to "Edit Profile", edit_user_path(current_user.id) %> |
         <%= link_to "Logout", logout_path, method: :post %>
       <% else %>
         <%= link_to "Register", new_user_path %> |
         <%= link_to "Login", login_path %>
+      <% end %>
+    </div>
+
+    <div>
+      <% if current_user %>
+        <%= link_to "Transactions" , transactions_path   %> |
+        <%= link_to "Accounts"     , accounts_path       %> |
+        <%= link_to "Categories"   , categories_path     %> |
+        <%= link_to "Budgets"      , budgets_path  %>
+        (<%= link_to "latest"      , latest_budget_path  %>)
       <% end %>
     </div>
 
