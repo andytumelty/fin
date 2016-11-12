@@ -20,6 +20,11 @@
 $(function(){ 
   $('.datepicker').datepicker();
 
+  $("td.expand").click(function() {
+    reservation = $(this).data('reservation');
+    $("tr[data-reservation='"+ reservation +"']").toggle();
+  });
+
   $("#transaction_filter_row").hide();
   $("#transaction_filter_row_toggle").click(function() {
     $("#transaction_filter_row").toggle();

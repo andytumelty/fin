@@ -1,3 +1,4 @@
+<!-- FIXME SO MUCH DUPLICATION D: !-->
 <h3>
   <%= @budget.name %><br>
   <small>
@@ -44,56 +45,100 @@
   </tr>
   <tr>
     <td colspan="3">
-      <table style="margin:0 auto;width:500px;">
+      <table class="reservations" style="margin:0 auto;width:500px;">
 
         <thead>
-          <th width="200">Reservations</th>
-          <th style="text-align:center" width="90" colspan="2">Budgeted</th>
-          <th style="text-align:center" width="90" colspan="2">Balance</th>
-          <th width="60"></th>
+          <!--   width="10" !-->
+          <th></th>
+          <!--  width="200" !-->
+          <th colspan="2">Reservations</th>
+          <!--  width="90" !-->
+          <th style="text-align:center">Budgeted</th>
+          <!--  width="90" !-->
+          <th style="text-align:center">Balance</th>
+          <!--  width="60" !-->
+          <th></th>
         </thead>
 
         <% @budgeted_reservations.each do |reservation| %>
           <% if !reservation.category_id.nil? %>
-            <tr>
-              <td><%= Category.find(reservation.category_id).name %></td>
-              <%= number_to_currency_td(reservation.amount, '') %>
-              <%= number_to_currency_td(reservation.balance, '') %>
+            <tr class="reservation">
+              <td class="expand" data-reservation="<%= reservation.id %>">+</td>
+              <td colspan="2"><%= Category.find(reservation.category_id).name %></td>
+              <td class="amount"><%= number_to_currency(reservation.amount) %></td>
+              <td class="balance"><%= number_to_currency(reservation.balance) %></td>
               <td style="text-align:center">
                 <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
                 <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
               </td>
             </tr>
+            <% reservation.transactions.each do |transaction| %>
+                <tr class="transaction" data-reservation="<%= reservation.id %>">
+                    <td></td>
+                    <td><%= transaction.date %></td>
+                    <td><%= transaction.description %></td>
+                    <td><%= transaction.account.name %></td>
+                    <td class="amount"><%= number_to_currency(transaction.amount) %></td>
+                </tr>
+            <% end %>
           <% end %>
         <% end %>
         
-        <tr>
-          <td>Everything else</td>
-          <td colspan="2"></td>
-          <%= number_to_currency_td(@budgeted_reservations.where(category_id: nil).first.balance, '') %>
-          <td></td>
-        </tr>
+        <% @budgeted_reservations.where(category_id: nil).each do |reservation| %>
+            <tr>
+            <td class="expand" data-reservation="<%= reservation.id %>">+</td>
+            <td colspan="2">Everything else</td>
+            <td></td>
+            <td class="balance"><%= number_to_currency(reservation.balance) %></td>
+            <td></td>
+            </tr>
+            <% reservation.transactions.each do |transaction| %>
+                <tr class="transaction" data-reservation="<%= reservation.id %>">
+                    <td></td>
+                    <td><%= transaction.date %></td>
+                    <td><%= transaction.description %></td>
+                    <td><%= transaction.account.name %></td>
+                    <td class="amount"><%= number_to_currency(transaction.amount) %></td>
+                </tr>
+            <% end %>
+        <% end %>
+
         <tr>
           <td style="padding-top:20px;" colspan="6"><i>Ignored Reservations</i></td>
         </tr>
         <% @ignored_reservations.each do |reservation| %>
           <tr>
-            <td><%= Category.find(reservation.category_id).name %></td>
-            <td colspan="2"></td>
-            <%= number_to_currency_td(reservation.balance, '') %>
+            <td class="expand" data-reservation="<%= reservation.id %>">+</td>
+            <td colspan="2"><%= Category.find(reservation.category_id).name %></td>
+            <td></td>
+            <td class="balance"><%= number_to_currency(reservation.balance) %></td>
             <td style="text-align:center">
               <%= link_to('X', budget_reservation_path(@budget, reservation), method: :delete, data: { confirm: 'Are you sure?' }) %>
               <%= link_to('Edit', edit_budget_reservation_path(@budget, reservation)) %>
             </td>
           </tr>
+            <% reservation.transactions.each do |transaction| %>
+                <tr class="transaction" data-reservation="<%= reservation.id %>">
+                    <td></td>
+                    <td><%= transaction.date %></td>
+                    <td><%= transaction.description %></td>
+                    <td><%= transaction.account.name %></td>
+                    <td class="amount"><%= number_to_currency(transaction.amount) %></td>
+                </tr>
+            <% end %>
         <% end %>
         <tr>
-          <td style="padding-top:20px;"><i>New Reservation</i></td>
+          <td colspan="6" style="padding-top:20px;"><i>New Reservation</i></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
           <td>Amount</td>
           <td>Ignored?</td>
           <td></td>
         </tr>
         <tr>
+          <td></td>
           <%= form_for [@budget, @new_reservation] do |f| %>
             <td><%= f.collection_select :category_id, @categories, :id, :name %></td>
             <td><%= f.text_field(:amount, size: 5) %></td>
