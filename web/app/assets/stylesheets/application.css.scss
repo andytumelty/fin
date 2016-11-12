@@ -29,11 +29,17 @@ table.transactions td{
   padding: .2em .5em;
 }
 
+table.reservations td.amount,
+table.reservations td.balance,
 table.transactions td.amount,
 table.transactions td.account_balance,
 table.transactions td.balance {
     letter-spacing: 1px;
     text-align: right;
+}
+
+table.reservations tr.transaction {
+    display: none; 
 }
 
 @media
