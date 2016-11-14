@@ -6,10 +6,14 @@
 
 # Ignore bundler config.
 web/.bundle
+web/Gemfile.lock
 
 # Ignore the default SQLite database.
 web/db/*.sqlite3
 web/db/*.sqlite3-journal
+
+# Ignore db structure
+web/db/structure.sql
 
 # Ignore all logfiles and tempfiles.
 web/log/*.log
